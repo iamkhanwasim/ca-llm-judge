@@ -1,0 +1,47 @@
+# --- Judge Models ---
+judges:
+  - provider: bedrock
+    model: claude-3.7-sonnet
+    enabled: false
+  - provider: bedrock
+    model: nova-premier
+    enabled: false
+  - provider: azure_openai
+    model: gpt-5
+    enabled: false
+  - provider: ollama
+    model: qwen3:1.7b
+    endpoint: http://localhost:11434
+    enabled: true
+
+# --- Azure OpenAI ---
+azure_openai:
+  endpoint: ${AZURE_OPENAI_ENDPOINT}
+  api_key: ${AZURE_OPENAI_API_KEY}
+  deployment: ${AZURE_OPENAI_DEPLOYMENT}
+  api_version: ${AZURE_OPENAI_API_VERSION}
+
+# --- Metrics and Thresholds ---
+metrics:
+  - clinical_correctness
+  - completeness
+  - specificity
+  - component_coverage
+
+thresholds:
+  clinical_correctness: 0.80
+  completeness: 0.75
+  specificity: 0.80
+  component_coverage: 0.70
+
+# --- Execution ---
+execution:
+  batch_size: 5
+
+# --- Gold Standard Paths ---
+gold_standard:
+  gold_file_path: data/gold_standard/gold_standard.json
+  pipeline_output_path: data/pipeline_output/pipeline_output.json
+
+# --- Report ---
+flag_for_review: true

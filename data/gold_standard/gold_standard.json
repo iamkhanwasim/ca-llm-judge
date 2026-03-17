@@ -1,0 +1,128 @@
+[
+	{
+		"id": "note_4",
+		"docname": "Note 4 - DiabetesMellitusSOAPNote2",
+		"page_start": 9,
+		"page_end": 10,
+		"fulltext": "SUBJECTIVE:  I am asked to see the patient today with ongoing issues around her diabetic control.  We have been fairly aggressively, downwardly adjusting her insulins, both the Lantus insulin, which we had been giving at night as well as her sliding scale Humalog insulin prior to meals.  Despite frequent decreases in her insulin regimen, she continues to have somewhat low blood glucoses, most notably in the morning when the glucoses have been in the 70s despite decreasing her Lantus insulin from around 84 units down to 60 units, which is a considerable change.  What I cannot explain is why her glucoses have not really climbed at all despite the decrease in insulin.  The staff reports to me that her appetite is good and that she is eating as well as ever.  I talked to Anna today.  She feels a little fatigued.  Otherwise, she is doing well.PHYSICAL EXAMINATION:  Vitals as in the chart.  The patient is a pleasant and cooperative.  She is in no apparent distress.ASSESSMENT AND PLAN:  Diabetes, still with some problematic low blood glucoses, most notably in the morning.  To address this situation, I am going to hold her Lantus insulin tonight and decrease and then change the administration time to in the morning.  She will get 55 units in the morning.  I am also decreasing once again her Humalog sliding scale insulin prior to meals.  I will review the blood glucoses again next week.",
+		"evidences": [
+			{
+				"id": 1,
+				"spans": [
+					{
+						"id": 1,
+						"text": "diabetic",
+						"start": 80,
+						"end": 88
+					},
+					{
+						"id": 9,
+						"text": "Diabetes",
+						"start": 999,
+						"end": 1007
+					}
+				],
+				"color": [
+					71,
+					212,
+					89
+				],
+				"group": "diabetes_type"
+			},
+			{
+				"id": 2,
+				"spans": [
+					{
+						"id": 2,
+						"text": " insulins ",
+						"start": 158,
+						"end": 168
+					},
+					{
+						"id": 3,
+						"text": "Lantus insulin",
+						"start": 179,
+						"end": 193
+					},
+					{
+						"id": 4,
+						"text": "sliding scale Humalog insulin",
+						"start": 244,
+						"end": 273
+					},
+					{
+						"id": 5,
+						"text": "insulin regimen",
+						"start": 325,
+						"end": 340
+					},
+					{
+						"id": 7,
+						"text": "Lantus insulin",
+						"start": 483,
+						"end": 497
+					},
+					{
+						"id": 8,
+						"text": "insulin",
+						"start": 667,
+						"end": 674
+					},
+					{
+						"id": 11,
+						"text": "Lantus insulin",
+						"start": 1137,
+						"end": 1151
+					},
+					{
+						"id": 12,
+						"text": " Humalog sliding scale insulin ",
+						"start": 1308,
+						"end": 1339
+					}
+				],
+				"color": [
+					255,
+					204,
+					153
+				],
+				"group": "insulin_use"
+			},
+			{
+				"id": 3,
+				"spans": [
+					{
+						"id": 6,
+						"text": "somewhat low blood glucoses, most notably in the morning when the glucoses have been in the 70s ",
+						"start": 364,
+						"end": 460
+					},
+					{
+						"id": 10,
+						"text": "problematic low blood glucoses",
+						"start": 1025,
+						"end": 1055
+					}
+				],
+				"color": [
+					255,
+					204,
+					204
+				],
+				"group": "hypoglycemia"
+			}
+		],
+		"golds": [
+			{
+				"id": 1,
+				"code": "64855057",
+				"title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
+				"evidence_groups": [
+					"diabetes_type",
+					"hypoglycemia",
+					"insulin_use"
+				]
+			}
+		]
+	}
+]
