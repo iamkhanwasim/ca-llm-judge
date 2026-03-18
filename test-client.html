@@ -26,7 +26,8 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: #004c90;
             color: white;
             padding: 30px;
             border-radius: 8px 8px 0 0;
@@ -134,7 +135,8 @@
         }
 
         .button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: #004c90;
             color: white;
             border: none;
             padding: 12px 30px;
@@ -369,6 +371,64 @@
 
         .load-models-btn:hover {
             box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .metrics-table thead {
+            background: #004c90;
+            color: white;
+        }
+
+        .metrics-table th {
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .metrics-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .metrics-table tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .metrics-table tbody tr:hover {
+            background: #f0f0f0;
+        }
+
+        .export-csv-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .export-csv-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .export-csv-btn:active {
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -744,6 +804,17 @@
 
                     html += `${prefix} <strong>Term ${idx + 1}:</strong> ${term.term}\n`;
                     html += `${childPrefix}|- <strong>Default Lexical:</strong> ${term.default_lexical_title}\n`;
+
+                    // Display ICD-10 codes if available
+                    if (term.icd10_codes && term.icd10_codes.length > 0) {
+                        html += `${childPrefix}|- <strong>ICD-10 Codes:</strong> ${term.icd10_codes.join(', ')}\n`;
+                    }
+
+                    // Display SNOMED codes if available
+                    if (term.snomed_codes && term.snomed_codes.length > 0) {
+                        html += `${childPrefix}|- <strong>SNOMED Codes:</strong> ${term.snomed_codes.join(', ')}\n`;
+                    }
+
                     html += `${childPrefix}|- <span class="${termVerdictClass}">Verdict: ${term.verdict}</span>\n`;
 
                     html += `${childPrefix}|- <strong>Scores:</strong>\n`;
@@ -897,22 +968,53 @@
         function formatGoldEvaluationResponse(data) {
             let html = '<div class="tree">';
 
+            // Store data globally for CSV export
+            currentGoldEvalData = data;
+
+            // Debug: Check if tables exist
+            console.log('Gold evaluation data:', data);
+            console.log('Tables data:', data.tables);
+
             html += `<strong>Gold Standard Evaluation</strong>\n`;
             html += `Total Gold Notes: ${data.total_gold_notes}\n\n`;
 
             if (data.judge_validation_metrics) {
-                html += '<strong>Judge Validation Metrics (P/R/F1):</strong>\n';
+                html += '<strong>Judge Validation Metrics:</strong>\n';
                 const metrics = data.judge_validation_metrics;
                 const systems = Object.keys(metrics);
 
                 systems.forEach((system, idx) => {
                     const isLast = idx === systems.length - 1;
                     const prefix = isLast ? '\\-' : '|-';
+                    const childPrefix = isLast ? ' ' : '|';
+
+                    const m = metrics[system];
 
                     html += `${prefix} <strong>${system.toUpperCase()}:</strong>\n`;
-                    html += `${isLast ? ' ' : '|'}  |- Precision: ${metrics[system].precision.toFixed(2)}\n`;
-                    html += `${isLast ? ' ' : '|'}  |- Recall: ${metrics[system].recall.toFixed(2)}\n`;
-                    html += `${isLast ? ' ' : '|'}  \\- F1: ${metrics[system].f1.toFixed(2)}\n`;
+                    html += `${childPrefix}  |- <strong>Precision:</strong> ${m.precision.toFixed(2)}\n`;
+                    html += `${childPrefix}  |- <strong>Recall:</strong> ${m.recall.toFixed(2)}\n`;
+                    html += `${childPrefix}  |- <strong>F1:</strong> ${m.f1.toFixed(2)}\n`;
+                    html += `${childPrefix}  |- <strong>TP (True Positives):</strong> ${m.tp}\n`;
+                    html += `${childPrefix}  |- <strong>FP (False Positives):</strong> ${m.fp}\n`;
+                    html += `${childPrefix}  |- <strong>FN (False Negatives):</strong> ${m.fn}\n`;
+
+                    // Show TP codes if available
+                    if (m.tp_codes && m.tp_codes.length > 0) {
+                        html += `${childPrefix}  |- <strong>TP Codes:</strong> ${m.tp_codes.join(', ')}\n`;
+                    }
+
+                    // Show FP codes if available
+                    if (m.fp_codes && m.fp_codes.length > 0) {
+                        html += `${childPrefix}  |- <strong>FP Codes:</strong> ${m.fp_codes.join(', ')}\n`;
+                    }
+
+                    // Show FN codes if available
+                    if (m.fn_codes && m.fn_codes.length > 0) {
+                        html += `${childPrefix}  \\- <strong>FN Codes:</strong> ${m.fn_codes.join(', ')}\n`;
+                    } else {
+                        // Close the section if no FN codes
+                        html = html.slice(0, -1) + '\\-' + html.slice(-1);
+                    }
                 });
                 html += '\n';
             }
@@ -932,9 +1034,270 @@
                 });
             }
 
+            // Add tables if available
+            if (data.tables) {
+                console.log('Tables found! IMO table rows:', data.tables.imo_table?.length);
+                console.log('IMO-ICD-SNOMED table rows:', data.tables.imo_icd_snomed_table?.length);
+
+                html += '\n';
+
+                // IMO Table
+                if (data.tables.imo_table && data.tables.imo_table.length > 0) {
+                    html += formatImoTable(data.tables.imo_table);
+                    html += '\n';
+                }
+
+                // IMO-ICD-SNOMED Table
+                if (data.tables.imo_icd_snomed_table && data.tables.imo_icd_snomed_table.length > 0) {
+                    html += formatImoIcdSnomedTable(data.tables.imo_icd_snomed_table);
+                    html += '\n';
+                }
+
+                // Detailed Table
+                if (data.tables.detailed_table && data.tables.detailed_table.length > 0) {
+                    html += formatDetailedTable(data.tables.detailed_table);
+                }
+            } else {
+                console.warn('No tables data found in response');
+                html += '\n<strong>⚠ No table data available</strong>\n';
+            }
+
             html += '\n<em>Note: Detailed per-note results available in response data</em>';
             html += '</div>';
             return html;
+        }
+
+        // Format IMO Table
+        function formatImoTable(tableData) {
+            let html = '<div style="margin-top: 20px;">';
+            html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+            html += '<strong>IMO Metrics (Per-Note):</strong>';
+            html += '<button onclick="exportImoTableCSV()" class="export-csv-btn">Export to CSV</button>';
+            html += '</div></div>\n';
+            html += '<table class="metrics-table">\n';
+            html += '<thead><tr>';
+            html += '<th>Judge(s)</th>';
+            html += '<th>Note</th>';
+            html += '<th>TP</th>';
+            html += '<th>FP</th>';
+            html += '<th>FN</th>';
+            html += '</tr></thead>\n';
+            html += '<tbody>\n';
+
+            tableData.forEach(row => {
+                html += '<tr>';
+                html += `<td>${row.judges}</td>`;
+                html += `<td>${row.note}</td>`;
+                html += `<td>${row.tp}</td>`;
+                html += `<td>${row.fp}</td>`;
+                html += `<td>${row.fn}</td>`;
+                html += '</tr>\n';
+            });
+
+            html += '</tbody>\n</table>\n';
+            return html;
+        }
+
+        // Format IMO-ICD-SNOMED Table
+        function formatImoIcdSnomedTable(tableData) {
+            let html = '<div style="margin-top: 20px;">';
+            html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+            html += '<strong>IMO-ICD10-SNOMED Metrics (Per-Note):</strong>';
+            html += '<button onclick="exportImoIcdSnomedTableCSV()" class="export-csv-btn">Export to CSV</button>';
+            html += '</div></div>\n';
+            html += '<table class="metrics-table">\n';
+            html += '<thead><tr>';
+            html += '<th>Judge(s)</th>';
+            html += '<th>Note</th>';
+            html += '<th colspan="6">IMO</th>';
+            html += '<th colspan="6">ICD-10</th>';
+            html += '<th colspan="6">SNOMED</th>';
+            html += '</tr>\n';
+            html += '<tr>';
+            html += '<th></th><th></th>';
+            // IMO columns
+            html += '<th>P</th><th>R</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th>';
+            // ICD-10 columns
+            html += '<th>P</th><th>R</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th>';
+            // SNOMED columns
+            html += '<th>P</th><th>R</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th>';
+            html += '</tr></thead>\n';
+            html += '<tbody>\n';
+
+            tableData.forEach(row => {
+                html += '<tr>';
+                html += `<td>${row.judges}</td>`;
+                html += `<td>${row.note}</td>`;
+                // IMO
+                html += `<td>${row.imo_precision.toFixed(2)}</td>`;
+                html += `<td>${row.imo_recall.toFixed(2)}</td>`;
+                html += `<td>${row.imo_f1.toFixed(2)}</td>`;
+                html += `<td>${row.imo_tp}</td>`;
+                html += `<td>${row.imo_fp}</td>`;
+                html += `<td>${row.imo_fn}</td>`;
+                // ICD-10
+                html += `<td>${row.icd10_precision.toFixed(2)}</td>`;
+                html += `<td>${row.icd10_recall.toFixed(2)}</td>`;
+                html += `<td>${row.icd10_f1.toFixed(2)}</td>`;
+                html += `<td>${row.icd10_tp}</td>`;
+                html += `<td>${row.icd10_fp}</td>`;
+                html += `<td>${row.icd10_fn}</td>`;
+                // SNOMED
+                html += `<td>${row.snomed_precision.toFixed(2)}</td>`;
+                html += `<td>${row.snomed_recall.toFixed(2)}</td>`;
+                html += `<td>${row.snomed_f1.toFixed(2)}</td>`;
+                html += `<td>${row.snomed_tp}</td>`;
+                html += `<td>${row.snomed_fp}</td>`;
+                html += `<td>${row.snomed_fn}</td>`;
+                html += '</tr>\n';
+            });
+
+            html += '</tbody>\n</table>\n';
+            return html;
+        }
+
+        // Format Detailed Table
+        function formatDetailedTable(tableData) {
+            let html = '<div style="margin-top: 20px;">';
+            html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+            html += '<strong>Detailed Term-Level Analysis:</strong>';
+            html += '<button onclick="exportDetailedTableCSV()" class="export-csv-btn">Export to CSV</button>';
+            html += '</div></div>\n';
+            html += '<div style="overflow-x: auto;">\n';
+            html += '<table class="metrics-table" style="font-size: 11px;">\n';
+            html += '<thead><tr>';
+            html += '<th>Judge(s)</th>';
+            html += '<th>Note</th>';
+            html += '<th>Match Key</th>';
+            html += '<th>Term</th>';
+            html += '<th>Default Lexical Title</th>';
+            html += '<th>Gold Lexical</th>';
+            html += '<th>Pred Lexical</th>';
+            html += '<th>Outcome</th>';
+            html += '<th>Gold ICD-10</th>';
+            html += '<th>Pred ICD-10</th>';
+            html += '<th>ICD-10 TP</th>';
+            html += '<th>ICD-10 FP</th>';
+            html += '<th>ICD-10 FN</th>';
+            html += '<th>Gold SNOMED</th>';
+            html += '<th>Pred SNOMED</th>';
+            html += '<th>SNOMED TP</th>';
+            html += '<th>SNOMED FP</th>';
+            html += '<th>SNOMED FN</th>';
+            html += '</tr></thead>\n';
+            html += '<tbody>\n';
+
+            tableData.forEach(row => {
+                // Color code the outcome column
+                const outcomeClass = row.lexical_outcome === 'TP' ? 'style="background: #d4edda; font-weight: bold;"' :
+                                    row.lexical_outcome === 'FP' ? 'style="background: #f8d7da; font-weight: bold;"' :
+                                    'style="background: #fff3cd; font-weight: bold;"';
+
+                html += '<tr>';
+                html += `<td>${row.judges}</td>`;
+                html += `<td>${row.note}</td>`;
+                html += `<td>${row.match_key}</td>`;
+                html += `<td title="${row.term}">${row.term.substring(0, 30)}${row.term.length > 30 ? '...' : ''}</td>`;
+                html += `<td title="${row.default_lexical_title}">${row.default_lexical_title.substring(0, 30)}${row.default_lexical_title.length > 30 ? '...' : ''}</td>`;
+                html += `<td>${row.gold_lexical}</td>`;
+                html += `<td>${row.pred_lexical}</td>`;
+                html += `<td ${outcomeClass}>${row.lexical_outcome}</td>`;
+                html += `<td title="${row.gold_icd10cm}">${row.gold_icd10cm}</td>`;
+                html += `<td title="${row.pred_icd10cm}">${row.pred_icd10cm}</td>`;
+                html += `<td>${row.icd10_tp}</td>`;
+                html += `<td>${row.icd10_fp}</td>`;
+                html += `<td>${row.icd10_fn}</td>`;
+                html += `<td title="${row.gold_snomed}">${row.gold_snomed}</td>`;
+                html += `<td title="${row.pred_snomed}">${row.pred_snomed}</td>`;
+                html += `<td>${row.snomed_tp}</td>`;
+                html += `<td>${row.snomed_fp}</td>`;
+                html += `<td>${row.snomed_fn}</td>`;
+                html += '</tr>\n';
+            });
+
+            html += '</tbody>\n</table>\n';
+            html += '</div>\n';
+            return html;
+        }
+
+        // CSV Export Functions
+        function convertToCSV(headers, rows) {
+            const csvRows = [];
+
+            // Add header row
+            csvRows.push(headers.map(h => `"${h}"`).join(','));
+
+            // Add data rows
+            rows.forEach(row => {
+                const values = headers.map(header => {
+                    const value = row[header] !== undefined ? String(row[header]) : '';
+                    // Escape double quotes and wrap in quotes
+                    return `"${value.replace(/"/g, '""')}"`;
+                });
+                csvRows.push(values.join(','));
+            });
+
+            return csvRows.join('\n');
+        }
+
+        function downloadCSV(filename, csvContent) {
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Store current table data globally for export
+        let currentGoldEvalData = null;
+
+        function exportImoTableCSV() {
+            if (!currentGoldEvalData || !currentGoldEvalData.tables || !currentGoldEvalData.tables.imo_table) {
+                alert('No IMO table data available to export');
+                return;
+            }
+
+            const headers = ['judges', 'note', 'tp', 'fp', 'fn'];
+            const csv = convertToCSV(headers, currentGoldEvalData.tables.imo_table);
+            downloadCSV('imo_metrics.csv', csv);
+        }
+
+        function exportImoIcdSnomedTableCSV() {
+            if (!currentGoldEvalData || !currentGoldEvalData.tables || !currentGoldEvalData.tables.imo_icd_snomed_table) {
+                alert('No IMO-ICD-SNOMED table data available to export');
+                return;
+            }
+
+            const headers = [
+                'judges', 'note',
+                'imo_precision', 'imo_recall', 'imo_f1', 'imo_tp', 'imo_fp', 'imo_fn',
+                'icd10_precision', 'icd10_recall', 'icd10_f1', 'icd10_tp', 'icd10_fp', 'icd10_fn',
+                'snomed_precision', 'snomed_recall', 'snomed_f1', 'snomed_tp', 'snomed_fp', 'snomed_fn'
+            ];
+            const csv = convertToCSV(headers, currentGoldEvalData.tables.imo_icd_snomed_table);
+            downloadCSV('imo_icd_snomed_metrics.csv', csv);
+        }
+
+        function exportDetailedTableCSV() {
+            if (!currentGoldEvalData || !currentGoldEvalData.tables || !currentGoldEvalData.tables.detailed_table) {
+                alert('No detailed table data available to export');
+                return;
+            }
+
+            const headers = [
+                'judges', 'note', 'match_key', 'term', 'default_lexical_title',
+                'gold_lexical', 'pred_lexical', 'lexical_outcome',
+                'gold_icd10cm', 'pred_icd10cm', 'icd10_tp', 'icd10_fp', 'icd10_fn',
+                'gold_snomed', 'pred_snomed', 'snomed_tp', 'snomed_fp', 'snomed_fn'
+            ];
+            const csv = convertToCSV(headers, currentGoldEvalData.tables.detailed_table);
+            downloadCSV('detailed_term_analysis.csv', csv);
         }
 
         // API Calls

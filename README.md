@@ -185,8 +185,10 @@ open test-client.html
 **Example Output:**
 ```
 📄 Note: note_4 | Verdict: FAIL ✗
-├─ Term 1: Diabetes mellitus
+├─ Term 1: Improving Unspecified diabetes mellitus
 │  ├─ Default Lexical: Diabetes mellitus
+│  ├─ ICD-10 Codes: E11.9
+│  ├─ SNOMED Codes: 73211009
 │  ├─ Verdict: FAIL ✗
 │  ├─ Scores:
 │  │  ├─ Clinical Correctness: 0.90 ✓

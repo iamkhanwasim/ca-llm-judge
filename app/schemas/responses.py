@@ -17,6 +17,8 @@ class SuggestedCorrection(BaseModel):
 class TermResult(BaseModel):
     term: str
     default_lexical_title: str
+    icd10_codes: List[str]
+    snomed_codes: List[str]
     scores: Dict[str, DimensionScore]
     failed_dimensions: List[str]
     justifications: Dict[str, Dict[str, str]]
@@ -61,6 +63,12 @@ class CodeSystemMetrics(BaseModel):
     precision: float
     recall: float
     f1: float
+    tp: int
+    fp: int
+    fn: int
+    tp_codes: List[str]
+    fp_codes: List[str]
+    fn_codes: List[str]
 
 
 class GoldNoteResult(BaseModel):
@@ -77,6 +85,7 @@ class GoldEvaluateResponse(BaseModel):
     per_note_results: List[GoldNoteResult]
     judge_validation_metrics: Dict[str, CodeSystemMetrics]
     aggregate: AggregateStats
+    tables: Optional[Dict[str, List[Dict]]] = None
 
 
 class HealthResponse(BaseModel):

@@ -1,128 +1,256 @@
 [
-	{
-		"id": "note_4",
-		"docname": "Note 4 - DiabetesMellitusSOAPNote2",
-		"page_start": 9,
-		"page_end": 10,
-		"fulltext": "SUBJECTIVE:  I am asked to see the patient today with ongoing issues around her diabetic control.  We have been fairly aggressively, downwardly adjusting her insulins, both the Lantus insulin, which we had been giving at night as well as her sliding scale Humalog insulin prior to meals.  Despite frequent decreases in her insulin regimen, she continues to have somewhat low blood glucoses, most notably in the morning when the glucoses have been in the 70s despite decreasing her Lantus insulin from around 84 units down to 60 units, which is a considerable change.  What I cannot explain is why her glucoses have not really climbed at all despite the decrease in insulin.  The staff reports to me that her appetite is good and that she is eating as well as ever.  I talked to Anna today.  She feels a little fatigued.  Otherwise, she is doing well.PHYSICAL EXAMINATION:  Vitals as in the chart.  The patient is a pleasant and cooperative.  She is in no apparent distress.ASSESSMENT AND PLAN:  Diabetes, still with some problematic low blood glucoses, most notably in the morning.  To address this situation, I am going to hold her Lantus insulin tonight and decrease and then change the administration time to in the morning.  She will get 55 units in the morning.  I am also decreasing once again her Humalog sliding scale insulin prior to meals.  I will review the blood glucoses again next week.",
-		"evidences": [
-			{
-				"id": 1,
-				"spans": [
-					{
-						"id": 1,
-						"text": "diabetic",
-						"start": 80,
-						"end": 88
-					},
-					{
-						"id": 9,
-						"text": "Diabetes",
-						"start": 999,
-						"end": 1007
-					}
-				],
-				"color": [
-					71,
-					212,
-					89
-				],
-				"group": "diabetes_type"
-			},
-			{
-				"id": 2,
-				"spans": [
-					{
-						"id": 2,
-						"text": " insulins ",
-						"start": 158,
-						"end": 168
-					},
-					{
-						"id": 3,
-						"text": "Lantus insulin",
-						"start": 179,
-						"end": 193
-					},
-					{
-						"id": 4,
-						"text": "sliding scale Humalog insulin",
-						"start": 244,
-						"end": 273
-					},
-					{
-						"id": 5,
-						"text": "insulin regimen",
-						"start": 325,
-						"end": 340
-					},
-					{
-						"id": 7,
-						"text": "Lantus insulin",
-						"start": 483,
-						"end": 497
-					},
-					{
-						"id": 8,
-						"text": "insulin",
-						"start": 667,
-						"end": 674
-					},
-					{
-						"id": 11,
-						"text": "Lantus insulin",
-						"start": 1137,
-						"end": 1151
-					},
-					{
-						"id": 12,
-						"text": " Humalog sliding scale insulin ",
-						"start": 1308,
-						"end": 1339
-					}
-				],
-				"color": [
-					255,
-					204,
-					153
-				],
-				"group": "insulin_use"
-			},
-			{
-				"id": 3,
-				"spans": [
-					{
-						"id": 6,
-						"text": "somewhat low blood glucoses, most notably in the morning when the glucoses have been in the 70s ",
-						"start": 364,
-						"end": 460
-					},
-					{
-						"id": 10,
-						"text": "problematic low blood glucoses",
-						"start": 1025,
-						"end": 1055
-					}
-				],
-				"color": [
-					255,
-					204,
-					204
-				],
-				"group": "hypoglycemia"
-			}
-		],
-		"golds": [
-			{
-				"id": 1,
-				"code": "64855057",
-				"title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-				"evidence_groups": [
-					"diabetes_type",
-					"hypoglycemia",
-					"insulin_use"
-				]
-			}
-		]
-	}
+{
+    "id": "note_4",
+    "docname": "Note 4 - DiabetesMellitusSOAPNote2",
+    "golds": [
+      {
+        "id": 1,
+        "code": "64855057",
+        "title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
+        "normalized": {
+          "code": "64855057",
+          "title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
+          "concept_code": "1613806775",
+          "concept_title": "diabetes mellitus with hypoglycemia, with long-term current use of insulin",
+          "lexical_code": "64855057",
+          "lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
+          "default_lexical_code": "64855057",
+          "default_lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
+          "score": 1,
+          "certainty": "",
+          "metadata": {
+            "mappings": {
+              "icd10cm": {
+                "codes": [
+                  {
+                    "code": "E11.649",
+                    "code_metadata": {
+                      "ccsr": [
+                        {
+                          "ccsr_category": "END005",
+                          "ccsr_description": "Diabetes mellitus, Type 2"
+                        },
+                        {
+                          "ccsr_category": "END003",
+                          "ccsr_description": "Diabetes mellitus with complication"
+                        }
+                      ],
+                      "hcc": [
+                        {
+                          "hcc_factors": {
+                            "community_fbdual_aged": "0.1860",
+                            "community_fbdual_disabled": "0.2350",
+                            "community_nondual_aged": "0.1660",
+                            "community_nondual_disabled": "0.1910",
+                            "community_pbdual_aged": "0.1660",
+                            "community_pbdual_disabled": "0.2100",
+                            "institutional": "0.2800"
+                          },
+                          "hcc_model_category": "38",
+                          "hcc_version": "v28"
+                        }
+                      ]
+                    },
+                    "map_type": "Preferred primary",
+                    "relationship_type": "Narrower than",
+                    "title": "Type 2 diabetes mellitus with hypoglycemia without coma"
+                  },
+                  {
+                    "code": "Z79.4",
+                    "code_metadata": {
+                      "ccsr": [
+                        {
+                          "ccsr_category": "FAC025",
+                          "ccsr_description": "Other specified status"
+                        }
+                      ],
+                      "hcc": [
+                        {
+                          "hcc_factors": {
+                            "community_fbdual_aged": "0.1860",
+                            "community_fbdual_disabled": "0.2350",
+                            "community_nondual_aged": "0.1660",
+                            "community_nondual_disabled": "0.1910",
+                            "community_pbdual_aged": "0.1660",
+                            "community_pbdual_disabled": "0.2100",
+                            "institutional": "0.2800"
+                          },
+                          "hcc_model_category": "38",
+                          "hcc_version": "v28"
+                        }
+                      ]
+                    },
+                    "map_type": "Preferred secondary",
+                    "relationship_type": "Narrower than",
+                    "title": "Long term (current) use of insulin"
+                  }
+                ]
+              },
+              "icd9cm": {
+                "codes": [
+                  {
+                    "code": "250.80",
+                    "map_type": "Preferred primary",
+                    "title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+                  },
+                  {
+                    "code": "251.2",
+                    "map_type": "Preferred secondary",
+                    "title": "Hypoglycemia, unspecified"
+                  },
+                  {
+                    "code": "V58.67",
+                    "map_type": "Alternate secondary",
+                    "title": "Encounter for long-term (current) use of insulin"
+                  }
+                ]
+              },
+              "snomedInternational": {
+                "codes": [
+                  {
+                    "code": "237633009",
+                    "map_type": "Preferred primary",
+                    "mesh_code": "",
+                    "relationship_type": "Narrower than",
+                    "title": "Hypoglycemia due to diabetes mellitus"
+                  },
+                  {
+                    "code": "73211009",
+                    "map_type": "Non-preferred primary",
+                    "mesh_code": "D003920",
+                    "relationship_type": "Narrower than",
+                    "title": "Diabetes mellitus"
+                  },
+                  {
+                    "code": "710815001",
+                    "map_type": "Non-preferred primary",
+                    "mesh_code": "",
+                    "relationship_type": "Narrower than",
+                    "title": "Long-term current use of insulin"
+                  },
+                  {
+                    "code": "170747006",
+                    "map_type": "Non-preferred primary",
+                    "mesh_code": "",
+                    "relationship_type": "Narrower than",
+                    "title": "Diabetic on insulin"
+                  }
+                ]
+              },
+              "umls": {
+                "codes": [
+                  {
+                    "code": "C0020615",
+                    "title": "Hypoglycemia"
+                  },
+                  {
+                    "code": "C0011849",
+                    "title": "Diabetes Mellitus"
+                  },
+                  {
+                    "code": "C0342313",
+                    "title": "Hypoglycemia due to diabetes mellitus"
+                  },
+                  {
+                    "code": "C1455979",
+                    "title": "Encounter for long-term (current) use of insulin"
+                  },
+                  {
+                    "code": "C2874122",
+                    "title": "Type 2 diabetes mellitus with hypoglycemia without coma"
+                  },
+                  {
+                    "code": "C0375145",
+                    "title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
+                  },
+                  {
+                    "code": "C4040354",
+                    "title": "Long-term current use of insulin"
+                  },
+                  {
+                    "code": "C0421248",
+                    "title": "Diabetic on insulin"
+                  }
+                ]
+              },
+              "uscdi": {
+                "profiles": [
+                  {
+                    "associated_codes": [
+                      {
+                        "code": "710815001",
+                        "code_system": "snomedInternational"
+                      },
+                      {
+                        "code": "E11.649",
+                        "code_system": "icd10cm"
+                      },
+                      {
+                        "code": "Z79.4",
+                        "code_system": "icd10cm"
+                      }
+                    ],
+                    "data_class": "Problems",
+                    "data_element": "Problems",
+                    "hrsn_domain": "",
+                    "valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+                  },
+                  {
+                    "associated_codes": [
+                      {
+                        "code": "710815001",
+                        "code_system": "snomedInternational"
+                      },
+                      {
+                        "code": "E11.649",
+                        "code_system": "icd10cm"
+                      },
+                      {
+                        "code": "Z79.4",
+                        "code_system": "icd10cm"
+                      }
+                    ],
+                    "data_class": "Problems",
+                    "data_element": "SDOH Problems/Health Concerns",
+                    "hrsn_domain": "",
+                    "valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+                  },
+                  {
+                    "associated_codes": [
+                      {
+                        "code": "170747006",
+                        "code_system": "snomedInternational"
+                      },
+                      {
+                        "code": "237633009",
+                        "code_system": "snomedInternational"
+                      },
+                      {
+                        "code": "73211009",
+                        "code_system": "snomedInternational"
+                      }
+                    ],
+                    "data_class": "Allergies and Intolerances",
+                    "data_element": "Reaction",
+                    "hrsn_domain": "",
+                    "valueset_oid": "2.16.840.1.113883.4.642.3.232"
+                  }
+                ]
+              }
+            },
+            "flags": {
+              "age_indicator": "",
+              "is_icd10cm_refinable": true,
+              "sex_indicator": ""
+            }
+          }
+        },
+        "evidence_groups": [
+          "diabetes_type",
+          "hypoglycemia",
+          "insulin_use"
+        ]
+      }
+    ]
+  }
 ]

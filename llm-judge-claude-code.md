@@ -205,6 +205,8 @@ Evaluates a single clinical note's pipeline output.
     {
       "term": "Improving Unspecified diabetes mellitus",
       "default_lexical_title": "Diabetes mellitus",
+      "icd10_codes": ["E11.9"],
+      "snomed_codes": ["73211009"],
       "scores": {
         "clinical_correctness": {
           "aggregated": 0.9,
@@ -244,6 +246,8 @@ Evaluates a single clinical note's pipeline output.
     {
       "term": "Improving Unspecified diabetes mellitus with long-term current use of insulin",
       "default_lexical_title": "Long-term current use of insulin for diabetes mellitus",
+      "icd10_codes": ["Z79.4", "E11.9"],
+      "snomed_codes": ["710815001"],
       "scores": {
         "clinical_correctness": {
           "aggregated": 0.9,
@@ -377,24 +381,77 @@ Runs LLM judge on the gold standard notes and computes P/R/F1 to validate the ju
       "pipeline_predicted": [
         { "default_lexical_title": "Diabetes mellitus", "default_lexical_code": "29688" },
         { "default_lexical_title": "Long-term current use of insulin for diabetes mellitus", "default_lexical_code": "57821885" }
-      ]
+      ],
+      "per_note_metrics": {
+        "imo": {
+          "precision": 0.50,
+          "recall": 0.50,
+          "f1": 0.50,
+          "tp": 1,
+          "fp": 1,
+          "fn": 1,
+          "tp_codes": ["64855057"],
+          "fp_codes": ["29688"],
+          "fn_codes": ["48686997"]
+        },
+        "icd10": {
+          "precision": 0.67,
+          "recall": 1.0,
+          "f1": 0.80,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "tp_codes": ["E11.649", "Z79.4"],
+          "fp_codes": ["E11.9"],
+          "fn_codes": []
+        },
+        "snomed": {
+          "precision": 0.75,
+          "recall": 0.75,
+          "f1": 0.75,
+          "tp": 3,
+          "fp": 1,
+          "fn": 1,
+          "tp_codes": ["237633009", "73211009", "710815001"],
+          "fp_codes": ["12345678"],
+          "fn_codes": ["170747006"]
+        }
+      }
     }
   ],
   "judge_validation_metrics": {
     "imo": {
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1": 0.0
+      "precision": 0.85,
+      "recall": 0.70,
+      "f1": 0.77,
+      "tp": 14,
+      "fp": 3,
+      "fn": 6,
+      "tp_codes": ["64855057", "48686997", ...],
+      "fp_codes": ["12345678"],
+      "fn_codes": ["98765432", "11223344"]
     },
     "icd10": {
       "precision": 0.85,
       "recall": 0.70,
-      "f1": 0.77
+      "f1": 0.77,
+      "tp": 17,
+      "fp": 3,
+      "fn": 6,
+      "tp_codes": ["E11.9", "E11.649", "Z79.4", ...],
+      "fp_codes": ["E11.00"],
+      "fn_codes": ["E11.65", "E10.9"]
     },
     "snomed": {
       "precision": 0.80,
       "recall": 0.65,
-      "f1": 0.72
+      "f1": 0.72,
+      "tp": 15,
+      "fp": 4,
+      "fn": 8,
+      "tp_codes": ["73211009", "710815001", ...],
+      "fp_codes": ["12345678"],
+      "fn_codes": ["87654321"]
     }
   },
   "aggregate": {
@@ -405,6 +462,48 @@ Runs LLM judge on the gold standard notes and computes P/R/F1 to validate the ju
       "specificity": 0.68,
       "component_coverage": 0.55
     }
+  },
+  "tables": {
+    "imo_table": [
+      {
+        "judges": "claude-3.7-sonnet, qwen3:1.7b",
+        "note": "note_4",
+        "tp": 1,
+        "fp": 1,
+        "fn": 1
+      },
+      {
+        "judges": "claude-3.7-sonnet, qwen3:1.7b",
+        "note": "note_5",
+        "tp": 2,
+        "fp": 0,
+        "fn": 1
+      }
+    ],
+    "imo_icd_snomed_table": [
+      {
+        "judges": "claude-3.7-sonnet, qwen3:1.7b",
+        "note": "note_4",
+        "imo_precision": 0.50,
+        "imo_recall": 0.50,
+        "imo_f1": 0.50,
+        "imo_tp": 1,
+        "imo_fp": 1,
+        "imo_fn": 1,
+        "icd10_precision": 0.67,
+        "icd10_recall": 1.0,
+        "icd10_f1": 0.80,
+        "icd10_tp": 2,
+        "icd10_fp": 1,
+        "icd10_fn": 0,
+        "snomed_precision": 0.75,
+        "snomed_recall": 0.75,
+        "snomed_f1": 0.75,
+        "snomed_tp": 3,
+        "snomed_fp": 1,
+        "snomed_fn": 1
+      }
+    ]
   }
 }
 ```
@@ -415,7 +514,12 @@ Runs LLM judge on the gold standard notes and computes P/R/F1 to validate the ju
 - Recall = |predicted ∩ gold| / |gold|
 - F1 = 2 × (P × R) / (P + R)
 - Computed separately for IMO codes, ICD-10 codes, SNOMED codes
-- Aggregated across all notes (micro-average)
+- **Per-note metrics:** Computed individually for each note (in `per_note_metrics` field)
+- **Aggregate metrics:** Computed across all notes combined (in `judge_validation_metrics` field)
+- **Tables:** Three tables are generated for display in test-client.html:
+  - `imo_table`: Shows TP/FP/FN for IMO codes per note
+  - `imo_icd_snomed_table`: Shows full P/R/F1 and TP/FP/FN for all three code systems per note
+  - `detailed_table`: Shows term-level matching with lexical codes and ICD-10/SNOMED codes comparison per term
 
 ---
 
@@ -712,6 +816,14 @@ TERM 2:
 
 The judge sees descriptions, not just codes. IMO codes are included in the flattened struct for reporting but NOT passed to the judge prompt.
 
+**Important Field Distinction:**
+- `term`: Raw term text from pipeline (e.g., "Improving Unspecified diabetes mellitus")
+- `default_lexical_title`: Normalized lexical title (e.g., "Diabetes mellitus")
+- `icd10_codes`: Array of ICD-10 code strings (e.g., ["E11.9", "Z79.4"])
+- `snomed_codes`: Array of SNOMED code strings (e.g., ["73211009"])
+
+These codes are extracted from the pipeline output and included in term results for gold standard comparison.
+
 ### 6.2 Judge Registry (`services/judge_registry.py`)
 
 - Reads config, builds registry of available models
@@ -813,16 +925,30 @@ Flow:
 4. For each matched note:
    a. Run LLM judge (same as /evaluate)
    b. Collect judge scores + suggested corrections
+   c. Compute per-note metrics (P/R/F1 for this note only)
 5. Compare pipeline predicted codes against gold standard expected codes:
-   - Extract predicted: IMO codes, ICD-10 codes, SNOMED codes from pipeline `normalized_terms`
+   - Extract predicted: ICD-10 and SNOMED codes from judge `term_results` (now included after evaluation)
+   - Extract predicted: IMO codes from pipeline `normalized_terms` (not in term_results)
    - Extract gold: IMO code from gold `golds[].code`
-   - For ICD-10/SNOMED: lookup from gold IMO code mappings if available
-6. Compute P/R/F1:
+   - Extract gold: ICD-10/SNOMED codes from `golds[].normalized.metadata.mappings`
+6. Compute P/R/F1 and TP/FP/FN:
    - Per code system (IMO, ICD-10, SNOMED)
-   - Precision = |predicted ∩ gold| / |predicted|
-   - Recall = |predicted ∩ gold| / |gold|
+   - TP (True Positives) = codes in both predicted and gold
+   - FP (False Positives) = codes in predicted but not in gold
+   - FN (False Negatives) = codes in gold but not predicted
+   - Precision = TP / (TP + FP)
+   - Recall = TP / (TP + FN)
    - F1 = 2 × (P × R) / (P + R)
-   - Micro-averaged across all notes
+   - **Per-note metrics:** Computed for each individual note
+   - **Aggregate metrics:** Micro-averaged across all notes
+7. Generate table data for UI display:
+   - `generate_imo_table()`: Creates IMO table with columns: Judge(s), Note, TP, FP, FN
+   - `generate_imo_icd_snomed_table()`: Creates comprehensive table with all metrics for all three code systems
+   - `generate_detailed_table()`: Creates term-level detailed table showing:
+     - Match by lexical code (default_lexical_code)
+     - One row per predicted term
+     - Lexical outcome: TP (match found) or FP (no match)
+     - Per-term ICD-10 and SNOMED code comparison with TP/FP/FN computed for each term individually
 
 **Gold standard JSON structure:**
 ```json
@@ -908,6 +1034,8 @@ class SuggestedCorrection(BaseModel):
 class TermResult(BaseModel):
     term: str
     default_lexical_title: str
+    icd10_codes: List[str]
+    snomed_codes: List[str]
     scores: Dict[str, DimensionScore]
     failed_dimensions: List[str]
     justifications: Dict[str, Dict[str, str]]
@@ -947,6 +1075,12 @@ class CodeSystemMetrics(BaseModel):
     precision: float
     recall: float
     f1: float
+    tp: int
+    fp: int
+    fn: int
+    tp_codes: List[str]
+    fp_codes: List[str]
+    fn_codes: List[str]
 
 class GoldNoteResult(BaseModel):
     note_id: str
@@ -1059,6 +1193,10 @@ A standalone HTML test client (`test-client.html`) is provided for easy API test
 - Models table with enabled/disabled status
 - Aggregate statistics for batch and gold evaluations
 - P/R/F1 metrics display for gold evaluation
+- **Per-note metrics tables** for gold evaluation:
+  - IMO table: Shows TP/FP/FN for IMO codes per note
+  - IMO-ICD-SNOMED table: Shows complete P/R/F1 and TP/FP/FN metrics for all three code systems per note
+  - Detailed table: Shows term-level matching with lexical outcome (TP/FP) and per-term ICD-10/SNOMED code analysis
 
 **Usage:**
 ```bash
@@ -1075,8 +1213,10 @@ xdg-open test-client.html
 **Output Format (Hierarchical Tree):**
 ```
 📄 Note: note_4 | Verdict: FAIL ✗
-├─ Term 1: Diabetes mellitus
+├─ Term 1: Improving Unspecified diabetes mellitus
 │  ├─ Default Lexical: Diabetes mellitus
+│  ├─ ICD-10 Codes: E11.9
+│  ├─ SNOMED Codes: 73211009
 │  ├─ Verdict: FAIL ✗
 │  ├─ Scores:
 │  │  ├─ Clinical Correctness: 0.90 (qwen3:1.7b: 0.90)

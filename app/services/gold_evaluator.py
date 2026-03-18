@@ -61,6 +61,7 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
 
     # Step 4: Evaluate each matched note
     per_note_results = []
+    per_note_metrics = []
     all_predicted_codes = {"imo": [], "icd10": [], "snomed": []}
     all_gold_codes = {"imo": [], "icd10": [], "snomed": []}
 
@@ -78,13 +79,24 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
                 prompt_template=prompt_template
             )
 
-            # Extract predicted codes
-            predicted_codes = extract_predicted_codes(pipeline_output)
+            # Extract predicted codes from term_results (now includes ICD10/SNOMED from evaluation)
+            predicted_codes = extract_predicted_codes_from_terms(judge_result["term_results"])
+
+            # Also extract IMO codes from pipeline (not in term_results)
+            imo_codes = extract_imo_codes(pipeline_output)
+            predicted_codes["imo"] = imo_codes
 
             # Extract gold expected codes
             gold_expected = extract_gold_codes(gold_note)
 
-            # Collect codes for P/R/F1 computation
+            # Compute per-note metrics
+            note_metrics = compute_metrics(predicted_codes, gold_expected)
+            per_note_metrics.append({
+                "note_id": note_id,
+                "metrics": note_metrics
+            })
+
+            # Collect codes for aggregate P/R/F1 computation
             all_predicted_codes["imo"].extend(predicted_codes.get("imo", []))
             all_predicted_codes["icd10"].extend(predicted_codes.get("icd10", []))
             all_predicted_codes["snomed"].extend(predicted_codes.get("snomed", []))
@@ -100,9 +112,15 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
                 "note_summary": judge_result["note_summary"],
                 "gold_expected": [{"title": g.get("title"), "code": g.get("code")} for g in gold_note.get("golds", [])],
                 "pipeline_predicted": [
-                    {"default_lexical_title": t.get("default_lexical_title"), "default_lexical_code": t.get("default_lexical_code")}
-                    for t in predicted_codes.get("terms", [])
-                ]
+                    {
+                        "term": t.get("term"),
+                        "default_lexical_title": t.get("default_lexical_title"),
+                        "icd10_codes": t.get("icd10_codes", []),
+                        "snomed_codes": t.get("snomed_codes", [])
+                    }
+                    for t in judge_result["term_results"]
+                ],
+                "per_note_metrics": note_metrics
             }
 
             per_note_results.append(per_note_result)
@@ -110,7 +128,7 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
         except Exception as e:
             logger.error(f"Failed to evaluate gold note {note_id}: {e}", exc_info=True)
 
-    # Step 5: Compute P/R/F1
+    # Step 5: Compute aggregate P/R/F1
     judge_validation_metrics = compute_metrics(all_predicted_codes, all_gold_codes)
 
     # Step 6: Generate aggregate stats
@@ -125,16 +143,68 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
     ]
     aggregate = generate_aggregate_report(note_reports_for_aggregate)
 
+    # Step 7: Generate table data for UI display
+    logger.info(f"Generating tables for {len(per_note_metrics)} notes")
+    judges_str = ", ".join(judges)
+    imo_table = generate_imo_table(per_note_metrics, judges_str)
+    imo_icd_snomed_table = generate_imo_icd_snomed_table(per_note_metrics, judges_str)
+    detailed_table = generate_detailed_table(per_note_results, judges_str, gold_by_id, pipeline_by_id)
+
+    logger.info(f"IMO table has {len(imo_table)} rows")
+    logger.info(f"IMO-ICD-SNOMED table has {len(imo_icd_snomed_table)} rows")
+    logger.info(f"Detailed table has {len(detailed_table)} rows")
+
     result = {
         "total_gold_notes": len(matched_note_ids),
         "per_note_results": per_note_results,
         "judge_validation_metrics": judge_validation_metrics,
-        "aggregate": aggregate
+        "aggregate": aggregate,
+        "tables": {
+            "imo_table": imo_table,
+            "imo_icd_snomed_table": imo_icd_snomed_table,
+            "detailed_table": detailed_table
+        }
     }
+
+    logger.info(f"Result has tables: {'tables' in result}")
 
     logger.info("Gold standard evaluation complete")
 
     return result
+
+
+def extract_predicted_codes_from_terms(term_results: List[Dict]) -> Dict:
+    """
+    Extract predicted codes from term_results (after evaluation).
+    Now ICD-10 and SNOMED codes are included in term_results.
+    """
+    predicted_codes = {"icd10": [], "snomed": []}
+
+    for term_result in term_results:
+        # Extract ICD-10 codes from term_result
+        icd10_codes = term_result.get("icd10_codes", [])
+        predicted_codes["icd10"].extend(icd10_codes)
+
+        # Extract SNOMED codes from term_result
+        snomed_codes = term_result.get("snomed_codes", [])
+        predicted_codes["snomed"].extend(snomed_codes)
+
+    return predicted_codes
+
+
+def extract_imo_codes(pipeline_output: dict) -> List[str]:
+    """Extract IMO codes from pipeline output (not included in term_results)."""
+    imo_codes = []
+
+    normalized_terms = pipeline_output.get("api_response", {}).get("normalized_terms", [])
+
+    for term_data in normalized_terms:
+        normalize_payload = term_data.get("normalize_payload", {})
+        imo_code = normalize_payload.get("code")
+        if imo_code:
+            imo_codes.append(imo_code)
+
+    return imo_codes
 
 
 def extract_predicted_codes(pipeline_output: dict) -> Dict:
@@ -178,7 +248,10 @@ def extract_predicted_codes(pipeline_output: dict) -> Dict:
 
 
 def extract_gold_codes(gold_note: dict) -> Dict:
-    """Extract expected codes from gold standard note."""
+    """
+    Extract expected codes from gold standard note.
+    Extracts IMO, ICD-10, and SNOMED codes from gold standard annotations.
+    """
     gold_codes = {"imo": [], "icd10": [], "snomed": []}
 
     golds = gold_note.get("golds", [])
@@ -188,20 +261,52 @@ def extract_gold_codes(gold_note: dict) -> Dict:
         if imo_code:
             gold_codes["imo"].append(imo_code)
 
-        # Note: ICD-10 and SNOMED codes would need to be looked up from IMO mappings
-        # For now, we'll leave them empty as the spec doesn't provide detailed mapping
+        # Extract ICD-10 and SNOMED codes from normalized.metadata.mappings
+        normalized = gold_item.get("normalized", {})
+        metadata = normalized.get("metadata", {})
+        mappings = metadata.get("mappings", {})
+
+        # ICD-10 codes
+        icd10_data = mappings.get("icd10cm", {}).get("codes", [])
+        for code_item in icd10_data:
+            code = code_item.get("code")
+            if code:
+                gold_codes["icd10"].append(code)
+
+        # SNOMED codes
+        snomed_data = mappings.get("snomedInternational", {}).get("codes", [])
+        for code_item in snomed_data:
+            code = code_item.get("code")
+            if code:
+                gold_codes["snomed"].append(code)
 
     return gold_codes
 
 
 def compute_metrics(predicted: Dict, gold: Dict) -> Dict:
-    """Compute P/R/F1 for each code system."""
+    """
+    Compute P/R/F1 and TP/FP/FN for each code system.
+
+    TP (True Positives): Codes correctly predicted (in both predicted and gold)
+    FP (False Positives): Codes incorrectly predicted (in predicted but not in gold)
+    FN (False Negatives): Codes missed (in gold but not in predicted)
+    """
     metrics = {}
 
     for code_system in ["imo", "icd10", "snomed"]:
         pred_set = set(predicted.get(code_system, []))
         gold_set = set(gold.get(code_system, []))
 
+        # Compute TP, FP, FN
+        tp_set = pred_set & gold_set  # True Positives: intersection
+        fp_set = pred_set - gold_set  # False Positives: predicted but not in gold
+        fn_set = gold_set - pred_set  # False Negatives: in gold but not predicted
+
+        tp = len(tp_set)
+        fp = len(fp_set)
+        fn = len(fn_set)
+
+        # Compute precision, recall, F1
         if not pred_set and not gold_set:
             # Both empty
             precision = recall = f1 = 0.0
@@ -216,17 +321,239 @@ def compute_metrics(predicted: Dict, gold: Dict) -> Dict:
             recall = 0.0
             f1 = 0.0
         else:
-            intersection = pred_set & gold_set
-            precision = len(intersection) / len(pred_set) if pred_set else 0.0
-            recall = len(intersection) / len(gold_set) if gold_set else 0.0
+            precision = tp / len(pred_set) if pred_set else 0.0
+            recall = tp / len(gold_set) if gold_set else 0.0
             f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
 
         metrics[code_system] = {
             "precision": round(precision, 2),
             "recall": round(recall, 2),
-            "f1": round(f1, 2)
+            "f1": round(f1, 2),
+            "tp": tp,
+            "fp": fp,
+            "fn": fn,
+            "tp_codes": list(tp_set),
+            "fp_codes": list(fp_set),
+            "fn_codes": list(fn_set)
         }
 
     logger.info(f"Computed metrics: {metrics}")
 
     return metrics
+
+
+def generate_imo_table(per_note_metrics: List[Dict], judges_str: str) -> List[Dict]:
+    """
+    Generate IMO table data for UI display.
+
+    Table columns: Judge(s) | Note | TP | FP | FN
+    """
+    table_data = []
+
+    for note_metric in per_note_metrics:
+        note_id = note_metric["note_id"]
+        imo_metrics = note_metric["metrics"].get("imo", {})
+
+        row = {
+            "judges": judges_str,
+            "note": note_id,
+            "tp": imo_metrics.get("tp", 0),
+            "fp": imo_metrics.get("fp", 0),
+            "fn": imo_metrics.get("fn", 0)
+        }
+
+        table_data.append(row)
+
+    logger.info(f"Generated IMO table with {len(table_data)} rows")
+    return table_data
+
+
+def generate_imo_icd_snomed_table(per_note_metrics: List[Dict], judges_str: str) -> List[Dict]:
+    """
+    Generate IMO-ICD-SNOMED table data for UI display.
+
+    Table columns: Judge(s) | Note | IMO_Precision | IMO_Recall | IMO_F1 | IMO_TP | IMO_FP | IMO_FN |
+                   ICD10_Precision | ICD10_Recall | ICD10_F1 | ICD10_TP | ICD10_FP | ICD10_FN |
+                   SNOMED_Precision | SNOMED_Recall | SNOMED_F1 | SNOMED_TP | SNOMED_FP | SNOMED_FN
+    """
+    table_data = []
+
+    for note_metric in per_note_metrics:
+        note_id = note_metric["note_id"]
+        metrics = note_metric["metrics"]
+
+        imo_metrics = metrics.get("imo", {})
+        icd10_metrics = metrics.get("icd10", {})
+        snomed_metrics = metrics.get("snomed", {})
+
+        row = {
+            "judges": judges_str,
+            "note": note_id,
+            # IMO metrics
+            "imo_precision": imo_metrics.get("precision", 0.0),
+            "imo_recall": imo_metrics.get("recall", 0.0),
+            "imo_f1": imo_metrics.get("f1", 0.0),
+            "imo_tp": imo_metrics.get("tp", 0),
+            "imo_fp": imo_metrics.get("fp", 0),
+            "imo_fn": imo_metrics.get("fn", 0),
+            # ICD10 metrics
+            "icd10_precision": icd10_metrics.get("precision", 0.0),
+            "icd10_recall": icd10_metrics.get("recall", 0.0),
+            "icd10_f1": icd10_metrics.get("f1", 0.0),
+            "icd10_tp": icd10_metrics.get("tp", 0),
+            "icd10_fp": icd10_metrics.get("fp", 0),
+            "icd10_fn": icd10_metrics.get("fn", 0),
+            # SNOMED metrics
+            "snomed_precision": snomed_metrics.get("precision", 0.0),
+            "snomed_recall": snomed_metrics.get("recall", 0.0),
+            "snomed_f1": snomed_metrics.get("f1", 0.0),
+            "snomed_tp": snomed_metrics.get("tp", 0),
+            "snomed_fp": snomed_metrics.get("fp", 0),
+            "snomed_fn": snomed_metrics.get("fn", 0)
+        }
+
+        table_data.append(row)
+
+    logger.info(f"Generated IMO-ICD-SNOMED table with {len(table_data)} rows")
+    return table_data
+
+
+def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_by_id: Dict, pipeline_by_id: Dict) -> List[Dict]:
+    """
+    Generate detailed term-level matching table.
+
+    Columns: Judges | Note | match_key | term | default_lexical_title | gold_lexical | pred_lexical |
+             lexical_outcome | gold_icd10cm | pred_icd10cm | icd10_tp | icd10_fp | icd10_fn |
+             gold_snomed | pred_snomed | snomed_tp | snomed_fp | snomed_fn
+
+    Logic:
+    - Match predicted terms with gold terms by lexical code (default_lexical_code)
+    - Create one row per predicted term
+    - Lexical outcome: TP if match found, FP if not
+    - ICD-10/SNOMED metrics computed per term match
+    """
+    table_data = []
+
+    for note_result in per_note_results:
+        note_id = note_result["note_id"]
+        gold_note = gold_by_id.get(note_id)
+        pipeline_output = pipeline_by_id.get(note_id)
+
+        if not gold_note or not pipeline_output:
+            continue
+
+        # Build gold lookup by lexical code
+        gold_by_lexical = {}
+        for gold_item in gold_note.get("golds", []):
+            lexical_code = gold_item.get("code")
+            if lexical_code:
+                normalized = gold_item.get("normalized", {})
+                metadata = normalized.get("metadata", {})
+                mappings = metadata.get("mappings", {})
+
+                # Extract ICD-10 codes
+                icd10_codes = []
+                for code_item in mappings.get("icd10cm", {}).get("codes", []):
+                    code = code_item.get("code")
+                    if code:
+                        icd10_codes.append(code)
+
+                # Extract SNOMED codes
+                snomed_codes = []
+                for code_item in mappings.get("snomedInternational", {}).get("codes", []):
+                    code = code_item.get("code")
+                    if code:
+                        snomed_codes.append(code)
+
+                gold_by_lexical[lexical_code] = {
+                    "lexical_code": lexical_code,
+                    "title": gold_item.get("title", ""),
+                    "icd10_codes": icd10_codes,
+                    "snomed_codes": snomed_codes
+                }
+
+        # Process each predicted term
+        normalized_terms = pipeline_output.get("api_response", {}).get("normalized_terms", [])
+
+        for term_data in normalized_terms:
+            normalize_payload = term_data.get("normalize_payload", {})
+
+            # Predicted data
+            term = term_data.get("term", "")
+            pred_lexical = normalize_payload.get("code", "")
+            default_lexical_title = normalize_payload.get("default_lexical_title", "")
+
+            # Extract predicted ICD-10 codes
+            pred_icd10_codes = []
+            mappings = normalize_payload.get("metadata", {}).get("mappings", {})
+            for code_item in mappings.get("icd10cm", {}).get("codes", []):
+                code = code_item.get("code")
+                if code:
+                    pred_icd10_codes.append(code)
+
+            # Extract predicted SNOMED codes
+            pred_snomed_codes = []
+            for code_item in mappings.get("snomedInternational", {}).get("codes", []):
+                code = code_item.get("code")
+                if code:
+                    pred_snomed_codes.append(code)
+
+            # Check if this predicted term matches a gold term
+            gold_match = gold_by_lexical.get(pred_lexical)
+
+            if gold_match:
+                # TP: Lexical code matches
+                lexical_outcome = "TP"
+                gold_lexical = gold_match["lexical_code"]
+                gold_icd10_codes = gold_match["icd10_codes"]
+                gold_snomed_codes = gold_match["snomed_codes"]
+                match_key = pred_lexical
+            else:
+                # FP: Predicted but not in gold
+                lexical_outcome = "FP"
+                gold_lexical = ""
+                gold_icd10_codes = []
+                gold_snomed_codes = []
+                match_key = pred_lexical
+
+            # Compute ICD-10 TP/FP/FN for this term
+            pred_icd10_set = set(pred_icd10_codes)
+            gold_icd10_set = set(gold_icd10_codes)
+
+            icd10_tp_set = pred_icd10_set & gold_icd10_set
+            icd10_fp_set = pred_icd10_set - gold_icd10_set
+            icd10_fn_set = gold_icd10_set - pred_icd10_set
+
+            # Compute SNOMED TP/FP/FN for this term
+            pred_snomed_set = set(pred_snomed_codes)
+            gold_snomed_set = set(gold_snomed_codes)
+
+            snomed_tp_set = pred_snomed_set & gold_snomed_set
+            snomed_fp_set = pred_snomed_set - gold_snomed_set
+            snomed_fn_set = gold_snomed_set - pred_snomed_set
+
+            row = {
+                "judges": judges_str,
+                "note": note_id,
+                "match_key": match_key,
+                "term": term,
+                "default_lexical_title": default_lexical_title,
+                "gold_lexical": gold_lexical,
+                "pred_lexical": pred_lexical,
+                "lexical_outcome": lexical_outcome,
+                "gold_icd10cm": ", ".join(gold_icd10_codes),
+                "pred_icd10cm": ", ".join(pred_icd10_codes),
+                "icd10_tp": ", ".join(sorted(icd10_tp_set)),
+                "icd10_fp": ", ".join(sorted(icd10_fp_set)),
+                "icd10_fn": ", ".join(sorted(icd10_fn_set)),
+                "gold_snomed": ", ".join(gold_snomed_codes),
+                "pred_snomed": ", ".join(pred_snomed_codes),
+                "snomed_tp": ", ".join(sorted(snomed_tp_set)),
+                "snomed_fp": ", ".join(sorted(snomed_fp_set)),
+                "snomed_fn": ", ".join(sorted(snomed_fn_set))
+            }
+
+            table_data.append(row)
+
+    logger.info(f"Generated detailed table with {len(table_data)} rows")
+    return table_data

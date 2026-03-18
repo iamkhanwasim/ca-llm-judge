@@ -26,15 +26,30 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
     terms_failed = 0
 
     for idx, aggregated_term in enumerate(aggregated_terms):
-        term_text = aggregated_term.get("term", "")
         scores = aggregated_term.get("scores", {})
         justifications = aggregated_term.get("justifications", {})
         suggested_corrections = aggregated_term.get("suggested_corrections", [])
 
-        # Get default_lexical_title from flattened_terms
+        # Get term details from flattened_terms (original pipeline data)
+        term_text = ""
         default_lexical_title = ""
+        icd10_codes = []
+        snomed_codes = []
+
         if idx < len(flattened_terms):
-            default_lexical_title = flattened_terms[idx].get("default_lexical_title", term_text)
+            flattened = flattened_terms[idx]
+            term_text = flattened.get("term", "")  # Raw term from pipeline
+            default_lexical_title = flattened.get("default_lexical_title", "")
+
+            # Extract just the code values (not full objects)
+            icd10_full = flattened.get("icd10", [])
+            snomed_full = flattened.get("snomed", [])
+
+            icd10_codes = [c.get("code", "") for c in icd10_full if c.get("code")]
+            snomed_codes = [c.get("code", "") for c in snomed_full if c.get("code")]
+        else:
+            # Fallback to aggregated term if index mismatch
+            term_text = aggregated_term.get("term", "")
 
         # Check each dimension against threshold
         failed_dimensions = []
@@ -55,6 +70,8 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
         term_result = {
             "term": term_text,
             "default_lexical_title": default_lexical_title,
+            "icd10_codes": icd10_codes,
+            "snomed_codes": snomed_codes,
             "scores": scores,
             "failed_dimensions": failed_dimensions,
             "justifications": justifications,
