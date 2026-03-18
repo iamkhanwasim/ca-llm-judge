@@ -16,7 +16,7 @@ class SuggestedCorrection(BaseModel):
 
 class TermResult(BaseModel):
     term: str
-    lexical_title: str
+    default_lexical_title: str
     scores: Dict[str, DimensionScore]
     failed_dimensions: List[str]
     justifications: Dict[str, Dict[str, str]]

@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(python -m app.main:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

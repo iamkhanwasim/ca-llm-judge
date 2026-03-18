@@ -92,6 +92,12 @@ async def evaluate_note(
     aggregated_result = aggregate_scores(judge_responses)
     aggregated_terms = aggregated_result.get("aggregated_terms", [])
 
+    logger.info(f"Aggregated {len(aggregated_terms)} terms from judge responses")
+
+    if len(aggregated_terms) == 0:
+        logger.warning(f"No aggregated terms for note {note_id}. Flattened terms count: {len(flattened_terms)}")
+        logger.warning(f"Judge responses summary: {[(j, len(r.get('term_evaluations', []))) for j, r in judge_responses.items()]}")
+
     # Step 5: Apply threshold gate
     threshold_result = apply_thresholds(aggregated_terms, flattened_terms)
 

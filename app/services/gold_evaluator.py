@@ -100,7 +100,7 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
                 "note_summary": judge_result["note_summary"],
                 "gold_expected": [{"title": g.get("title"), "code": g.get("code")} for g in gold_note.get("golds", [])],
                 "pipeline_predicted": [
-                    {"lexical_title": t.get("lexical_title"), "lexical_code": t.get("lexical_code")}
+                    {"default_lexical_title": t.get("default_lexical_title"), "default_lexical_code": t.get("default_lexical_code")}
                     for t in predicted_codes.get("terms", [])
                 ]
             }
@@ -151,12 +151,12 @@ def extract_predicted_codes(pipeline_output: dict) -> Dict:
         if imo_code:
             predicted_codes["imo"].append(imo_code)
 
-        # Lexical info
-        lexical_title = normalize_payload.get("lexical_title", "")
-        lexical_code = normalize_payload.get("lexical_code", "")
+        # Default lexical info
+        default_lexical_title = normalize_payload.get("default_lexical_title", "")
+        default_lexical_code = normalize_payload.get("default_lexical_code", "")
         predicted_codes["terms"].append({
-            "lexical_title": lexical_title,
-            "lexical_code": lexical_code
+            "default_lexical_title": default_lexical_title,
+            "default_lexical_code": default_lexical_code
         })
 
         # ICD-10 codes

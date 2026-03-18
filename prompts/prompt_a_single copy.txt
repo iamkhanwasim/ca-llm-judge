@@ -26,39 +26,28 @@ For EACH predicted term, score these 4 dimensions on a scale of 0.0 to 1.0:
 
 CLINICAL_CORRECTNESS: Is this predicted term and its associated ICD-10
 and SNOMED descriptions clinically supported by the note?
-- 1.0 = fully supported
-- 0.8 = supported but with minor ambiguity
-- 0.6 = mostly supported, one aspect questionable
-- 0.4 = weakly supported, significant assumptions made
-- 0.2 = barely supported
+- 1.0 = fully supported by the note
+- 0.5 = partially supported or ambiguous
 - 0.0 = contradicted or unsupported
 
 COMPLETENESS: Does this term fully capture the clinical finding it
 represents? Are relevant aspects of that finding included?
-- 1.0 = finding fully represented
-- 0.8 = core finding + most aspects captured, one minor aspect missing
-- 0.6 = core finding captured, one significant aspect missing
-- 0.4 = core finding captured, multiple aspects missing
-- 0.2 = only the broadest element captured
-- 0.0 = term barely represents the finding
+- 1.0 = the finding is fully represented
+- 0.5 = the core finding is captured but some aspects are missing
+- 0.0 = the term barely represents the finding
 
 SPECIFICITY: Is this term precise enough? Not too broad, not hallucinated?
 - 1.0 = appropriately specific
-- 0.8 = slightly too broad but clinically acceptable
-- 0.6 = noticeably generic, missing one key qualifier
-- 0.4 = overly broad, missing multiple qualifiers
-- 0.2 = very vague
-- 0.0 = fabricated or completely wrong
+- 0.5 = too generic (e.g., "diabetes" instead of "diabetes with
+  hypoglycemia" when hypoglycemia is evidenced in the note)
+- 0.0 = vague or fabricated
 
 COMPONENT_COVERAGE: Does this term capture all relevant clinical modifiers
 and qualifiers evidenced in the note? For diabetes terms, are the
 components present in the correct order per the construction rules above?
-- 1.0 = all evidenced modifiers present, correct order
-- 0.8 = all modifiers present, minor ordering issue
-- 0.6 = one evidenced modifier missing, order correct
-- 0.4 = one modifier missing + ordering issue
-- 0.2 = multiple modifiers missing
-- 0.0 = most modifiers missing
+- 1.0 = all evidenced modifiers captured in correct order
+- 0.5 = some evidenced modifiers missing or ordering incorrect
+- 0.0 = most evidenced modifiers missing
 
 For any term with any dimension scoring below 1.0, suggest specific corrections.
 

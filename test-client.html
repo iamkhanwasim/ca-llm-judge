@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Judge API Test Client</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .api-url-bar {
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #fafafa;
+        }
+
+        .api-url-bar label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .api-url-bar input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 400px;
+            font-family: monospace;
+        }
+
+        .tabs {
+            display: flex;
+            padding: 0 30px;
+            border-bottom: 2px solid #e0e0e0;
+            background: #f9f9f9;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .tab.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            resize: vertical;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .output.empty {
+            color: #999;
+            font-style: italic;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            color: #856404;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .tree {
+            font-family: monospace;
+            line-height: 1.8;
+        }
+
+        .verdict-pass {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .verdict-fail {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .metric-pass {
+            color: #28a745;
+        }
+
+        .metric-fail {
+            color: #dc3545;
+        }
+
+        .metric-partial {
+            color: #ffc107;
+        }
+
+        .judge-name {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .health-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .health-status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .health-status.healthy {
+            background: #28a745;
+        }
+
+        .health-status.unhealthy {
+            background: #dc3545;
+        }
+
+        .models-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .models-table th,
+        .models-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .models-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-enabled {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-disabled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .judge-selection {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            background: #fafafa;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .judge-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+
+        .judge-checkbox:hover {
+            background: #fff;
+        }
+
+        .judge-checkbox input[type="checkbox"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .judge-checkbox label {
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .judge-checkbox.disabled {
+            opacity: 0.5;
+        }
+
+        .prompt-selection {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+
+        .prompt-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .prompt-option input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .prompt-option label {
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .load-models-btn {
+            background: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .load-models-btn:hover {
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>LLM Judge API Test Client</h1>
+            <p>Test and evaluate clinical NLP pipeline output using multiple LLM judges</p>
+        </div>
+
+        <div class="api-url-bar">
+            <label for="apiUrl">API Base URL:</label>
+            <input type="text" id="apiUrl" value="http://localhost:8000" />
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('health')">Health</button>
+            <button class="tab" onclick="switchTab('models')">Models</button>
+            <button class="tab" onclick="switchTab('evaluate')">Evaluate</button>
+            <button class="tab" onclick="switchTab('batch')">Batch Evaluate</button>
+            <button class="tab" onclick="switchTab('gold')">Gold Evaluate</button>
+        </div>
+
+        <!-- Health Tab -->
+        <div id="health" class="tab-content active">
+            <div class="section">
+                <button class="button" onclick="callHealth()">Check Health</button>
+                <div class="loading" id="health-loading">Checking health...</div>
+            </div>
+            <div class="section">
+                <div class="section-title">Response</div>
+                <div id="health-output" class="output empty">Click "Check Health" to test the /health endpoint</div>
+            </div>
+        </div>
+
+        <!-- Models Tab -->
+        <div id="models" class="tab-content">
+            <div class="section">
+                <button class="button" onclick="callModels()">List Models</button>
+                <div class="loading" id="models-loading">Loading models...</div>
+            </div>
+            <div class="section">
+                <div class="section-title">Response</div>
+                <div id="models-output" class="output empty">Click "List Models" to test the /models endpoint</div>
+            </div>
+        </div>
+
+        <!-- Evaluate Tab -->
+        <div id="evaluate" class="tab-content">
+            <div class="section">
+                <button class="button load-models-btn" onclick="loadModelsForEvaluate()">Load Available Models</button>
+                <div class="loading" id="evaluate-models-loading">Loading models...</div>
+            </div>
+
+            <div class="form-row">
+                <div class="section">
+                    <div class="section-title">Select Judge(s)</div>
+                    <div id="evaluate-judges" class="judge-selection">
+                        <em>Click "Load Available Models" to see judges</em>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Select Prompt Template</div>
+                    <div class="prompt-selection">
+                        <div class="prompt-option">
+                            <input type="radio" id="evaluate-prompt-a" name="evaluate-prompt" value="prompt_a" checked>
+                            <label for="evaluate-prompt-a">Prompt A (Single)</label>
+                        </div>
+                        <div class="prompt-option">
+                            <input type="radio" id="evaluate-prompt-b" name="evaluate-prompt" value="prompt_b">
+                            <label for="evaluate-prompt-b">Prompt B (Chain-of-Thought)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Pipeline Output (JSON)</div>
+                <textarea id="evaluate-input" placeholder='Paste pipeline_output JSON here:
+{
+  "note_id": "note_4",
+  "docname": "Note 4",
+  "api_response": {
+    "raw_text": "...",
+    "normalized_terms": [...]
+  }
+}'></textarea>
+            </div>
+
+            <div class="section">
+                <button class="button" onclick="callEvaluate()">Evaluate Note</button>
+                <div class="loading" id="evaluate-loading">Evaluating note...</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Response</div>
+                <div id="evaluate-output" class="output empty">Response will appear here</div>
+            </div>
+        </div>
+
+        <!-- Batch Evaluate Tab -->
+        <div id="batch" class="tab-content">
+            <div class="section">
+                <button class="button load-models-btn" onclick="loadModelsForBatch()">Load Available Models</button>
+                <div class="loading" id="batch-models-loading">Loading models...</div>
+            </div>
+
+            <div class="form-row">
+                <div class="section">
+                    <div class="section-title">Select Judge(s)</div>
+                    <div id="batch-judges" class="judge-selection">
+                        <em>Click "Load Available Models" to see judges</em>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Select Prompt Template</div>
+                    <div class="prompt-selection">
+                        <div class="prompt-option">
+                            <input type="radio" id="batch-prompt-a" name="batch-prompt" value="prompt_a" checked>
+                            <label for="batch-prompt-a">Prompt A (Single)</label>
+                        </div>
+                        <div class="prompt-option">
+                            <input type="radio" id="batch-prompt-b" name="batch-prompt" value="prompt_b">
+                            <label for="batch-prompt-b">Prompt B (Chain-of-Thought)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Pipeline Outputs (JSON Array)</div>
+                <textarea id="batch-input" placeholder='Paste array of pipeline_outputs JSON here:
+[
+  {
+    "note_id": "note_4",
+    "docname": "Note 4",
+    "api_response": { "raw_text": "...", "normalized_terms": [...] }
+  },
+  {
+    "note_id": "note_5",
+    "docname": "Note 5",
+    "api_response": { "raw_text": "...", "normalized_terms": [...] }
+  }
+]'></textarea>
+            </div>
+
+            <div class="section">
+                <button class="button" onclick="callBatchEvaluate()">Batch Evaluate</button>
+                <div class="loading" id="batch-loading">Evaluating batch...</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Response</div>
+                <div id="batch-output" class="output empty">Response will appear here</div>
+            </div>
+        </div>
+
+        <!-- Gold Evaluate Tab -->
+        <div id="gold" class="tab-content">
+            <div class="section">
+                <button class="button load-models-btn" onclick="loadModelsForGold()">Load Available Models</button>
+                <div class="loading" id="gold-models-loading">Loading models...</div>
+            </div>
+
+            <div class="form-row">
+                <div class="section">
+                    <div class="section-title">Select Judge(s)</div>
+                    <div id="gold-judges" class="judge-selection">
+                        <em>Click "Load Available Models" to see judges</em>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Select Prompt Template</div>
+                    <div class="prompt-selection">
+                        <div class="prompt-option">
+                            <input type="radio" id="gold-prompt-a" name="gold-prompt" value="prompt_a" checked>
+                            <label for="gold-prompt-a">Prompt A (Single)</label>
+                        </div>
+                        <div class="prompt-option">
+                            <input type="radio" id="gold-prompt-b" name="gold-prompt" value="prompt_b">
+                            <label for="gold-prompt-b">Prompt B (Chain-of-Thought)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p style="color: #666; font-style: italic; margin-bottom: 15px;">
+                    Note: Gold evaluation loads data from configured file paths in the server.
+                </p>
+                <button class="button" onclick="callGoldEvaluate()">Run Gold Evaluation</button>
+                <div class="loading" id="gold-loading">Running gold evaluation...</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Response</div>
+                <div id="gold-output" class="output empty">Response will appear here</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function getApiUrl() {
+            return document.getElementById('apiUrl').value.trim().replace(/\/$/, '');
+        }
+
+        function showLoading(id) {
+            document.getElementById(`${id}-loading`).classList.add('active');
+        }
+
+        function hideLoading(id) {
+            document.getElementById(`${id}-loading`).classList.remove('active');
+        }
+
+        function displayError(outputId, error) {
+            const output = document.getElementById(outputId);
+            output.className = 'output';
+            output.innerHTML = `<div class="error"><strong>Error:</strong> ${error}</div>`;
+        }
+
+        // Load models and populate checkboxes
+        async function loadModels(containerId, loadingId) {
+            showLoading(loadingId);
+            const container = document.getElementById(containerId);
+
+            try {
+                const response = await fetch(`${getApiUrl()}/models`);
+                const data = await response.json();
+
+                if (data.models && data.models.length > 0) {
+                    container.innerHTML = '';
+                    data.models.forEach(model => {
+                        const div = document.createElement('div');
+                        div.className = `judge-checkbox ${!model.enabled ? 'disabled' : ''}`;
+
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `${containerId}-${model.name}`;
+                        checkbox.value = model.name;
+                        checkbox.disabled = !model.enabled;
+                        if (model.enabled) checkbox.checked = true;
+
+                        const label = document.createElement('label');
+                        label.htmlFor = `${containerId}-${model.name}`;
+                        label.innerHTML = `
+                            <span>${model.name}</span>
+                            <span class="badge ${model.enabled ? 'badge-enabled' : 'badge-disabled'}">
+                                ${model.enabled ? 'ENABLED' : 'DISABLED'}
+                            </span>
+                        `;
+
+                        div.appendChild(checkbox);
+                        div.appendChild(label);
+                        container.appendChild(div);
+                    });
+                } else {
+                    container.innerHTML = '<em>No models available</em>';
+                }
+            } catch (error) {
+                container.innerHTML = `<em style="color: #dc3545;">Error loading models: ${error.message}</em>`;
+            } finally {
+                hideLoading(loadingId);
+            }
+        }
+
+        function loadModelsForEvaluate() {
+            loadModels('evaluate-judges', 'evaluate-models');
+        }
+
+        function loadModelsForBatch() {
+            loadModels('batch-judges', 'batch-models');
+        }
+
+        function loadModelsForGold() {
+            loadModels('gold-judges', 'gold-models');
+        }
+
+        // Get selected judges from checkboxes
+        function getSelectedJudges(containerId) {
+            const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`);
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        // Get selected prompt template
+        function getSelectedPrompt(name) {
+            const radio = document.querySelector(`input[name="${name}"]:checked`);
+            return radio ? radio.value : 'prompt_a';
+        }
+
+        // Format health response
+        function formatHealthResponse(data) {
+            let html = '<div class="tree">';
+            html += '<div class="health-item">';
+            html += `<span class="health-status ${data.status === 'healthy' ? 'healthy' : 'unhealthy'}"></span>`;
+            html += `<strong>Status:</strong> ${data.status.toUpperCase()}`;
+            html += '</div>';
+
+            html += '<div class="health-item">';
+            html += `<span class="health-status ${data.config_loaded ? 'healthy' : 'unhealthy'}"></span>`;
+            html += `<strong>Config Loaded:</strong> ${data.config_loaded ? 'Yes' : 'No'}`;
+            html += '</div>';
+
+            html += '<div class="health-item">';
+            html += `<span class="health-status ${data.ollama_reachable ? 'healthy' : 'unhealthy'}"></span>`;
+            html += `<strong>Ollama Reachable:</strong> ${data.ollama_reachable ? 'Yes' : 'No'}`;
+            html += '</div>';
+
+            html += '<div style="margin-top: 15px;"><strong>Available Judges:</strong></div>';
+            if (data.available_judges && data.available_judges.length > 0) {
+                data.available_judges.forEach(judge => {
+                    html += `<div style="margin-left: 20px;">|- ${judge}</div>`;
+                });
+            } else {
+                html += '<div style="margin-left: 20px;">|- <em>No judges available</em></div>';
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        // Format models response
+        function formatModelsResponse(data) {
+            let html = '<table class="models-table">';
+            html += '<thead><tr><th>Model Name</th><th>Provider</th><th>Status</th></tr></thead>';
+            html += '<tbody>';
+
+            if (data.models && data.models.length > 0) {
+                data.models.forEach(model => {
+                    html += '<tr>';
+                    html += `<td><strong>${model.name}</strong></td>`;
+                    html += `<td>${model.provider}</td>`;
+                    html += `<td><span class="badge ${model.enabled ? 'badge-enabled' : 'badge-disabled'}">${model.enabled ? 'ENABLED' : 'DISABLED'}</span></td>`;
+                    html += '</tr>';
+                });
+            } else {
+                html += '<tr><td colspan="3"><em>No models found</em></td></tr>';
+            }
+
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // Format evaluation response (hierarchical tree)
+        function formatEvaluationResponse(data) {
+            let html = '<div class="tree">';
+
+            const verdictClass = data.verdict === 'PASS' ? 'verdict-pass' : 'verdict-fail';
+            html += `Note: ${data.note_id} | <span class="${verdictClass}">Verdict: ${data.verdict}</span>\n`;
+
+            if (data.term_results && data.term_results.length > 0) {
+                data.term_results.forEach((term, idx) => {
+                    const isLast = idx === data.term_results.length - 1;
+                    const prefix = isLast ? '\\-' : '|-';
+                    const childPrefix = isLast ? '   ' : '|  ';
+
+                    const termVerdictClass = term.verdict === 'PASS' ? 'verdict-pass' : 'verdict-fail';
+
+                    html += `${prefix} <strong>Term ${idx + 1}:</strong> ${term.term}\n`;
+                    html += `${childPrefix}|- <strong>Default Lexical:</strong> ${term.default_lexical_title}\n`;
+                    html += `${childPrefix}|- <span class="${termVerdictClass}">Verdict: ${term.verdict}</span>\n`;
+
+                    html += `${childPrefix}|- <strong>Scores:</strong>\n`;
+                    const scoreKeys = Object.keys(term.scores);
+                    scoreKeys.forEach((metric, sIdx) => {
+                        const score = term.scores[metric];
+                        const isLastScore = sIdx === scoreKeys.length - 1;
+                        const scorePrefix = isLastScore ? '\\-' : '|-';
+
+                        const aggregated = score.aggregated;
+                        let scoreClass = 'metric-pass';
+                        if (aggregated < 0.6) scoreClass = 'metric-fail';
+                        else if (aggregated < 0.8) scoreClass = 'metric-partial';
+
+                        const metricName = metric.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        html += `${childPrefix}|  ${scorePrefix} <span class="${scoreClass}">${metricName}: ${aggregated.toFixed(2)}</span>`;
+
+                        if (score.per_judge) {
+                            const judges = Object.keys(score.per_judge);
+                            html += ' (';
+                            judges.forEach((judge, jIdx) => {
+                                html += `${judge}: ${score.per_judge[judge].toFixed(2)}`;
+                                if (jIdx < judges.length - 1) html += ', ';
+                            });
+                            html += ')';
+                        }
+                        html += '\n';
+                    });
+
+                    if (term.failed_dimensions && term.failed_dimensions.length > 0) {
+                        html += `${childPrefix}|- <strong>Failed Dimensions:</strong> ${term.failed_dimensions.join(', ')}\n`;
+                    }
+
+                    if (term.justifications) {
+                        html += `${childPrefix}|- <strong>Justifications:</strong>\n`;
+                        const judges = Object.keys(term.justifications);
+                        judges.forEach((judge, jIdx) => {
+                            const isLastJudge = jIdx === judges.length - 1;
+                            const judgePrefix = isLastJudge ? '\\-' : '|-';
+
+                            html += `${childPrefix}|  ${judgePrefix} <span class="judge-name">${judge}:</span>\n`;
+
+                            const justifications = term.justifications[judge];
+                            const justKeys = Object.keys(justifications);
+                            justKeys.forEach((metric, mIdx) => {
+                                const isLastMetric = mIdx === justKeys.length - 1;
+                                const metricPrefix = isLastMetric ? '\\-' : '|-';
+                                const childMetricPrefix = isLastJudge ? '   ' : '|  ';
+
+                                const metricName = metric.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                const justText = justifications[metric];
+                                html += `${childPrefix}|  ${childMetricPrefix}${metricPrefix} ${metricName}: "${justText}"\n`;
+                            });
+                        });
+                    }
+
+                    if (term.suggested_corrections && term.suggested_corrections.length > 0) {
+                        html += `${childPrefix}\\- <strong>Suggested Corrections:</strong>\n`;
+                        term.suggested_corrections.forEach((correction, cIdx) => {
+                            const isLastCorrection = cIdx === term.suggested_corrections.length - 1;
+                            const corrPrefix = isLastCorrection ? '\\-' : '|-';
+
+                            html += `${childPrefix}   ${corrPrefix} <span class="judge-name">[${correction.judge}]</span> ${correction.issue}\n`;
+                            html += `${childPrefix}   ${isLastCorrection ? ' ' : '|'}  |- <strong>Current:</strong> ${correction.current}\n`;
+                            html += `${childPrefix}   ${isLastCorrection ? ' ' : '|'}  \\- <strong>Suggested:</strong> ${correction.suggested}\n`;
+                        });
+                    } else {
+                        html += `${childPrefix}\\- <strong>Suggested Corrections:</strong> None\n`;
+                    }
+
+                    html += '\n';
+                });
+            }
+
+            if (data.note_summary) {
+                html += '\\- <strong>Summary:</strong>\n';
+                html += `   |- Total Terms: ${data.note_summary.total_terms}\n`;
+                html += `   |- Passed: ${data.note_summary.terms_passed}\n`;
+                html += `   |- Failed: ${data.note_summary.terms_failed}\n`;
+                html += `   \\- Average Scores: `;
+
+                const avgScores = data.note_summary.avg_scores;
+                const avgKeys = Object.keys(avgScores);
+                avgKeys.forEach((key, idx) => {
+                    const shortName = key.substring(0, 4);
+                    html += `${shortName}=${avgScores[key].toFixed(2)}`;
+                    if (idx < avgKeys.length - 1) html += ', ';
+                });
+                html += '\n';
+            }
+
+            if (data.flagged_for_review) {
+                html += '\n[!] <strong>FLAGGED FOR REVIEW</strong>\n';
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function formatBatchEvaluationResponse(data) {
+            let html = '<div class="tree">';
+
+            html += `<strong>Batch Evaluation Results</strong>\n\n`;
+
+            if (data.results && data.results.length > 0) {
+                data.results.forEach((result, idx) => {
+                    const isLast = idx === data.results.length - 1;
+                    const prefix = isLast ? '\\-' : '|-';
+
+                    const verdictClass = result.verdict === 'PASS' ? 'verdict-pass' : 'verdict-fail';
+
+                    html += `${prefix} <strong>Note ${idx + 1}:</strong> ${result.note_id} | <span class="${verdictClass}">${result.verdict}</span>\n`;
+                    html += `${isLast ? ' ' : '|'}  \\- Terms: ${result.note_summary.terms_passed}/${result.note_summary.total_terms} passed\n`;
+                    html += '\n';
+                });
+            }
+
+            if (data.aggregate) {
+                html += '<strong>Aggregate Statistics:</strong>\n';
+                html += `|- Total Notes: ${data.aggregate.total_notes}\n`;
+                html += `|- Pass Count: ${data.aggregate.pass_count}\n`;
+                html += `|- Fail Count: ${data.aggregate.fail_count}\n`;
+                html += `|- Pass Rate: ${(data.aggregate.pass_rate * 100).toFixed(1)}%\n`;
+                html += `|- Total Terms Evaluated: ${data.aggregate.total_terms_evaluated}\n`;
+                html += `|- Terms Passed: ${data.aggregate.terms_passed}\n`;
+                html += `|- Terms Failed: ${data.aggregate.terms_failed}\n`;
+
+                html += `|- Average Scores:\n`;
+                const avgScores = data.aggregate.avg_scores;
+                const avgKeys = Object.keys(avgScores);
+                avgKeys.forEach((key, idx) => {
+                    const isLastScore = idx === avgKeys.length - 1;
+                    const scorePrefix = isLastScore ? '\\-' : '|-';
+                    const metricName = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `|  ${scorePrefix} ${metricName}: ${avgScores[key].toFixed(2)}\n`;
+                });
+
+                if (data.aggregate.most_common_failures && data.aggregate.most_common_failures.length > 0) {
+                    html += `|- Most Common Failures: ${data.aggregate.most_common_failures.join(', ')}\n`;
+                }
+
+                if (data.aggregate.worst_performing_notes && data.aggregate.worst_performing_notes.length > 0) {
+                    html += `\\- Worst Performing Notes: ${data.aggregate.worst_performing_notes.join(', ')}\n`;
+                }
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function formatGoldEvaluationResponse(data) {
+            let html = '<div class="tree">';
+
+            html += `<strong>Gold Standard Evaluation</strong>\n`;
+            html += `Total Gold Notes: ${data.total_gold_notes}\n\n`;
+
+            if (data.judge_validation_metrics) {
+                html += '<strong>Judge Validation Metrics (P/R/F1):</strong>\n';
+                const metrics = data.judge_validation_metrics;
+                const systems = Object.keys(metrics);
+
+                systems.forEach((system, idx) => {
+                    const isLast = idx === systems.length - 1;
+                    const prefix = isLast ? '\\-' : '|-';
+
+                    html += `${prefix} <strong>${system.toUpperCase()}:</strong>\n`;
+                    html += `${isLast ? ' ' : '|'}  |- Precision: ${metrics[system].precision.toFixed(2)}\n`;
+                    html += `${isLast ? ' ' : '|'}  |- Recall: ${metrics[system].recall.toFixed(2)}\n`;
+                    html += `${isLast ? ' ' : '|'}  \\- F1: ${metrics[system].f1.toFixed(2)}\n`;
+                });
+                html += '\n';
+            }
+
+            if (data.aggregate) {
+                html += '<strong>Aggregate Statistics:</strong>\n';
+                html += `|- Pass Rate: ${(data.aggregate.pass_rate * 100).toFixed(1)}%\n`;
+                html += `\\- Average Scores:\n`;
+
+                const avgScores = data.aggregate.avg_scores;
+                const avgKeys = Object.keys(avgScores);
+                avgKeys.forEach((key, idx) => {
+                    const isLastScore = idx === avgKeys.length - 1;
+                    const scorePrefix = isLastScore ? '\\-' : '|-';
+                    const metricName = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `   ${scorePrefix} ${metricName}: ${avgScores[key].toFixed(2)}\n`;
+                });
+            }
+
+            html += '\n<em>Note: Detailed per-note results available in response data</em>';
+            html += '</div>';
+            return html;
+        }
+
+        // API Calls
+        async function callHealth() {
+            const outputId = 'health-output';
+            showLoading('health');
+
+            try {
+                const response = await fetch(`${getApiUrl()}/health`);
+                const data = await response.json();
+
+                const output = document.getElementById(outputId);
+                output.className = 'output';
+                output.innerHTML = formatHealthResponse(data);
+            } catch (error) {
+                displayError(outputId, error.message);
+            } finally {
+                hideLoading('health');
+            }
+        }
+
+        async function callModels() {
+            const outputId = 'models-output';
+            showLoading('models');
+
+            try {
+                const response = await fetch(`${getApiUrl()}/models`);
+                const data = await response.json();
+
+                const output = document.getElementById(outputId);
+                output.className = 'output';
+                output.innerHTML = formatModelsResponse(data);
+            } catch (error) {
+                displayError(outputId, error.message);
+            } finally {
+                hideLoading('models');
+            }
+        }
+
+        async function callEvaluate() {
+            const outputId = 'evaluate-output';
+            const inputText = document.getElementById('evaluate-input').value.trim();
+            const judges = getSelectedJudges('evaluate-judges');
+            const promptTemplate = getSelectedPrompt('evaluate-prompt');
+
+            if (!inputText) {
+                displayError(outputId, 'Please provide pipeline_output JSON');
+                return;
+            }
+
+            if (judges.length === 0) {
+                displayError(outputId, 'Please select at least one judge');
+                return;
+            }
+
+            showLoading('evaluate');
+
+            try {
+                const pipelineOutput = JSON.parse(inputText);
+
+                const requestBody = {
+                    pipeline_output: pipelineOutput,
+                    judges: judges,
+                    prompt_template: promptTemplate
+                };
+
+                const response = await fetch(`${getApiUrl()}/evaluate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                const output = document.getElementById(outputId);
+                output.className = 'output';
+                output.innerHTML = formatEvaluationResponse(data);
+            } catch (error) {
+                displayError(outputId, error.message);
+            } finally {
+                hideLoading('evaluate');
+            }
+        }
+
+        async function callBatchEvaluate() {
+            const outputId = 'batch-output';
+            const inputText = document.getElementById('batch-input').value.trim();
+            const judges = getSelectedJudges('batch-judges');
+            const promptTemplate = getSelectedPrompt('batch-prompt');
+
+            if (!inputText) {
+                displayError(outputId, 'Please provide pipeline_outputs array JSON');
+                return;
+            }
+
+            if (judges.length === 0) {
+                displayError(outputId, 'Please select at least one judge');
+                return;
+            }
+
+            showLoading('batch');
+
+            try {
+                const pipelineOutputs = JSON.parse(inputText);
+
+                const requestBody = {
+                    pipeline_outputs: pipelineOutputs,
+                    judges: judges,
+                    prompt_template: promptTemplate
+                };
+
+                const response = await fetch(`${getApiUrl()}/batch_evaluate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                const output = document.getElementById(outputId);
+                output.className = 'output';
+                output.innerHTML = formatBatchEvaluationResponse(data);
+            } catch (error) {
+                displayError(outputId, error.message);
+            } finally {
+                hideLoading('batch');
+            }
+        }
+
+        async function callGoldEvaluate() {
+            const outputId = 'gold-output';
+            const judges = getSelectedJudges('gold-judges');
+            const promptTemplate = getSelectedPrompt('gold-prompt');
+
+            if (judges.length === 0) {
+                displayError(outputId, 'Please select at least one judge');
+                return;
+            }
+
+            showLoading('gold');
+
+            try {
+                const requestBody = {
+                    judges: judges,
+                    prompt_template: promptTemplate
+                };
+
+                const response = await fetch(`${getApiUrl()}/gold_evaluate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                const output = document.getElementById(outputId);
+                output.className = 'output';
+                output.innerHTML = formatGoldEvaluationResponse(data);
+            } catch (error) {
+                displayError(outputId, error.message);
+            } finally {
+                hideLoading('gold');
+            }
+        }
+    </script>
+</body>
+</html>

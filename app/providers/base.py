@@ -53,3 +53,44 @@ class BaseProvider(ABC):
             clinical_note=clinical_note,
             predicted_terms=predicted_terms
         )
+
+    def normalize_response_format(self, result: dict) -> dict:
+        """
+        Normalize LLM response to ensure consistent format.
+        Converts direct float scores to dict format with score and justification.
+
+        Args:
+            result: Raw LLM response dict
+
+        Returns:
+            Normalized response dict with consistent score format
+        """
+        if "term_evaluations" not in result:
+            return result
+
+        for term_eval in result["term_evaluations"]:
+            if "scores" not in term_eval:
+                continue
+
+            scores = term_eval["scores"]
+            normalized_scores = {}
+
+            for metric, value in scores.items():
+                if isinstance(value, dict):
+                    # Already in correct format {"score": 0.9, "justification": "..."}
+                    normalized_scores[metric] = value
+                elif isinstance(value, (int, float)):
+                    # Convert direct number to dict format
+                    normalized_scores[metric] = {
+                        "score": float(value),
+                        "justification": ""
+                    }
+                    logger.debug(f"Normalized {metric} from float {value} to dict format")
+                else:
+                    # Unknown format, keep as is
+                    logger.warning(f"Unknown score format for {metric}: {type(value)}")
+                    normalized_scores[metric] = value
+
+            term_eval["scores"] = normalized_scores
+
+        return result

@@ -11,6 +11,7 @@ A FastAPI application that serves as a reference-free LLM judge for evaluating c
 - **Diabetes-specific rules**: Built-in term construction rules for diabetes-related terms
 - **Gold standard validation**: Compute P/R/F1 to validate judge performance
 - **Structured logging**: Comprehensive logging across all services
+- **HTML test client**: Standalone UI for easy API testing with hierarchical tree output
 
 ## Architecture
 
@@ -34,6 +35,7 @@ llm-judge/
 │   └── pipeline_output/        # Pipeline outputs
 ├── requirements.txt
 ├── Dockerfile
+├── test-client.html            # HTML test client UI
 └── README.md
 ```
 
@@ -95,9 +97,10 @@ docker run -p 8000:8000 --env-file .env llm-judge
 
 ### Access the API
 
-- API: http://localhost:8000
-- Interactive docs: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+- **API**: http://localhost:8000
+- **Interactive docs**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **Test client**: Open `test-client.html` in your browser
 
 ## API Endpoints
 
@@ -154,6 +157,55 @@ POST /gold_evaluate
 ```
 
 Run judge on gold standard notes and compute P/R/F1 metrics.
+
+## Test Client (HTML UI)
+
+A standalone HTML test client is provided for easy API testing without external tools:
+
+```bash
+# Open test-client.html in your browser
+# (Make sure FastAPI server is running first)
+open test-client.html
+```
+
+**Features:**
+- 🎯 **Single-page app** with tabs for each endpoint
+- 📝 **Raw JSON input** via textareas
+- 🌳 **Hierarchical tree display** for readable output
+- ✅ **Color-coded verdicts** (PASS/FAIL)
+- 📊 **Detailed breakdowns**:
+  - Scores per dimension (aggregated + per-judge)
+  - Failed dimensions highlighted
+  - Justifications per judge per metric
+  - Suggested corrections with judge attribution
+- 🔧 **Configurable API URL** (defaults to localhost:8000)
+- 📈 **Aggregate statistics** for batch evaluations
+- 🎓 **P/R/F1 metrics** for gold standard validation
+
+**Example Output:**
+```
+📄 Note: note_4 | Verdict: FAIL ✗
+├─ Term 1: Diabetes mellitus
+│  ├─ Default Lexical: Diabetes mellitus
+│  ├─ Verdict: FAIL ✗
+│  ├─ Scores:
+│  │  ├─ Clinical Correctness: 0.90 ✓
+│  │  ├─ Completeness: 0.50 ✗
+│  │  └─ ...
+│  ├─ Justifications:
+│  │  └─ qwen3:1.7b: "Missing hypoglycemia..."
+│  └─ Suggested Corrections:
+│     └─ [qwen3:1.7b] Missing components
+│        ├─ Current: Diabetes mellitus
+│        └─ Suggested: Uncontrolled diabetes with hypoglycemia
+└─ Summary: 0/2 terms passed
+```
+
+This makes it easy to:
+- Test API endpoints visually
+- Review evaluation results in readable format
+- Compare different judges and prompts
+- Debug pipeline output issues
 
 ## Configuration
 

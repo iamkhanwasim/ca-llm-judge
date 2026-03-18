@@ -88,6 +88,7 @@ class BedrockProvider(BaseProvider):
             try:
                 result = json.loads(content)
                 logger.info(f"Successfully parsed JSON response from {self.model_name}")
+                result = self.normalize_response_format(result)
                 return result
             except json.JSONDecodeError as e:
                 logger.error(f"Failed to parse JSON response: {e}")
@@ -100,6 +101,7 @@ class BedrockProvider(BaseProvider):
                         json_content = content[json_start:json_end].strip()
                         result = json.loads(json_content)
                         logger.info("Successfully extracted JSON from markdown code block")
+                        result = self.normalize_response_format(result)
                         return result
                     except:
                         pass

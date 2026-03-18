@@ -32,9 +32,9 @@ def flatten_pipeline_output(pipeline_output: dict) -> Tuple[str, List[Dict], str
         term_text = term_data.get("term", "")
         normalize_payload = term_data.get("normalize_payload", {})
 
-        # Extract lexical info
-        lexical_title = normalize_payload.get("lexical_title", "")
-        lexical_code = normalize_payload.get("lexical_code", "")
+        # Extract default lexical info
+        default_lexical_title = normalize_payload.get("default_lexical_title", "")
+        default_lexical_code = normalize_payload.get("default_lexical_code", "")
 
         # Extract IMO code
         imo_code = normalize_payload.get("code", "")
@@ -60,8 +60,8 @@ def flatten_pipeline_output(pipeline_output: dict) -> Tuple[str, List[Dict], str
 
         flattened_term = {
             "term": term_text,
-            "lexical_title": lexical_title,
-            "lexical_code": lexical_code,
+            "default_lexical_title": default_lexical_title,
+            "default_lexical_code": default_lexical_code,
             "imo_code": imo_code,
             "icd10": icd10_codes,
             "snomed": snomed_codes
@@ -90,7 +90,7 @@ def format_terms_for_prompt(flattened_terms: List[Dict]) -> str:
     formatted_parts = []
 
     for idx, term in enumerate(flattened_terms, 1):
-        term_text = term.get("lexical_title", term.get("term", ""))
+        term_text = term.get("default_lexical_title", term.get("term", ""))
         icd10_codes = term.get("icd10", [])
         snomed_codes = term.get("snomed", [])
 

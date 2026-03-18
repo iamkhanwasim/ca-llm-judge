@@ -48,7 +48,14 @@ def format_single_judge_response(judge_name: str, response: dict) -> Dict:
         aggregated_scores = {}
         for metric in metrics:
             if metric in scores_data:
-                score_value = scores_data[metric].get("score", 0.0)
+                # Handle both dict format {"score": 0.9, "justification": "..."} and direct float 0.9
+                score_data = scores_data[metric]
+                if isinstance(score_data, dict):
+                    score_value = score_data.get("score", 0.0)
+                else:
+                    # Direct float value
+                    score_value = float(score_data)
+
                 aggregated_scores[metric] = {
                     "aggregated": score_value,
                     "per_judge": {judge_name: score_value}
@@ -58,9 +65,12 @@ def format_single_judge_response(judge_name: str, response: dict) -> Dict:
         justifications = {}
         for metric in metrics:
             if metric in scores_data:
-                justification = scores_data[metric].get("justification", "")
-                if metric not in justifications:
-                    justifications[metric] = {}
+                score_data = scores_data[metric]
+                if isinstance(score_data, dict):
+                    justification = score_data.get("justification", "")
+                else:
+                    # No justification available for direct float
+                    justification = ""
                 justifications[metric] = justification
 
         # Add judge name to each correction
@@ -116,8 +126,15 @@ def aggregate_multiple_judges(judge_responses: Dict[str, dict]) -> Dict:
             judge_justifications = {}
             for metric in metrics:
                 if metric in scores_data:
-                    score_value = scores_data[metric].get("score", 0.0)
-                    justification = scores_data[metric].get("justification", "")
+                    # Handle both dict format and direct float
+                    score_data = scores_data[metric]
+                    if isinstance(score_data, dict):
+                        score_value = score_data.get("score", 0.0)
+                        justification = score_data.get("justification", "")
+                    else:
+                        # Direct float value
+                        score_value = float(score_data)
+                        justification = ""
 
                     if metric not in scores_by_metric:
                         scores_by_metric[metric] = []

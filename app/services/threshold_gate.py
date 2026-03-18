@@ -31,10 +31,10 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
         justifications = aggregated_term.get("justifications", {})
         suggested_corrections = aggregated_term.get("suggested_corrections", [])
 
-        # Get lexical_title from flattened_terms
-        lexical_title = ""
+        # Get default_lexical_title from flattened_terms
+        default_lexical_title = ""
         if idx < len(flattened_terms):
-            lexical_title = flattened_terms[idx].get("lexical_title", term_text)
+            default_lexical_title = flattened_terms[idx].get("default_lexical_title", term_text)
 
         # Check each dimension against threshold
         failed_dimensions = []
@@ -54,7 +54,7 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
 
         term_result = {
             "term": term_text,
-            "lexical_title": lexical_title,
+            "default_lexical_title": default_lexical_title,
             "scores": scores,
             "failed_dimensions": failed_dimensions,
             "justifications": justifications,
@@ -64,9 +64,19 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
 
         term_results.append(term_result)
 
-    # Note-level verdict: if at least ONE term passes, note passes
-    # Only if ALL terms fail, note fails
-    note_verdict = "PASS" if terms_passed > 0 else "FAIL"
+    # Note-level verdict logic:
+    # - If no terms at all (0 passed, 0 failed): PASS (nothing to fail)
+    # - If at least ONE term passes: PASS
+    # - If ALL terms fail (terms_failed > 0 and terms_passed = 0): FAIL
+    if terms_passed == 0 and terms_failed == 0:
+        # No terms evaluated - pass by default
+        note_verdict = "PASS"
+    elif terms_passed > 0:
+        # At least one term passed
+        note_verdict = "PASS"
+    else:
+        # All terms failed
+        note_verdict = "FAIL"
 
     logger.info(f"Note verdict: {note_verdict} ({terms_passed} passed, {terms_failed} failed)")
 

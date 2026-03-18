@@ -13,7 +13,7 @@ The primary use case is diabetes-related clinical notes, but the system should s
 **Evaluation level:** The judge receives **all `normalized_terms` in a single prompt** per judge and scores **each term independently** within that response. All 4 scoring dimensions are applied per term. This means one LLM call per judge per note (not per term). Note-level verdicts are derived by aggregating term-level scores.
 
 The judge evaluates per term:
-- Lexical term text (e.g., "Diabetes mellitus")
+- Default lexical term text (e.g., "Diabetes mellitus")
 - ICD-10 code descriptions (e.g., "Type 2 diabetes mellitus without complications")
 - SNOMED code descriptions (e.g., "Diabetes mellitus")
 
@@ -173,8 +173,8 @@ Evaluates a single clinical note's pipeline output.
           "normalize_payload": {
             "code": "48686997",
             "title": "diabetes mellitus, unspecified",
-            "lexical_code": "29688",
-            "lexical_title": "Diabetes mellitus",
+            "default_lexical_code": "29688",
+            "default_lexical_title": "Diabetes mellitus",
             "metadata": {
               "mappings": {
                 "icd10cm": { "codes": [...] },
@@ -204,7 +204,7 @@ Evaluates a single clinical note's pipeline output.
   "term_results": [
     {
       "term": "Improving Unspecified diabetes mellitus",
-      "lexical_title": "Diabetes mellitus",
+      "default_lexical_title": "Diabetes mellitus",
       "scores": {
         "clinical_correctness": {
           "aggregated": 0.9,
@@ -243,7 +243,7 @@ Evaluates a single clinical note's pipeline output.
     },
     {
       "term": "Improving Unspecified diabetes mellitus with long-term current use of insulin",
-      "lexical_title": "Long-term current use of insulin for diabetes mellitus",
+      "default_lexical_title": "Long-term current use of insulin for diabetes mellitus",
       "scores": {
         "clinical_correctness": {
           "aggregated": 0.9,
@@ -375,8 +375,8 @@ Runs LLM judge on the gold standard notes and computes P/R/F1 to validate the ju
         "code": "64855057"
       },
       "pipeline_predicted": [
-        { "lexical_title": "Diabetes mellitus", "lexical_code": "29688" },
-        { "lexical_title": "Long-term current use of insulin for diabetes mellitus", "lexical_code": "57821885" }
+        { "default_lexical_title": "Diabetes mellitus", "default_lexical_code": "29688" },
+        { "default_lexical_title": "Long-term current use of insulin for diabetes mellitus", "default_lexical_code": "57821885" }
       ]
     }
   ],
@@ -682,8 +682,8 @@ Flattens ALL pipeline JSON `normalized_terms` into judge-ready format for a sing
 [
     {
         "term": "Improving Unspecified diabetes mellitus",
-        "lexical_title": "Diabetes mellitus",
-        "lexical_code": "29688",
+        "default_lexical_title": "Diabetes mellitus",
+        "default_lexical_code": "29688",
         "imo_code": "48686997",
         "icd10": [
             {"code": "E11.9", "title": "Type 2 diabetes mellitus without complications"}
@@ -777,7 +777,7 @@ Core orchestration:
 5. Collect all judge responses
 6. Pass to aggregator (aggregates per-term scores across judges)
 7. Apply threshold gate per term
-8. Derive note-level verdict: if ANY term fails → note FAILS
+8. Derive note-level verdict: if at least ONE term passes → note PASSES (only if ALL terms fail → note FAILS)
 
 **API call count:** 1 call per judge per note. A note with 2 judges = 2 API calls total, regardless of term count.
 
@@ -793,7 +793,7 @@ Core orchestration:
 - **Applied per term:** For each dimension of each term, check if aggregated score >= threshold
 - All dimensions pass for a term → term verdict = "PASS"
 - Any dimension fails for a term → term verdict = "FAIL", record which dimensions failed
-- **Note-level verdict:** If ANY term in the note fails → note verdict = "FAIL"
+- **Note-level verdict:** If at least ONE term passes → note verdict = "PASS" (only if ALL terms fail → note verdict = "FAIL")
 - Attach flag_for_review based on config
 
 ### 6.7 Report Generator (`services/report_generator.py`)
@@ -849,8 +849,8 @@ Flow:
         "term": "...",
         "normalize_payload": {
           "code": "...",
-          "lexical_code": "...",
-          "lexical_title": "...",
+          "default_lexical_code": "...",
+          "default_lexical_title": "...",
           "metadata": {
             "mappings": {
               "icd10cm": { "codes": [...] },
@@ -907,7 +907,7 @@ class SuggestedCorrection(BaseModel):
 
 class TermResult(BaseModel):
     term: str
-    lexical_title: str
+    default_lexical_title: str
     scores: Dict[str, DimensionScore]
     failed_dimensions: List[str]
     justifications: Dict[str, Dict[str, str]]
@@ -1020,7 +1020,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 ## 11. Key Design Decisions
 
-1. **Per-term scoring in single prompt**: All terms sent in one LLM call per judge. The LLM scores each term independently within its response. This gives granular per-term diagnostics with minimal API calls (1 call per judge per note). Note-level verdict: if any term fails, note fails.
+1. **Per-term scoring in single prompt**: All terms sent in one LLM call per judge. The LLM scores each term independently within its response. This gives granular per-term diagnostics with minimal API calls (1 call per judge per note). Note-level verdict: if at least one term passes, note passes (only if all terms fail, note fails).
 
 2. **Reference-free evaluation**: LLM judge reads only the clinical note + pipeline output. No gold standard at runtime. This allows the judge to scale beyond the 20 annotated notes.
 
@@ -1037,3 +1037,79 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 8. **Gold evaluation validates the judge**: Runs LLM judge on gold notes, computes P/R/F1 per code system. This measures how well the judge + pipeline perform against known correct answers.
 
 9. **Azure OpenAI for GPT-5**: GPT-5 accessed via Azure OpenAI endpoint. Credentials stored in environment variables, referenced in config. Uses openai Python SDK with AzureOpenAI client.
+
+---
+
+## 12. Test Client (HTML UI)
+
+A standalone HTML test client (`test-client.html`) is provided for easy API testing without needing external tools like Postman.
+
+**Features:**
+- Single-page application with tabs for each API endpoint
+- Configurable API base URL (defaults to `http://localhost:8000`)
+- Raw JSON input via textareas
+- **Hierarchical tree display** for readable output (not raw JSON)
+- Color-coded verdicts (PASS = green, FAIL = red)
+- Detailed term-by-term breakdown showing:
+  - Scores per dimension (aggregated + per-judge)
+  - Failed dimensions
+  - Justifications per judge per metric
+  - Suggested corrections with judge attribution
+- Health status indicators
+- Models table with enabled/disabled status
+- Aggregate statistics for batch and gold evaluations
+- P/R/F1 metrics display for gold evaluation
+
+**Usage:**
+```bash
+# Open in browser (FastAPI server must be running)
+# For Windows:
+start test-client.html
+
+# For Mac/Linux:
+open test-client.html
+# or
+xdg-open test-client.html
+```
+
+**Output Format (Hierarchical Tree):**
+```
+📄 Note: note_4 | Verdict: FAIL ✗
+├─ Term 1: Diabetes mellitus
+│  ├─ Default Lexical: Diabetes mellitus
+│  ├─ Verdict: FAIL ✗
+│  ├─ Scores:
+│  │  ├─ Clinical Correctness: 0.90 (qwen3:1.7b: 0.90)
+│  │  ├─ Completeness: 0.50 (qwen3:1.7b: 0.50)
+│  │  ├─ Specificity: 0.50 (qwen3:1.7b: 0.50)
+│  │  └─ Component Coverage: 0.40 (qwen3:1.7b: 0.40)
+│  ├─ Failed Dimensions: completeness, specificity, component_coverage
+│  ├─ Justifications:
+│  │  └─ qwen3:1.7b:
+│  │     ├─ Clinical Correctness: "Term is supported by the note..."
+│  │     ├─ Completeness: "Missing hypoglycemia finding..."
+│  │     └─ ...
+│  └─ Suggested Corrections:
+│     └─ [qwen3:1.7b] Missing hypoglycemia and control status
+│        ├─ Current: Diabetes mellitus
+│        └─ Suggested: Uncontrolled diabetes mellitus with hypoglycemia
+└─ Summary:
+   ├─ Total Terms: 2
+   ├─ Passed: 0
+   ├─ Failed: 2
+   └─ Average Scores: clin=0.9, comp=0.6, spec=0.65, comp=0.5
+```
+
+**Tabs:**
+1. **Health** - Check service health and available judges
+2. **Models** - List all configured models with their status
+3. **Evaluate** - Single note evaluation with full term details
+4. **Batch Evaluate** - Multiple notes with aggregate statistics
+5. **Gold Evaluate** - Gold standard validation with P/R/F1 metrics
+
+The test client makes it easy to:
+- Quickly verify API is running
+- Test different judge models
+- Compare prompt templates (prompt_a vs prompt_b)
+- Review detailed evaluation results in readable format
+- Debug pipeline output issues
