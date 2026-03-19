@@ -1,256 +1,608 @@
 [
-{
-    "id": "note_4",
-    "docname": "Note 4 - DiabetesMellitusSOAPNote2",
-    "golds": [
-      {
-        "id": 1,
-        "code": "64855057",
-        "title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-        "normalized": {
-          "code": "64855057",
-          "title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-          "concept_code": "1613806775",
-          "concept_title": "diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-          "lexical_code": "64855057",
-          "lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-          "default_lexical_code": "64855057",
-          "default_lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-          "score": 1,
-          "certainty": "",
-          "metadata": {
-            "mappings": {
-              "icd10cm": {
-                "codes": [
-                  {
-                    "code": "E11.649",
-                    "code_metadata": {
-                      "ccsr": [
-                        {
-                          "ccsr_category": "END005",
-                          "ccsr_description": "Diabetes mellitus, Type 2"
-                        },
-                        {
-                          "ccsr_category": "END003",
-                          "ccsr_description": "Diabetes mellitus with complication"
-                        }
-                      ],
-                      "hcc": [
-                        {
-                          "hcc_factors": {
-                            "community_fbdual_aged": "0.1860",
-                            "community_fbdual_disabled": "0.2350",
-                            "community_nondual_aged": "0.1660",
-                            "community_nondual_disabled": "0.1910",
-                            "community_pbdual_aged": "0.1660",
-                            "community_pbdual_disabled": "0.2100",
-                            "institutional": "0.2800"
-                          },
-                          "hcc_model_category": "38",
-                          "hcc_version": "v28"
-                        }
-                      ]
-                    },
-                    "map_type": "Preferred primary",
-                    "relationship_type": "Narrower than",
-                    "title": "Type 2 diabetes mellitus with hypoglycemia without coma"
-                  },
-                  {
-                    "code": "Z79.4",
-                    "code_metadata": {
-                      "ccsr": [
-                        {
-                          "ccsr_category": "FAC025",
-                          "ccsr_description": "Other specified status"
-                        }
-                      ],
-                      "hcc": [
-                        {
-                          "hcc_factors": {
-                            "community_fbdual_aged": "0.1860",
-                            "community_fbdual_disabled": "0.2350",
-                            "community_nondual_aged": "0.1660",
-                            "community_nondual_disabled": "0.1910",
-                            "community_pbdual_aged": "0.1660",
-                            "community_pbdual_disabled": "0.2100",
-                            "institutional": "0.2800"
-                          },
-                          "hcc_model_category": "38",
-                          "hcc_version": "v28"
-                        }
-                      ]
-                    },
-                    "map_type": "Preferred secondary",
-                    "relationship_type": "Narrower than",
-                    "title": "Long term (current) use of insulin"
-                  }
-                ]
-              },
-              "icd9cm": {
-                "codes": [
-                  {
-                    "code": "250.80",
-                    "map_type": "Preferred primary",
-                    "title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
-                  },
-                  {
-                    "code": "251.2",
-                    "map_type": "Preferred secondary",
-                    "title": "Hypoglycemia, unspecified"
-                  },
-                  {
-                    "code": "V58.67",
-                    "map_type": "Alternate secondary",
-                    "title": "Encounter for long-term (current) use of insulin"
-                  }
-                ]
-              },
-              "snomedInternational": {
-                "codes": [
-                  {
-                    "code": "237633009",
-                    "map_type": "Preferred primary",
-                    "mesh_code": "",
-                    "relationship_type": "Narrower than",
-                    "title": "Hypoglycemia due to diabetes mellitus"
-                  },
-                  {
-                    "code": "73211009",
-                    "map_type": "Non-preferred primary",
-                    "mesh_code": "D003920",
-                    "relationship_type": "Narrower than",
-                    "title": "Diabetes mellitus"
-                  },
-                  {
-                    "code": "710815001",
-                    "map_type": "Non-preferred primary",
-                    "mesh_code": "",
-                    "relationship_type": "Narrower than",
-                    "title": "Long-term current use of insulin"
-                  },
-                  {
-                    "code": "170747006",
-                    "map_type": "Non-preferred primary",
-                    "mesh_code": "",
-                    "relationship_type": "Narrower than",
-                    "title": "Diabetic on insulin"
-                  }
-                ]
-              },
-              "umls": {
-                "codes": [
-                  {
-                    "code": "C0020615",
-                    "title": "Hypoglycemia"
-                  },
-                  {
-                    "code": "C0011849",
-                    "title": "Diabetes Mellitus"
-                  },
-                  {
-                    "code": "C0342313",
-                    "title": "Hypoglycemia due to diabetes mellitus"
-                  },
-                  {
-                    "code": "C1455979",
-                    "title": "Encounter for long-term (current) use of insulin"
-                  },
-                  {
-                    "code": "C2874122",
-                    "title": "Type 2 diabetes mellitus with hypoglycemia without coma"
-                  },
-                  {
-                    "code": "C0375145",
-                    "title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
-                  },
-                  {
-                    "code": "C4040354",
-                    "title": "Long-term current use of insulin"
-                  },
-                  {
-                    "code": "C0421248",
-                    "title": "Diabetic on insulin"
-                  }
-                ]
-              },
-              "uscdi": {
-                "profiles": [
-                  {
-                    "associated_codes": [
-                      {
-                        "code": "710815001",
-                        "code_system": "snomedInternational"
-                      },
-                      {
-                        "code": "E11.649",
-                        "code_system": "icd10cm"
-                      },
-                      {
-                        "code": "Z79.4",
-                        "code_system": "icd10cm"
-                      }
-                    ],
-                    "data_class": "Problems",
-                    "data_element": "Problems",
-                    "hrsn_domain": "",
-                    "valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-                  },
-                  {
-                    "associated_codes": [
-                      {
-                        "code": "710815001",
-                        "code_system": "snomedInternational"
-                      },
-                      {
-                        "code": "E11.649",
-                        "code_system": "icd10cm"
-                      },
-                      {
-                        "code": "Z79.4",
-                        "code_system": "icd10cm"
-                      }
-                    ],
-                    "data_class": "Problems",
-                    "data_element": "SDOH Problems/Health Concerns",
-                    "hrsn_domain": "",
-                    "valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-                  },
-                  {
-                    "associated_codes": [
-                      {
-                        "code": "170747006",
-                        "code_system": "snomedInternational"
-                      },
-                      {
-                        "code": "237633009",
-                        "code_system": "snomedInternational"
-                      },
-                      {
-                        "code": "73211009",
-                        "code_system": "snomedInternational"
-                      }
-                    ],
-                    "data_class": "Allergies and Intolerances",
-                    "data_element": "Reaction",
-                    "hrsn_domain": "",
-                    "valueset_oid": "2.16.840.1.113883.4.642.3.232"
-                  }
-                ]
-              }
-            },
-            "flags": {
-              "age_indicator": "",
-              "is_icd10cm_refinable": true,
-              "sex_indicator": ""
-            }
-          }
-        },
-        "evidence_groups": [
-          "diabetes_type",
-          "hypoglycemia",
-          "insulin_use"
-        ]
-      }
-    ]
-  }
+    {
+	"id": "note_1",
+	"docname": "Note 1 - DiabetesMellitusSOAPNote1",
+	"golds": [
+		{
+			"id": 1,
+			"code": "64855292",
+			"title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+			"normalized": {
+				"code": "64855292",
+				"title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+				"concept_code": "1613809867",
+				"concept_title": "uncontrolled type 1 diabetes with diabetic neuropathy",
+				"lexical_code": "64855292",
+				"lexical_title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+				"default_lexical_code": "64855292",
+				"default_lexical_title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+				"score": 1,
+				"certainty": "",
+				"metadata": {
+					"mappings": {
+						"icd10cm": {
+							"codes": [],
+							"map_context": "INSUFFICIENT INFORMATION"
+						},
+						"icd9cm": {
+							"codes": [
+								{
+									"code": "250.63",
+									"map_type": "Preferred primary",
+									"title": "Type I (juvenile type) diabetes mellitus with neurological manifestations, uncontrolled"
+								},
+								{
+									"code": "357.2",
+									"map_type": "Preferred secondary",
+									"title": "Polyneuropathy in diabetes"
+								}
+							]
+						},
+						"snomedInternational": {
+							"codes": [
+								{
+									"code": "368521000119107",
+									"map_type": "Preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Narrower than",
+									"title": "Disorder of nerve due to type 1 diabetes mellitus"
+								},
+								{
+									"code": "444073006",
+									"map_type": "Non-preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Narrower than",
+									"title": "Uncontrolled type 1 diabetes mellitus"
+								}
+							]
+						},
+						"umls": {
+							"codes": [
+								{
+									"code": "C5223858",
+									"title": "Disorder of nerve due to type 1 diabetes mellitus"
+								},
+								{
+									"code": "C0375140",
+									"title": "Diabetes with neurological manifestations, type I [juvenile type], uncontrolled"
+								},
+								{
+									"code": "C2732402",
+									"title": "Uncontrolled type 1 diabetes mellitus"
+								},
+								{
+									"code": "C0271680",
+									"title": "Diabetic Polyneuropathies"
+								}
+							]
+						},
+						"uscdi": {
+							"profiles": [
+								{
+									"associated_codes": [
+										{
+											"code": "368521000119107",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "444073006",
+											"code_system": "snomedInternational"
+										}
+									],
+									"data_class": "Allergies and Intolerances",
+									"data_element": "Reaction",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.3.232"
+								}
+							]
+						}
+					},
+					"flags": {
+						"age_indicator": "",
+						"is_icd10cm_refinable": false,
+						"sex_indicator": ""
+					}
+				}
+			},
+			"evidence_groups": [
+				"control_status",
+				"diabetes_type",
+				"neuropathy"
+			]
+		},
+		{
+			"id": 2,
+			"code": "50757154",
+			"title": "Neuropathy involving both lower extremities",
+			"normalized": {
+				"code": "50757154",
+				"title": "Neuropathy involving both lower extremities",
+				"concept_code": "1018006060",
+				"concept_title": "neuropathy involving both lower extremities",
+				"lexical_code": "50757154",
+				"lexical_title": "Neuropathy involving both lower extremities",
+				"default_lexical_code": "50757154",
+				"default_lexical_title": "Neuropathy involving both lower extremities",
+				"score": 1,
+				"certainty": "",
+				"metadata": {
+					"mappings": {
+						"icd10cm": {
+							"codes": [
+								{
+									"code": "G57.93",
+									"code_metadata": {
+										"ccsr": [
+											{
+												"ccsr_category": "NVS017",
+												"ccsr_description": "Nerve and nerve root disorders"
+											}
+										],
+										"hcc": []
+									},
+									"map_type": "Preferred primary",
+									"relationship_type": "Broader than",
+									"title": "Unspecified mononeuropathy of bilateral lower limbs"
+								}
+							]
+						},
+						"icd9cm": {
+							"codes": [
+								{
+									"code": "356.9",
+									"map_type": "Preferred primary",
+									"title": "Unspecified hereditary and idiopathic peripheral neuropathy"
+								}
+							]
+						},
+						"snomedInternational": {
+							"codes": [
+								{
+									"code": "16026551000119108",
+									"map_type": "Preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Same as",
+									"title": "Bilateral peripheral neuropathy of lower limbs"
+								}
+							]
+						},
+						"umls": {
+							"codes": [
+								{
+									"code": "C4268323",
+									"title": "Unspecified mononeuropathy of bilateral lower limbs"
+								},
+								{
+									"code": "C4750682",
+									"title": "Bilateral peripheral neuropathy of lower limbs"
+								},
+								{
+									"code": "C0859673",
+									"title": "Unspecified hereditary and idiopathic peripheral neuropathy"
+								}
+							]
+						},
+						"uscdi": {
+							"profiles": [
+								{
+									"associated_codes": [
+										{
+											"code": "16026551000119108",
+											"code_system": "snomedInternational"
+										}
+									],
+									"data_class": "Allergies and Intolerances",
+									"data_element": "Reaction",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.3.232"
+								},
+								{
+									"associated_codes": [
+										{
+											"code": "G57.93",
+											"code_system": "icd10cm"
+										}
+									],
+									"data_class": "Problems",
+									"data_element": "Problems",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+								},
+								{
+									"associated_codes": [
+										{
+											"code": "G57.93",
+											"code_system": "icd10cm"
+										}
+									],
+									"data_class": "Problems",
+									"data_element": "SDOH Problems/Health Concerns",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+								}
+							]
+						}
+					},
+					"flags": {
+						"age_indicator": "",
+						"is_icd10cm_refinable": false,
+						"sex_indicator": ""
+					}
+				}
+			},
+			"evidence_groups": [
+				"neuropathy"
+			]
+		},
+		{
+			"id": 3,
+			"code": "62522959",
+			"title": "Uncontrolled type 1 diabetes mellitus with microalbuminuric diabetic nephropathy",
+			"normalized": {
+				"code": "62522959",
+				"title": "Uncontrolled type 1 diabetes mellitus with microalbuminuric diabetic nephropathy",
+				"concept_code": "37358260",
+				"concept_title": "uncontrolled type 1 diabetes mellitus with microalbuminuric diabetic nephropathy",
+				"lexical_code": "62522959",
+				"lexical_title": "Uncontrolled type 1 diabetes mellitus with microalbuminuric diabetic nephropathy",
+				"default_lexical_code": "62522959",
+				"default_lexical_title": "Uncontrolled type 1 diabetes mellitus with microalbuminuric diabetic nephropathy",
+				"score": 1,
+				"certainty": "",
+				"metadata": {
+					"mappings": {
+						"icd10cm": {
+							"codes": [],
+							"map_context": "INSUFFICIENT INFORMATION"
+						},
+						"icd9cm": {
+							"codes": [
+								{
+									"code": "250.43",
+									"map_type": "Preferred primary",
+									"title": "Type I (juvenile type) diabetes mellitus with renal manifestations, uncontrolled"
+								},
+								{
+									"code": "583.81",
+									"map_type": "Preferred secondary",
+									"title": "Nephritis and nephropathy, not specified as acute or chronic, with other specified pathological lesion in kidney, in diseases classified elsewhere"
+								}
+							]
+						},
+						"snomedInternational": {
+							"codes": [
+								{
+									"code": "18521000119106",
+									"map_type": "Preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Narrower than",
+									"title": "Microalbuminuria due to type 1 diabetes mellitus"
+								},
+								{
+									"code": "444073006",
+									"map_type": "Non-preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Narrower than",
+									"title": "Uncontrolled type 1 diabetes mellitus"
+								}
+							]
+						},
+						"umls": {
+							"codes": [
+								{
+									"code": "C0027699",
+									"title": "Nephritis and nephropathy, not specified as acute or chronic, in diseases classified elsewhere"
+								},
+								{
+									"code": "C3875080",
+									"title": "Microalbuminuria due to type 1 diabetes mellitus"
+								},
+								{
+									"code": "C2732402",
+									"title": "Uncontrolled type 1 diabetes mellitus"
+								},
+								{
+									"code": "C0375133",
+									"title": "Diabetes with renal manifestations, type I [juvenile type], uncontrolled"
+								}
+							]
+						},
+						"uscdi": {
+							"profiles": [
+								{
+									"associated_codes": [
+										{
+											"code": "18521000119106",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "444073006",
+											"code_system": "snomedInternational"
+										}
+									],
+									"data_class": "Allergies and Intolerances",
+									"data_element": "Reaction",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.3.232"
+								}
+							]
+						}
+					},
+					"flags": {
+						"age_indicator": "",
+						"is_icd10cm_refinable": false,
+						"sex_indicator": ""
+					}
+				}
+			},
+			"evidence_groups": [
+				"diabetes_type",
+				"renal_manifestation"
+			]
+		},
+		{
+			"id": 4,
+			"code": "1700352",
+			"title": "History of hypoglycemia",
+			"normalized": {
+				"code": "1700352",
+				"title": "History of hypoglycemia",
+				"concept_code": "336439523",
+				"concept_title": "history of hypoglycemia",
+				"lexical_code": "1700352",
+				"lexical_title": "History of hypoglycemia",
+				"default_lexical_code": "1700352",
+				"default_lexical_title": "History of hypoglycemia",
+				"score": 1,
+				"certainty": "",
+				"metadata": {
+					"mappings": {
+						"icd10cm": {
+							"codes": [
+								{
+									"code": "Z86.39",
+									"code_metadata": {
+										"ccsr": [
+											{
+												"ccsr_category": "FAC030",
+												"ccsr_description": "Personal history of other disease"
+											}
+										],
+										"hcc": []
+									},
+									"map_type": "Preferred primary",
+									"relationship_type": "Narrower than",
+									"title": "Personal history of other endocrine, nutritional and metabolic disease"
+								}
+							]
+						},
+						"icd9cm": {
+							"codes": [
+								{
+									"code": "V12.29",
+									"map_type": "Preferred primary",
+									"title": "Personal history of other endocrine, metabolic, and immunity disorders"
+								}
+							]
+						},
+						"snomedInternational": {
+							"codes": [
+								{
+									"code": "266990005",
+									"map_type": "Preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Narrower than",
+									"title": "H/O: endocrine disorder"
+								}
+							]
+						},
+						"umls": {
+							"codes": [
+								{
+									"code": "C2911320",
+									"title": "Personal history of other endocrine, nutritional and metabolic disease"
+								},
+								{
+									"code": "C0455484",
+									"title": "H/O: endocrine disorder"
+								},
+								{
+									"code": "C3161146",
+									"title": "Personal history of other endocrine, metabolic, and immunity disorders"
+								}
+							]
+						},
+						"uscdi": {
+							"profiles": [
+								{
+									"associated_codes": [
+										{
+											"code": "266990005",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "Z86.39",
+											"code_system": "icd10cm"
+										}
+									],
+									"data_class": "Problems",
+									"data_element": "SDOH Problems/Health Concerns",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+								},
+								{
+									"associated_codes": [
+										{
+											"code": "266990005",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "Z86.39",
+											"code_system": "icd10cm"
+										}
+									],
+									"data_class": "Problems",
+									"data_element": "Problems",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+								}
+							]
+						}
+					},
+					"flags": {
+						"age_indicator": "",
+						"is_icd10cm_refinable": false,
+						"sex_indicator": ""
+					}
+				}
+			},
+			"evidence_groups": [
+				"other_diabetes_complication"
+			]
+		},
+		{
+			"id": 5,
+			"code": "1701648",
+			"title": "History of diabetic gastroparesis",
+			"normalized": {
+				"code": "1701648",
+				"title": "History of diabetic gastroparesis",
+				"concept_code": "336439324",
+				"concept_title": "history of diabetic gastroparesis",
+				"lexical_code": "1701648",
+				"lexical_title": "History of diabetic gastroparesis",
+				"default_lexical_code": "1701648",
+				"default_lexical_title": "History of diabetic gastroparesis",
+				"score": 1,
+				"certainty": "",
+				"metadata": {
+					"mappings": {
+						"icd10cm": {
+							"codes": [
+								{
+									"code": "Z86.39",
+									"code_metadata": {
+										"ccsr": [
+											{
+												"ccsr_category": "FAC030",
+												"ccsr_description": "Personal history of other disease"
+											}
+										],
+										"hcc": []
+									},
+									"map_type": "Preferred primary",
+									"relationship_type": "Narrower than",
+									"title": "Personal history of other endocrine, nutritional and metabolic disease"
+								}
+							]
+						},
+						"icd9cm": {
+							"codes": [
+								{
+									"code": "V12.29",
+									"map_type": "Preferred primary",
+									"title": "Personal history of other endocrine, metabolic, and immunity disorders"
+								}
+							]
+						},
+						"snomedInternational": {
+							"codes": [
+								{
+									"code": "266997008",
+									"map_type": "Preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Narrower than",
+									"title": "H/O: gastrointestinal disease"
+								},
+								{
+									"code": "161445009",
+									"map_type": "Non-preferred primary",
+									"mesh_code": "",
+									"relationship_type": "Narrower than",
+									"title": "H/O: diabetes mellitus"
+								}
+							]
+						},
+						"umls": {
+							"codes": [
+								{
+									"code": "C1313984",
+									"title": "H/O: intestinal disease"
+								},
+								{
+									"code": "C0455488",
+									"title": "H/O: diabetes mellitus"
+								},
+								{
+									"code": "C3161146",
+									"title": "Personal history of other endocrine, metabolic, and immunity disorders"
+								},
+								{
+									"code": "C0455553",
+									"title": "H/O: gastrointestinal disease"
+								},
+								{
+									"code": "C2911320",
+									"title": "Personal history of other endocrine, nutritional and metabolic disease"
+								}
+							]
+						},
+						"uscdi": {
+							"profiles": [
+								{
+									"associated_codes": [
+										{
+											"code": "161445009",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "266997008",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "Z86.39",
+											"code_system": "icd10cm"
+										}
+									],
+									"data_class": "Problems",
+									"data_element": "Problems",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+								},
+								{
+									"associated_codes": [
+										{
+											"code": "161445009",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "266997008",
+											"code_system": "snomedInternational"
+										},
+										{
+											"code": "Z86.39",
+											"code_system": "icd10cm"
+										}
+									],
+									"data_class": "Problems",
+									"data_element": "SDOH Problems/Health Concerns",
+									"hrsn_domain": "",
+									"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
+								}
+							]
+						}
+					},
+					"flags": {
+						"age_indicator": "",
+						"is_icd10cm_refinable": false,
+						"sex_indicator": ""
+					}
+				}
+			},
+			"evidence_groups": [
+				"other_diabetes_complication"
+			]
+		}
+	]
+    }
 ]

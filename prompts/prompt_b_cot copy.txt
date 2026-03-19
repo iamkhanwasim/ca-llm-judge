@@ -12,7 +12,9 @@ For diabetes-related terms, the expected component ordering is:
 3. Complications — use natural word order: "diabetes mellitus with
    retinopathy" NOT "retinopathy with diabetes mellitus"
 4. Insulin Status — "with long-term current use of insulin" (only if the
-   note evidences insulin use)
+   note evidences insulin use). Note: this modifier applies exclusively
+   to Type 2 diabetes. Type 1 diabetes inherently requires insulin and
+   should not include this modifier.
 5. Oral Medication — "with oral medication" (only if the note evidences it)
 
 Example: "Uncontrolled Type 2 diabetes mellitus with retinopathy with

@@ -114,7 +114,7 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
                 "verdict": judge_result["verdict"],
                 "term_results": judge_result["term_results"],
                 "note_summary": judge_result["note_summary"],
-                "gold_expected": [{"title": g.get("title"), "code": g.get("code")} for g in gold_note.get("golds", [])],
+                "gold_expected": [{"title": g.get("title"), "code": g.get("normalized", {}).get("default_lexical_code", "")} for g in gold_note.get("golds", [])],
                 "pipeline_predicted": [
                     {
                         "term": t.get("term"),
@@ -215,7 +215,8 @@ def extract_imo_codes(pipeline_output: dict) -> List[str]:
 
     for term_data in normalized_terms:
         normalize_payload = term_data.get("normalize_payload", {})
-        imo_code = normalize_payload.get("code")
+        # Use default_lexical_code as the IMO code
+        imo_code = normalize_payload.get("default_lexical_code", "")
         if imo_code:
             imo_codes.append(imo_code)
 
@@ -231,8 +232,8 @@ def extract_predicted_codes(pipeline_output: dict) -> Dict:
     for term_data in normalized_terms:
         normalize_payload = term_data.get("normalize_payload", {})
 
-        # IMO code
-        imo_code = normalize_payload.get("code")
+        # IMO code (use default_lexical_code)
+        imo_code = normalize_payload.get("default_lexical_code", "")
         if imo_code:
             predicted_codes["imo"].append(imo_code)
 
@@ -271,13 +272,13 @@ def extract_gold_codes(gold_note: dict) -> Dict:
 
     golds = gold_note.get("golds", [])
     for gold_item in golds:
-        # IMO code
-        imo_code = gold_item.get("code")
+        # Extract IMO code from normalized.default_lexical_code
+        normalized = gold_item.get("normalized", {})
+        imo_code = normalized.get("default_lexical_code", "")
         if imo_code:
             gold_codes["imo"].append(imo_code)
 
         # Extract ICD-10 and SNOMED codes from normalized.metadata.mappings
-        normalized = gold_item.get("normalized", {})
         metadata = normalized.get("metadata", {})
         mappings = metadata.get("mappings", {})
 
@@ -379,6 +380,16 @@ def generate_imo_table(per_note_metrics: List[Dict], judges_str: str) -> List[Di
 
         table_data.append(row)
 
+    # Sort by note number (extract numeric part for proper sorting)
+    def get_note_num(row):
+        note = row["note"]
+        # Extract number from note_X format
+        try:
+            return int(note.split("_")[1]) if "_" in note else 0
+        except (IndexError, ValueError):
+            return 0
+
+    table_data.sort(key=get_note_num)
     logger.info(f"Generated IMO table with {len(table_data)} rows")
     return table_data
 
@@ -429,6 +440,15 @@ def generate_imo_icd_snomed_table(per_note_metrics: List[Dict], judges_str: str)
 
         table_data.append(row)
 
+    # Sort by note number (extract numeric part for proper sorting)
+    def get_note_num(row):
+        note = row["note"]
+        try:
+            return int(note.split("_")[1]) if "_" in note else 0
+        except (IndexError, ValueError):
+            return 0
+
+    table_data.sort(key=get_note_num)
     logger.info(f"Generated IMO-ICD-SNOMED table with {len(table_data)} rows")
     return table_data
 
@@ -457,12 +477,13 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
         if not gold_note or not pipeline_output:
             continue
 
-        # Build gold lookup by lexical code
+        # Build gold lookup by default_lexical_code
         gold_by_lexical = {}
         for gold_item in gold_note.get("golds", []):
-            lexical_code = gold_item.get("code")
+            # Use default_lexical_code instead of IMO code
+            normalized = gold_item.get("normalized", {})
+            lexical_code = normalized.get("default_lexical_code", "")
             if lexical_code:
-                normalized = gold_item.get("normalized", {})
                 metadata = normalized.get("metadata", {})
                 mappings = metadata.get("mappings", {})
 
@@ -483,6 +504,7 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
                 gold_by_lexical[lexical_code] = {
                     "lexical_code": lexical_code,
                     "title": gold_item.get("title", ""),
+                    "default_lexical_title": normalized.get("default_lexical_title", ""),
                     "icd10_codes": icd10_codes,
                     "snomed_codes": snomed_codes
                 }
@@ -509,7 +531,7 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
 
             # Predicted data
             term = term_data.get("term", "")
-            pred_lexical = normalize_payload.get("code", "")
+            pred_lexical = normalize_payload.get("default_lexical_code", "")
             default_lexical_title = normalize_payload.get("default_lexical_title", "")
 
             # Track predicted lexical codes
@@ -618,14 +640,15 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
                 # FN: In gold but not in predicted
                 gold_icd10_codes = gold_data["icd10_codes"]
                 gold_snomed_codes = gold_data["snomed_codes"]
+                gold_default_lexical_title = gold_data["default_lexical_title"]
 
-                # For FN, there's no predicted data
+                # For FN, show gold data in title field
                 row = {
                     "judges": judges_str,
                     "note": note_id,
                     "match_key": gold_lexical_code,
                     "term": "",  # No predicted term
-                    "default_lexical_title": "",  # No predicted term
+                    "default_lexical_title": gold_default_lexical_title,  # Show gold title for FN
                     "gold_lexical": gold_lexical_code,
                     "pred_lexical": "",  # Not predicted
                     "lexical_outcome": "FN",
@@ -644,5 +667,14 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
 
                 table_data.append(row)
 
+    # Sort by note number (extract numeric part for proper sorting)
+    def get_note_num(row):
+        note = row["note"]
+        try:
+            return int(note.split("_")[1]) if "_" in note else 0
+        except (IndexError, ValueError):
+            return 0
+
+    table_data.sort(key=get_note_num)
     logger.info(f"Generated detailed table with {len(table_data)} rows")
     return table_data

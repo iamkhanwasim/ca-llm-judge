@@ -1161,10 +1161,15 @@
             let html = '<div style="margin-top: 20px;">';
             html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
             html += '<strong>Detailed Term-Level Analysis:</strong>';
+            html += '<div>';
+            html += '<input type="text" id="detailedTableSearch" placeholder="Search by note (e.g., note_4)" ';
+            html += 'style="padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px; width: 200px;" ';
+            html += 'onkeyup="filterDetailedTable()" />';
             html += '<button onclick="exportDetailedTableCSV()" class="export-csv-btn">Export to CSV</button>';
+            html += '</div>';
             html += '</div></div>\n';
             html += '<div style="overflow-x: auto;">\n';
-            html += '<table class="metrics-table" style="font-size: 11px;">\n';
+            html += '<table id="detailedTableElement" class="metrics-table" style="font-size: 11px;">\n';
             html += '<thead><tr>';
             html += '<th>Judge(s)</th>';
             html += '<th>Note</th>';
@@ -1258,6 +1263,30 @@
 
         // Store current table data globally for export
         let currentGoldEvalData = null;
+
+        // Filter detailed table by note
+        function filterDetailedTable() {
+            const input = document.getElementById('detailedTableSearch');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('detailedTableElement');
+
+            if (!table) return;
+
+            const tr = table.getElementsByTagName('tr');
+
+            // Start from 1 to skip header row
+            for (let i = 1; i < tr.length; i++) {
+                const td = tr[i].getElementsByTagName('td')[1]; // Note column is index 1
+                if (td) {
+                    const txtValue = td.textContent || td.innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = '';
+                    } else {
+                        tr[i].style.display = 'none';
+                    }
+                }
+            }
+        }
 
         function exportImoTableCSV() {
             if (!currentGoldEvalData || !currentGoldEvalData.tables || !currentGoldEvalData.tables.imo_table) {

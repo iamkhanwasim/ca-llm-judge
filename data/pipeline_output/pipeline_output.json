@@ -1,157 +1,169 @@
 [    
   {
-	"note_id": "note_4",
-	"docname": "Note 4 - DiabetesMellitusSOAPNote2",
-	"page_start": 9,
-	"page_end": 10,
+	"note_id": "note_1",
+	"docname": "Note 1 - DiabetesMellitusSOAPNote1",
+	"page_start": 1,
+	"page_end": 3,
 	"api_response": {
-		"raw_text": "SUBJECTIVE:  I am asked to see the patient today with ongoing issues around her diabetic control.  We have been fairly aggressively, downwardly adjusting her  insulins , both the Lantus insulin, which we had been giving at night as well as her sliding scale Humalog insulin prior to meals.  Despite frequent decreases in her insulin regimen, she continues to have somewhat low blood glucoses, most notably in the morning when the glucoses have been in the 70s despite decreasing her Lantus insulin from around 84 units down to 60 units, which is a considerable change.  What I cannot explain is why her glucoses have not really climbed at all despite the decrease in insulin.  The staff reports to me that her appetite is good and that she is eating as well as ever.  I talked to Anna today.  She feels a little fatigued.  Otherwise, she is doing well. PHYSICAL EXAMINATION:  Vitals as in the chart.  The patient is a pleasant and cooperative.  She is in no apparent distress. ASSESSMENT AND PLAN:  Diabetes, still with some problematic low blood glucoses, most notably in the morning.  To address this situation, I am going to hold her Lantus insulin tonight and decrease and then change the administration time to in the morning.  She will get 55 units in the morning.  I am also decreasing once again her  Humalog sliding scale insulin prior to meals.  I will review the blood glucoses again next week.",
-		"preprocessed_text": "SUBJECTIVE:  I am asked to see the patient today with ongoing issues around her diabetic control.  We have been fairly aggressively, downwardly adjusting her  insulins , both the Lantus insulin, which we had been giving at night as well as her sliding scale Humalog insulin prior to meals.  Despite frequent decreases in her insulin regimen, she continues to have somewhat low blood glucoses, most notably in the morning when the glucoses have been in the 70s despite decreasing her Lantus insulin from around 84 units down to 60 units, which is a considerable change.  What I cannot explain is why her glucoses have not really climbed at all despite the decrease in insulin.  The staff reports to me that her appetite is good and that she is eating as well as ever.  I talked to Anna today.  She feels a little fatigued.  Otherwise, she is doing well. PHYSICAL EXAMINATION:  Vitals as in the chart.  The patient is a pleasant and cooperative.  She is in no apparent distress. ASSESSMENT AND PLAN:  Diabetes, still with some problematic low blood glucoses, most notably in the morning.  To address this situation, I am going to hold her Lantus insulin tonight and decrease and then change the administration time to in the morning.  She will get 55 units in the morning.  I am also decreasing once again her  Humalog sliding scale insulin prior to meals.  I will review the blood glucoses again next week.",
+		"raw_text": "CHIEF COMPLAINT:  Followup diabetes mellitus, type 1. SUBJECTIVE:  Patient is a 34-year-old male with significant diabetic neuropathy.  He has been off on insurance for over a year.  Has been using NPH and Regular insulin to maintain his blood sugars.  States that he is deathly afraid of having a low blood sugar due to motor vehicle accident he was in several years ago.  Reports that his blood sugar dropped too low which caused the accident.  Since this point in time, he has been unwilling to let his blood sugars fall within a normal range, for fear of hypoglycemia. Also reports that he regulates his blood sugars with how he feels, rarely checking his blood sugar with a glucometer. Reports that he has been worked up extensively at hospital and was seeing an Endocrinologist at one time.  Reports that he had some indications of kidney damage when first diagnosed.  His urine microalbumin today is 100.  His last hemoglobin A1C drawn at the end of December is 11.9.  Reports that at one point, he was on Lantus which worked well and he did not worry about his blood sugars dropping too low. While using Lantus, he was able to get his hemoglobin A1C down to 7.  His last CMP shows an elevated alkaline phosphatase level of 168. He denies alcohol or drug use and is a non smoker.  Reports he quit drinking 3 years ago. I have discussed with patient that it would be appropriate to do an SGGT and hepatic panel today.  Patient also has a history of gastroparesis and impotence.  Patient requests Nexium and Viagra, neither of which are covered under the Health Plan.   Patient reports that he was in a scooter accident one week ago, fell off his scooter, hit his head.  Was not wearing a helmet.  Reports that he did not go to the emergency room and had a headache for several days after this incident.  Reports that an ambulance arrived at the scene and he was told he had a scalp laceration and to go into the emergency room.  Patient did not comply.  Reports that the headache has resolved.  Denies any dizziness, nausea, vomiting, or other neurological abnormalities. PHYSICAL EXAMINATION:  WD, WN.  Slender, 34-year-old white male.  VITAL SIGNS:  Blood sugar 145, blood pressure 120/88, heart rate 104, respirations 16.  Microalbumin 100. SKIN:  There appears to be 2 skin lacerations on the left parietal region of the scalp, each approximately 1 inch long.  No signs of infection.  Wound is closed with new granulation tissue.  Appears to be healing well.  HEENT:  Normocephalic.  PERRLA.  EOMI.  TMs pearly gray with landmarks present.  Nares patent.  Throat with no redness or swelling.  Nontender sinuses.  NECK:  Supple.  Full ROM.  No LAD. CARDIAC:   RRR.  No murmurs, rubs, or gallops.  RESPIRATORY:  CTA.  ABDOMEN:  Soft, nontender.  No HSM and no masses.  NEURO:  Significant for lower extremity numbness throughout.  Microfilament test shows more than 3 regions without sensation bilaterally.  Bottoms of feet appear calloused and dry.  Skin is intact.  There is also a small contusion on right shin which appears to be healing, less than 1/2 inch in length and 1 cm in diameter.  No signs of infection at this time and appears to be healing.  Cranial nerves 2-12 grossly nonfocal.  Cerebellar function intact demonstrated through RAM.  ASSESSMENT:  1.  Diabetes mellitus, type 1, poorly controlled.2.  Significant diabetic neuropathy with positive microalbuminuria.3.  Scalp laceration, secondary to motor vehicle accident, symptoms resolving.4.  Elevated Alk Phos, etiology unclear. PLAN:  1.  Diabetes mellitus type 1: We will follow up the elevated alkaline phosphatase with an SGGT and a hepatic function panel.  The positive microalbumin is 100 today.  He will be placed on a low dose Ace Inhibitor. I will put in a Prior Authorization for Lantus.  I have also asked the patient to keep a log of his blood sugars for 2 weeks.  Patient agrees to this.  We may need to put in a referral to Endocrinology to get him stabilized. Prescription given for Prilosec OTC for GERD symptoms. 2.  Followup scooter accident.  Lacerations on scalp and shin appear to be healing.  Discussed with patient if there are any signs of heat, swelling, infection to return to clinic. It is extremely important for him to watch these areas as he does not have feeling in the majority of his lower body.",
+		"preprocessed_text": "CHIEF COMPLAINT:  Followup diabetes mellitus, type 1. SUBJECTIVE:  Patient is a 34-year-old male with significant diabetic neuropathy.  He has been off on insurance for over a year.  Has been using NPH and Regular insulin to maintain his blood sugars.  States that he is deathly afraid of having a low blood sugar due to motor vehicle accident he was in several years ago.  Reports that his blood sugar dropped too low which caused the accident.  Since this point in time, he has been unwilling to let his blood sugars fall within a normal range, for fear of hypoglycemia. Also reports that he regulates his blood sugars with how he feels, rarely checking his blood sugar with a glucometer. Reports that he has been worked up extensively at hospital and was seeing an Endocrinologist at one time.  Reports that he had some indications of kidney damage when first diagnosed.  His urine microalbumin today is 100.  His last hemoglobin A1C drawn at the end of December is 11.9.  Reports that at one point, he was on Lantus which worked well and he did not worry about his blood sugars dropping too low. While using Lantus, he was able to get his hemoglobin A1C down to 7.  His last CMP shows an elevated alkaline phosphatase level of 168. He denies alcohol or drug use and is a non smoker.  Reports he quit drinking 3 years ago. I have discussed with patient that it would be appropriate to do an SGGT and hepatic panel today.  Patient also has a history of gastroparesis and impotence.  Patient requests Nexium and Viagra, neither of which are covered under the Health Plan.   Patient reports that he was in a scooter accident one week ago, fell off his scooter, hit his head.  Was not wearing a helmet.  Reports that he did not go to the emergency room and had a headache for several days after this incident.  Reports that an ambulance arrived at the scene and he was told he had a scalp laceration and to go into the emergency room.  Patient did not comply.  Reports that the headache has resolved.  Denies any dizziness, nausea, vomiting, or other neurological abnormalities. PHYSICAL EXAMINATION:  WD, WN.  Slender, 34-year-old white male.  VITAL SIGNS:  Blood sugar 145, blood pressure 120/88, heart rate 104, respirations 16.  Microalbumin 100. SKIN:  There appears to be 2 skin lacerations on the left parietal region of the scalp, each approximately 1 inch long.  No signs of infection.  Wound is closed with new granulation tissue.  Appears to be healing well.  HEENT:  Normocephalic.  PERRLA.  EOMI.  TMs pearly gray with landmarks present.  Nares patent.  Throat with no redness or swelling.  Nontender sinuses.  NECK:  Supple.  Full ROM.  No LAD. CARDIAC:   RRR.  No murmurs, rubs, or gallops.  RESPIRATORY:  CTA.  ABDOMEN:  Soft, nontender.  No HSM and no masses.  NEURO:  Significant for lower extremity numbness throughout.  Microfilament test shows more than 3 regions without sensation bilaterally.  Bottoms of feet appear calloused and dry.  Skin is intact.  There is also a small contusion on right shin which appears to be healing, less than 1/2 inch in length and 1 cm in diameter.  No signs of infection at this time and appears to be healing.  Cranial nerves 2-12 grossly nonfocal.  Cerebellar function intact demonstrated through RAM.  ASSESSMENT:  1.  Diabetes mellitus, type 1, poorly controlled.2.  Significant diabetic neuropathy with positive microalbuminuria.3.  Scalp laceration, secondary to motor vehicle accident, symptoms resolving.4.  Elevated Alk Phos, etiology unclear. PLAN:  1.  Diabetes mellitus type 1: We will follow up the elevated alkaline phosphatase with an SGGT and a hepatic function panel.  The positive microalbumin is 100 today.  He will be placed on a low dose Ace Inhibitor. I will put in a Prior Authorization for Lantus.  I have also asked the patient to keep a log of his blood sugars for 2 weeks.  Patient agrees to this.  We may need to put in a referral to Endocrinology to get him stabilized. Prescription given for Prilosec OTC for GERD symptoms. 2.  Followup scooter accident.  Lacerations on scalp and shin appear to be healing.  Discussed with patient if there are any signs of heat, swelling, infection to return to clinic. It is extremely important for him to watch these areas as he does not have feeling in the majority of his lower body.",
 		"extracted_entities": [
 			{
-				"start": 80,
-				"end": 96,
-				"text": "diabetic control",
+				"start": 27,
+				"end": 44,
+				"text": "diabetes mellitus",
+				"label": "diabetes_type",
+				"assertion": "Type1",
+				"source": "diabetes_ner"
+			},
+			{
+				"start": 46,
+				"end": 52,
+				"text": "type 1",
+				"label": "diabetes_type",
+				"assertion": "Type1",
+				"source": "diabetes_ner"
+			},
+			{
+				"start": 214,
+				"end": 221,
+				"text": "insulin",
+				"label": "insulin_status",
+				"assertion": "Present",
+				"source": "diabetes_ner"
+			},
+			{
+				"start": 1013,
+				"end": 1019,
+				"text": "Lantus",
+				"label": "insulin_status",
+				"assertion": "Present",
+				"source": "diabetes_ner"
+			},
+			{
+				"start": 1112,
+				"end": 1118,
+				"text": "Lantus",
+				"label": "insulin_status",
+				"assertion": "Present",
+				"source": "diabetes_ner"
+			},
+			{
+				"start": 3303,
+				"end": 3320,
+				"text": "poorly controlled",
 				"label": "control_status",
-				"assertion": "Improving",
-				"source": "diabetes_ner"
+				"assertion": "Uncontrolled",
+				"source": "llm_extension"
 			},
 			{
-				"start": 159,
-				"end": 166,
-				"text": "insulin",
-				"label": "insulin_status",
-				"assertion": "Present",
-				"source": "diabetes_ner"
-			},
-			{
-				"start": 266,
-				"end": 273,
-				"text": "insulin",
-				"label": "insulin_status",
-				"assertion": "Present",
-				"source": "diabetes_ner"
-			},
-			{
-				"start": 373,
-				"end": 391,
-				"text": "low blood glucoses",
+				"start": 114,
+				"end": 133,
+				"text": "diabetic neuropathy",
 				"label": "complication",
 				"assertion": "Present",
 				"source": "llm_extension"
 			},
 			{
-				"start": 812,
-				"end": 820,
-				"text": "fatigued",
+				"start": 3362,
+				"end": 3387,
+				"text": "positive microalbuminuria",
+				"label": "complication",
+				"assertion": "Present",
+				"source": "llm_extension"
+			},
+			{
+				"start": 1455,
+				"end": 1468,
+				"text": "gastroparesis",
+				"label": "complication",
+				"assertion": "Present",
+				"source": "llm_extension"
+			},
+			{
+				"start": 1473,
+				"end": 1482,
+				"text": "impotence",
 				"label": "complication",
 				"assertion": "Present",
 				"source": "llm_extension"
 			}
 		],
 		"built_terms": [
-			"Improving Diabetes mellitus with low blood glucoses",
-			"Improving Diabetes mellitus with low blood glucoses with long-term current use of insulin",
-			"Improving Diabetes mellitus with fatigued",
-			"Improving Diabetes mellitus with fatigued with long-term current use of insulin"
+			"Uncontrolled Type 1 diabetes mellitus with diabetic neuropathy",
+			"Uncontrolled Type 1 diabetes mellitus with positive microalbuminuria",
+			"Uncontrolled Type 1 diabetes mellitus with gastroparesis",
+			"Uncontrolled Type 1 diabetes mellitus with impotence"
 		],
 		"normalized_terms": [
 			{
-				"term": "Improving Diabetes mellitus with low blood glucoses",
+				"term": "Uncontrolled Type 1 diabetes mellitus with diabetic neuropathy",
 				"normalize_payload": {
-					"code": "808719",
-					"title": "Low blood sugar in diabetes",
-					"concept_code": "597617",
-					"concept_title": "diabetic hypoglycemia",
-					"lexical_code": "808719",
-					"lexical_title": "Low blood sugar in diabetes",
-					"default_lexical_code": "75101",
-					"default_lexical_title": "Diabetic hypoglycemia",
-					"score": 0.917,
+					"code": "65858685",
+					"title": "uncontrolled type 1 diabetes mellitus with diabetic neuropathy",
+					"concept_code": "1613809867",
+					"concept_title": "uncontrolled type 1 diabetes with diabetic neuropathy",
+					"lexical_code": "64855292",
+					"lexical_title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+					"default_lexical_code": "64855292",
+					"default_lexical_title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+					"score": 1,
 					"certainty": "",
 					"metadata": {
 						"mappings": {
 							"icd10cm": {
-								"codes": [
-									{
-										"code": "E11.649",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "END003",
-													"ccsr_description": "Diabetes mellitus with complication"
-												},
-												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred primary",
-										"relationship_type": "Broader than",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
-									}
-								]
+								"codes": [],
+								"map_context": "INSUFFICIENT INFORMATION"
 							},
 							"icd9cm": {
 								"codes": [
 									{
-										"code": "250.80",
+										"code": "250.63",
 										"map_type": "Preferred primary",
-										"title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+										"title": "Type I (juvenile type) diabetes mellitus with neurological manifestations, uncontrolled"
+									},
+									{
+										"code": "357.2",
+										"map_type": "Preferred secondary",
+										"title": "Polyneuropathy in diabetes"
 									}
 								]
 							},
 							"snomedInternational": {
 								"codes": [
 									{
-										"code": "237633009",
+										"code": "368521000119107",
 										"map_type": "Preferred primary",
 										"mesh_code": "",
-										"relationship_type": "Same as",
-										"title": "Hypoglycemia due to diabetes mellitus"
+										"relationship_type": "Narrower than",
+										"title": "Disorder of nerve due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "73211009",
+										"code": "444073006",
 										"map_type": "Non-preferred primary",
-										"mesh_code": "D003920",
+										"mesh_code": "",
 										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									}
 								]
 							},
 							"umls": {
 								"codes": [
 									{
-										"code": "C0342313",
-										"title": "Hypoglycemia due to diabetes mellitus"
+										"code": "C2732402",
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									},
 									{
-										"code": "C0375145",
-										"title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
+										"code": "C0271680",
+										"title": "Diabetic Polyneuropathies"
 									},
 									{
-										"code": "C2874122",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
+										"code": "C5223858",
+										"title": "Disorder of nerve due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
+										"code": "C0375140",
+										"title": "Diabetes with neurological manifestations, type I [juvenile type], uncontrolled"
 									}
 								]
 							},
@@ -160,35 +172,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "SDOH Problems/Health Concerns",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "Problems",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "237633009",
+												"code": "368521000119107",
 												"code_system": "snomedInternational"
 											},
 											{
-												"code": "73211009",
+												"code": "444073006",
 												"code_system": "snomedInternational"
 											}
 										],
@@ -209,170 +197,73 @@
 				}
 			},
 			{
-				"term": "Improving Diabetes mellitus with low blood glucoses with long-term current use of insulin",
+				"term": "Uncontrolled Type 1 diabetes mellitus with positive microalbuminuria",
 				"normalize_payload": {
-					"code": "64855057",
-					"title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"concept_code": "1613806775",
-					"concept_title": "diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"lexical_code": "64855057",
-					"lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"default_lexical_code": "64855057",
-					"default_lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"score": 0.948,
+					"code": "68207084",
+					"title": "Uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"concept_code": "1758139547",
+					"concept_title": "uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"lexical_code": "68207084",
+					"lexical_title": "Uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"default_lexical_code": "68207084",
+					"default_lexical_title": "Uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"score": 0.98,
 					"certainty": "",
 					"metadata": {
 						"mappings": {
 							"icd10cm": {
-								"codes": [
-									{
-										"code": "E11.649",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "END003",
-													"ccsr_description": "Diabetes mellitus with complication"
-												},
-												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred primary",
-										"relationship_type": "Narrower than",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
-									},
-									{
-										"code": "Z79.4",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "FAC025",
-													"ccsr_description": "Other specified status"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred secondary",
-										"relationship_type": "Narrower than",
-										"title": "Long term (current) use of insulin"
-									}
-								]
+								"codes": [],
+								"map_context": "INSUFFICIENT INFORMATION"
 							},
 							"icd9cm": {
 								"codes": [
 									{
-										"code": "250.80",
+										"code": "250.43",
 										"map_type": "Preferred primary",
-										"title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+										"title": "Type I (juvenile type) diabetes mellitus with renal manifestations, uncontrolled"
 									},
 									{
-										"code": "251.2",
+										"code": "791.0",
 										"map_type": "Preferred secondary",
-										"title": "Hypoglycemia, unspecified"
-									},
-									{
-										"code": "V58.67",
-										"map_type": "Alternate secondary",
-										"title": "Encounter for long-term (current) use of insulin"
+										"title": "Proteinuria"
 									}
 								]
 							},
 							"snomedInternational": {
 								"codes": [
 									{
-										"code": "237633009",
+										"code": "444073006",
 										"map_type": "Preferred primary",
 										"mesh_code": "",
 										"relationship_type": "Narrower than",
-										"title": "Hypoglycemia due to diabetes mellitus"
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									},
 									{
-										"code": "73211009",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "D003920",
-										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
-									},
-									{
-										"code": "710815001",
+										"code": "312975006",
 										"map_type": "Non-preferred primary",
 										"mesh_code": "",
 										"relationship_type": "Narrower than",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "170747006",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "",
-										"relationship_type": "Narrower than",
-										"title": "Diabetic on insulin"
+										"title": "Microalbuminuria"
 									}
 								]
 							},
 							"umls": {
 								"codes": [
 									{
-										"code": "C1455979",
-										"title": "Encounter for long-term (current) use of insulin"
+										"code": "C2732402",
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									},
 									{
-										"code": "C2874122",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
+										"code": "C0375133",
+										"title": "Diabetes with renal manifestations, type I [juvenile type], uncontrolled"
 									},
 									{
-										"code": "C0375145",
-										"title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
+										"code": "C0730345",
+										"title": "Microalbuminuria"
 									},
 									{
-										"code": "C0342313",
-										"title": "Hypoglycemia due to diabetes mellitus"
-									},
-									{
-										"code": "C0020615",
-										"title": "Hypoglycemia"
-									},
-									{
-										"code": "C4040354",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "C0421248",
-										"title": "Diabetic on insulin"
-									},
-									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
+										"code": "C0033687",
+										"title": "Proteinuria"
 									}
 								]
 							},
@@ -381,35 +272,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "710815001",
+												"code": "312975006",
 												"code_system": "snomedInternational"
 											},
 											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											},
-											{
-												"code": "Z79.4",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "Problems",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "170747006",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "237633009",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "73211009",
+												"code": "444073006",
 												"code_system": "snomedInternational"
 											}
 										],
@@ -417,57 +284,137 @@
 										"data_element": "Reaction",
 										"hrsn_domain": "",
 										"valueset_oid": "2.16.840.1.113883.4.642.3.232"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "710815001",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											},
-											{
-												"code": "Z79.4",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "SDOH Problems/Health Concerns",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
 									}
 								]
 							}
 						},
 						"flags": {
 							"age_indicator": "",
-							"is_icd10cm_refinable": true,
+							"is_icd10cm_refinable": false,
 							"sex_indicator": ""
 						}
 					}
 				}
 			},
 			{
-				"term": "Improving Diabetes mellitus with fatigued",
+				"term": "Uncontrolled Type 1 diabetes mellitus with gastroparesis",
 				"normalize_payload": {
-					"code": "29719",
-					"title": "Diabetes mellitus with other specified manifestations",
-					"concept_code": "604279",
-					"concept_title": "diabetes mellitus with other specified manifestations",
-					"lexical_code": "29719",
-					"lexical_title": "Diabetes mellitus with other specified manifestations",
-					"default_lexical_code": "29719",
-					"default_lexical_title": "Diabetes mellitus with other specified manifestations",
-					"score": 0.993,
+					"code": "35363135",
+					"title": "Uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"concept_code": "37348641",
+					"concept_title": "uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"lexical_code": "35363135",
+					"lexical_title": "Uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"default_lexical_code": "35363135",
+					"default_lexical_title": "Uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"score": 1,
+					"certainty": "",
+					"metadata": {
+						"mappings": {
+							"icd10cm": {
+								"codes": [],
+								"map_context": "INSUFFICIENT INFORMATION"
+							},
+							"icd9cm": {
+								"codes": [
+									{
+										"code": "250.63",
+										"map_type": "Preferred primary",
+										"title": "Type I (juvenile type) diabetes mellitus with neurological manifestations, uncontrolled"
+									},
+									{
+										"code": "536.3",
+										"map_type": "Preferred secondary",
+										"title": "Gastroparesis"
+									}
+								]
+							},
+							"snomedInternational": {
+								"codes": [
+									{
+										"code": "713702000",
+										"map_type": "Preferred primary",
+										"mesh_code": "",
+										"relationship_type": "Narrower than",
+										"title": "Gastroparesis due to type 1 diabetes mellitus"
+									},
+									{
+										"code": "444073006",
+										"map_type": "Non-preferred primary",
+										"mesh_code": "",
+										"relationship_type": "Narrower than",
+										"title": "Uncontrolled type 1 diabetes mellitus"
+									}
+								]
+							},
+							"umls": {
+								"codes": [
+									{
+										"code": "C4075823",
+										"title": "Gastroparesis due to type 1 diabetes mellitus"
+									},
+									{
+										"code": "C0152020",
+										"title": "Gastroparesis"
+									},
+									{
+										"code": "C2732402",
+										"title": "Uncontrolled type 1 diabetes mellitus"
+									},
+									{
+										"code": "C0375140",
+										"title": "Diabetes with neurological manifestations, type I [juvenile type], uncontrolled"
+									}
+								]
+							},
+							"uscdi": {
+								"profiles": [
+									{
+										"associated_codes": [
+											{
+												"code": "444073006",
+												"code_system": "snomedInternational"
+											},
+											{
+												"code": "713702000",
+												"code_system": "snomedInternational"
+											}
+										],
+										"data_class": "Allergies and Intolerances",
+										"data_element": "Reaction",
+										"hrsn_domain": "",
+										"valueset_oid": "2.16.840.1.113883.4.642.3.232"
+									}
+								]
+							}
+						},
+						"flags": {
+							"age_indicator": "",
+							"is_icd10cm_refinable": false,
+							"sex_indicator": ""
+						}
+					}
+				}
+			},
+			{
+				"term": "Uncontrolled Type 1 diabetes mellitus with impotence",
+				"normalize_payload": {
+					"code": "1494815897",
+					"title": "Erectile dysfunction due to type 1 diabetes mellitus",
+					"concept_code": "37493336",
+					"concept_title": "erectile dysfunction due to type 1 diabetes mellitus",
+					"lexical_code": "1494815897",
+					"lexical_title": "Erectile dysfunction due to type 1 diabetes mellitus",
+					"default_lexical_code": "1494815897",
+					"default_lexical_title": "Erectile dysfunction due to type 1 diabetes mellitus",
+					"score": 0.947,
 					"certainty": "",
 					"metadata": {
 						"mappings": {
 							"icd10cm": {
 								"codes": [
 									{
-										"code": "E11.69",
+										"code": "E10.69",
 										"code_metadata": {
 											"ccsr": [
 												{
@@ -475,8 +422,8 @@
 													"ccsr_description": "Diabetes mellitus with complication"
 												},
 												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
+													"ccsr_category": "END004",
+													"ccsr_description": "Diabetes mellitus, Type 1"
 												}
 											],
 											"hcc": [
@@ -497,54 +444,82 @@
 										},
 										"map_type": "Preferred primary",
 										"relationship_type": "Narrower than",
-										"title": "Type 2 diabetes mellitus with other specified complication"
+										"title": "Type 1 diabetes mellitus with other specified complication"
+									},
+									{
+										"code": "N52.9",
+										"code_metadata": {
+											"ccsr": [
+												{
+													"ccsr_category": "GEN014",
+													"ccsr_description": "Erectile dysfunction"
+												}
+											],
+											"hcc": []
+										},
+										"map_type": "Preferred secondary",
+										"relationship_type": "Narrower than",
+										"title": "Male erectile dysfunction, unspecified"
 									}
 								]
 							},
 							"icd9cm": {
 								"codes": [
 									{
-										"code": "250.80",
+										"code": "250.81",
 										"map_type": "Preferred primary",
-										"title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+										"title": "Type I (juvenile type) diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+									},
+									{
+										"code": "607.84",
+										"map_type": "Preferred secondary",
+										"title": "Impotence of organic origin"
 									}
 								]
 							},
 							"snomedInternational": {
 								"codes": [
 									{
-										"code": "73211009",
+										"code": "691000119103",
 										"map_type": "Preferred primary",
-										"mesh_code": "D003920",
-										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
+										"mesh_code": "",
+										"relationship_type": "Same as",
+										"title": "Erectile dysfunction due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "74627003",
+										"code": "46635009",
 										"map_type": "Non-preferred primary",
-										"mesh_code": "D048909",
+										"mesh_code": "D003922",
 										"relationship_type": "Narrower than",
-										"title": "Complication due to diabetes mellitus"
+										"title": "Type 1 diabetes mellitus"
 									}
 								]
 							},
 							"umls": {
 								"codes": [
 									{
-										"code": "C0342262",
-										"title": "Non-insulin-dependent diabetes mellitus with other specified complications"
+										"code": "C3494566",
+										"title": "Erectile dysfunction due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
+										"code": "C0011854",
+										"title": "Diabetes Mellitus, Insulin-Dependent"
 									},
 									{
-										"code": "C0342257",
-										"title": "Complications of Diabetes Mellitus"
+										"code": "C0156309",
+										"title": "Impotence of organic origin"
 									},
 									{
-										"code": "C0375145",
-										"title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
+										"code": "C0375146",
+										"title": "Diabetes with other specified manifestations, type I [juvenile type], not stated as uncontrolled"
+									},
+									{
+										"code": "C0342261",
+										"title": "Insulin-dependent diabetes mellitus with other specified complications"
+									},
+									{
+										"code": "C0242350",
+										"title": "Erectile dysfunction"
 									}
 								]
 							},
@@ -553,23 +528,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "E11.69",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "SDOH Problems/Health Concerns",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "73211009",
+												"code": "46635009",
 												"code_system": "snomedInternational"
 											},
 											{
-												"code": "74627003",
+												"code": "691000119103",
 												"code_system": "snomedInternational"
 											}
 										],
@@ -581,204 +544,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "E11.69",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "Problems",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									}
-								]
-							}
-						},
-						"flags": {
-							"age_indicator": "",
-							"is_icd10cm_refinable": false,
-							"sex_indicator": ""
-						}
-					}
-				}
-			},
-			{
-				"term": "Improving Diabetes mellitus with fatigued with long-term current use of insulin",
-				"normalize_payload": {
-					"code": "57821885",
-					"title": "Long-term current use of insulin for diabetes mellitus",
-					"concept_code": "1268347903",
-					"concept_title": "long-term current use of insulin for diabetes mellitus",
-					"lexical_code": "57821885",
-					"lexical_title": "Long-term current use of insulin for diabetes mellitus",
-					"default_lexical_code": "57821885",
-					"default_lexical_title": "Long-term current use of insulin for diabetes mellitus",
-					"score": 0.902,
-					"certainty": "",
-					"metadata": {
-						"mappings": {
-							"icd10cm": {
-								"codes": [
-									{
-										"code": "Z79.4",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "FAC025",
-													"ccsr_description": "Other specified status"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred primary",
-										"relationship_type": "Narrower than",
-										"title": "Long term (current) use of insulin"
-									},
-									{
-										"code": "E11.9",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "END002",
-													"ccsr_description": "Diabetes mellitus without complication"
-												},
-												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred secondary",
-										"relationship_type": "Narrower than",
-										"title": "Type 2 diabetes mellitus without complications"
-									}
-								]
-							},
-							"icd9cm": {
-								"codes": [
-									{
-										"code": "V58.67",
-										"map_type": "Preferred primary",
-										"title": "Encounter for long-term (current) use of insulin"
-									},
-									{
-										"code": "250.00",
-										"map_type": "Preferred secondary",
-										"title": "Type II or unspecified type diabetes mellitus without mention of complication, not stated as uncontrolled"
-									}
-								]
-							},
-							"snomedInternational": {
-								"codes": [
-									{
-										"code": "710815001",
-										"map_type": "Preferred primary",
-										"mesh_code": "",
-										"relationship_type": "Narrower than",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "309298003",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "",
-										"relationship_type": "Narrower than",
-										"title": "Drug therapy finding"
-									},
-									{
-										"code": "73211009",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "D003920",
-										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
-									}
-								]
-							},
-							"umls": {
-								"codes": [
-									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
-									},
-									{
-										"code": "C0494290",
-										"title": "Non-insulin-dependent diabetes mellitus without complications"
-									},
-									{
-										"code": "C0586814",
-										"title": "Drug therapy finding"
-									},
-									{
-										"code": "C1455979",
-										"title": "Encounter for long-term (current) use of insulin"
-									},
-									{
-										"code": "C4040354",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "C0375113",
-										"title": "Diabetes mellitus without mention of complication, type II or unspecified type, not stated as uncontrolled"
-									}
-								]
-							},
-							"uscdi": {
-								"profiles": [
-									{
-										"associated_codes": [
-											{
-												"code": "309298003",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "73211009",
-												"code_system": "snomedInternational"
-											}
-										],
-										"data_class": "Allergies and Intolerances",
-										"data_element": "Reaction",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.3.232"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "710815001",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "E11.9",
+												"code": "E10.69",
 												"code_system": "icd10cm"
 											},
 											{
-												"code": "Z79.4",
+												"code": "N52.9",
 												"code_system": "icd10cm"
 											}
 										],
@@ -790,15 +560,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "710815001",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "E11.9",
+												"code": "E10.69",
 												"code_system": "icd10cm"
 											},
 											{
-												"code": "Z79.4",
+												"code": "N52.9",
 												"code_system": "icd10cm"
 											}
 										],
@@ -813,7 +579,7 @@
 						"flags": {
 							"age_indicator": "",
 							"is_icd10cm_refinable": false,
-							"sex_indicator": ""
+							"sex_indicator": "M"
 						}
 					}
 				}
@@ -821,101 +587,73 @@
 		],
 		"selected_terms": [
 			{
-				"term": "Improving Diabetes mellitus with low blood glucoses",
+				"term": "Uncontrolled Type 1 diabetes mellitus with diabetic neuropathy",
 				"normalize_payload": {
-					"code": "808719",
-					"title": "Low blood sugar in diabetes",
-					"concept_code": "597617",
-					"concept_title": "diabetic hypoglycemia",
-					"lexical_code": "808719",
-					"lexical_title": "Low blood sugar in diabetes",
-					"default_lexical_code": "75101",
-					"default_lexical_title": "Diabetic hypoglycemia",
-					"score": 0.917,
+					"code": "65858685",
+					"title": "uncontrolled type 1 diabetes mellitus with diabetic neuropathy",
+					"concept_code": "1613809867",
+					"concept_title": "uncontrolled type 1 diabetes with diabetic neuropathy",
+					"lexical_code": "64855292",
+					"lexical_title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+					"default_lexical_code": "64855292",
+					"default_lexical_title": "Uncontrolled type 1 diabetes with diabetic neuropathy",
+					"score": 1,
 					"certainty": "",
 					"metadata": {
 						"mappings": {
 							"icd10cm": {
-								"codes": [
-									{
-										"code": "E11.649",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "END003",
-													"ccsr_description": "Diabetes mellitus with complication"
-												},
-												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred primary",
-										"relationship_type": "Broader than",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
-									}
-								]
+								"codes": [],
+								"map_context": "INSUFFICIENT INFORMATION"
 							},
 							"icd9cm": {
 								"codes": [
 									{
-										"code": "250.80",
+										"code": "250.63",
 										"map_type": "Preferred primary",
-										"title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+										"title": "Type I (juvenile type) diabetes mellitus with neurological manifestations, uncontrolled"
+									},
+									{
+										"code": "357.2",
+										"map_type": "Preferred secondary",
+										"title": "Polyneuropathy in diabetes"
 									}
 								]
 							},
 							"snomedInternational": {
 								"codes": [
 									{
-										"code": "237633009",
+										"code": "368521000119107",
 										"map_type": "Preferred primary",
 										"mesh_code": "",
-										"relationship_type": "Same as",
-										"title": "Hypoglycemia due to diabetes mellitus"
+										"relationship_type": "Narrower than",
+										"title": "Disorder of nerve due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "73211009",
+										"code": "444073006",
 										"map_type": "Non-preferred primary",
-										"mesh_code": "D003920",
+										"mesh_code": "",
 										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									}
 								]
 							},
 							"umls": {
 								"codes": [
 									{
-										"code": "C0342313",
-										"title": "Hypoglycemia due to diabetes mellitus"
+										"code": "C2732402",
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									},
 									{
-										"code": "C0375145",
-										"title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
+										"code": "C0271680",
+										"title": "Diabetic Polyneuropathies"
 									},
 									{
-										"code": "C2874122",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
+										"code": "C5223858",
+										"title": "Disorder of nerve due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
+										"code": "C0375140",
+										"title": "Diabetes with neurological manifestations, type I [juvenile type], uncontrolled"
 									}
 								]
 							},
@@ -924,35 +662,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "SDOH Problems/Health Concerns",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "Problems",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "237633009",
+												"code": "368521000119107",
 												"code_system": "snomedInternational"
 											},
 											{
-												"code": "73211009",
+												"code": "444073006",
 												"code_system": "snomedInternational"
 											}
 										],
@@ -973,170 +687,73 @@
 				}
 			},
 			{
-				"term": "Improving Diabetes mellitus with low blood glucoses with long-term current use of insulin",
+				"term": "Uncontrolled Type 1 diabetes mellitus with positive microalbuminuria",
 				"normalize_payload": {
-					"code": "64855057",
-					"title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"concept_code": "1613806775",
-					"concept_title": "diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"lexical_code": "64855057",
-					"lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"default_lexical_code": "64855057",
-					"default_lexical_title": "Diabetes mellitus with hypoglycemia, with long-term current use of insulin",
-					"score": 0.948,
+					"code": "68207084",
+					"title": "Uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"concept_code": "1758139547",
+					"concept_title": "uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"lexical_code": "68207084",
+					"lexical_title": "Uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"default_lexical_code": "68207084",
+					"default_lexical_title": "Uncontrolled type 1 diabetes mellitus with microalbuminuria",
+					"score": 0.98,
 					"certainty": "",
 					"metadata": {
 						"mappings": {
 							"icd10cm": {
-								"codes": [
-									{
-										"code": "E11.649",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "END003",
-													"ccsr_description": "Diabetes mellitus with complication"
-												},
-												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred primary",
-										"relationship_type": "Narrower than",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
-									},
-									{
-										"code": "Z79.4",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "FAC025",
-													"ccsr_description": "Other specified status"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred secondary",
-										"relationship_type": "Narrower than",
-										"title": "Long term (current) use of insulin"
-									}
-								]
+								"codes": [],
+								"map_context": "INSUFFICIENT INFORMATION"
 							},
 							"icd9cm": {
 								"codes": [
 									{
-										"code": "250.80",
+										"code": "250.43",
 										"map_type": "Preferred primary",
-										"title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+										"title": "Type I (juvenile type) diabetes mellitus with renal manifestations, uncontrolled"
 									},
 									{
-										"code": "251.2",
+										"code": "791.0",
 										"map_type": "Preferred secondary",
-										"title": "Hypoglycemia, unspecified"
-									},
-									{
-										"code": "V58.67",
-										"map_type": "Alternate secondary",
-										"title": "Encounter for long-term (current) use of insulin"
+										"title": "Proteinuria"
 									}
 								]
 							},
 							"snomedInternational": {
 								"codes": [
 									{
-										"code": "237633009",
+										"code": "444073006",
 										"map_type": "Preferred primary",
 										"mesh_code": "",
 										"relationship_type": "Narrower than",
-										"title": "Hypoglycemia due to diabetes mellitus"
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									},
 									{
-										"code": "73211009",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "D003920",
-										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
-									},
-									{
-										"code": "710815001",
+										"code": "312975006",
 										"map_type": "Non-preferred primary",
 										"mesh_code": "",
 										"relationship_type": "Narrower than",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "170747006",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "",
-										"relationship_type": "Narrower than",
-										"title": "Diabetic on insulin"
+										"title": "Microalbuminuria"
 									}
 								]
 							},
 							"umls": {
 								"codes": [
 									{
-										"code": "C1455979",
-										"title": "Encounter for long-term (current) use of insulin"
+										"code": "C2732402",
+										"title": "Uncontrolled type 1 diabetes mellitus"
 									},
 									{
-										"code": "C2874122",
-										"title": "Type 2 diabetes mellitus with hypoglycemia without coma"
+										"code": "C0375133",
+										"title": "Diabetes with renal manifestations, type I [juvenile type], uncontrolled"
 									},
 									{
-										"code": "C0375145",
-										"title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
+										"code": "C0730345",
+										"title": "Microalbuminuria"
 									},
 									{
-										"code": "C0342313",
-										"title": "Hypoglycemia due to diabetes mellitus"
-									},
-									{
-										"code": "C0020615",
-										"title": "Hypoglycemia"
-									},
-									{
-										"code": "C4040354",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "C0421248",
-										"title": "Diabetic on insulin"
-									},
-									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
+										"code": "C0033687",
+										"title": "Proteinuria"
 									}
 								]
 							},
@@ -1145,35 +762,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "710815001",
+												"code": "312975006",
 												"code_system": "snomedInternational"
 											},
 											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											},
-											{
-												"code": "Z79.4",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "Problems",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "170747006",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "237633009",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "73211009",
+												"code": "444073006",
 												"code_system": "snomedInternational"
 											}
 										],
@@ -1181,57 +774,137 @@
 										"data_element": "Reaction",
 										"hrsn_domain": "",
 										"valueset_oid": "2.16.840.1.113883.4.642.3.232"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "710815001",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "E11.649",
-												"code_system": "icd10cm"
-											},
-											{
-												"code": "Z79.4",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "SDOH Problems/Health Concerns",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
 									}
 								]
 							}
 						},
 						"flags": {
 							"age_indicator": "",
-							"is_icd10cm_refinable": true,
+							"is_icd10cm_refinable": false,
 							"sex_indicator": ""
 						}
 					}
 				}
 			},
 			{
-				"term": "Improving Diabetes mellitus with fatigued",
+				"term": "Uncontrolled Type 1 diabetes mellitus with gastroparesis",
 				"normalize_payload": {
-					"code": "29719",
-					"title": "Diabetes mellitus with other specified manifestations",
-					"concept_code": "604279",
-					"concept_title": "diabetes mellitus with other specified manifestations",
-					"lexical_code": "29719",
-					"lexical_title": "Diabetes mellitus with other specified manifestations",
-					"default_lexical_code": "29719",
-					"default_lexical_title": "Diabetes mellitus with other specified manifestations",
-					"score": 0.993,
+					"code": "35363135",
+					"title": "Uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"concept_code": "37348641",
+					"concept_title": "uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"lexical_code": "35363135",
+					"lexical_title": "Uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"default_lexical_code": "35363135",
+					"default_lexical_title": "Uncontrolled type 1 diabetes mellitus with gastroparesis",
+					"score": 1,
+					"certainty": "",
+					"metadata": {
+						"mappings": {
+							"icd10cm": {
+								"codes": [],
+								"map_context": "INSUFFICIENT INFORMATION"
+							},
+							"icd9cm": {
+								"codes": [
+									{
+										"code": "250.63",
+										"map_type": "Preferred primary",
+										"title": "Type I (juvenile type) diabetes mellitus with neurological manifestations, uncontrolled"
+									},
+									{
+										"code": "536.3",
+										"map_type": "Preferred secondary",
+										"title": "Gastroparesis"
+									}
+								]
+							},
+							"snomedInternational": {
+								"codes": [
+									{
+										"code": "713702000",
+										"map_type": "Preferred primary",
+										"mesh_code": "",
+										"relationship_type": "Narrower than",
+										"title": "Gastroparesis due to type 1 diabetes mellitus"
+									},
+									{
+										"code": "444073006",
+										"map_type": "Non-preferred primary",
+										"mesh_code": "",
+										"relationship_type": "Narrower than",
+										"title": "Uncontrolled type 1 diabetes mellitus"
+									}
+								]
+							},
+							"umls": {
+								"codes": [
+									{
+										"code": "C4075823",
+										"title": "Gastroparesis due to type 1 diabetes mellitus"
+									},
+									{
+										"code": "C0152020",
+										"title": "Gastroparesis"
+									},
+									{
+										"code": "C2732402",
+										"title": "Uncontrolled type 1 diabetes mellitus"
+									},
+									{
+										"code": "C0375140",
+										"title": "Diabetes with neurological manifestations, type I [juvenile type], uncontrolled"
+									}
+								]
+							},
+							"uscdi": {
+								"profiles": [
+									{
+										"associated_codes": [
+											{
+												"code": "444073006",
+												"code_system": "snomedInternational"
+											},
+											{
+												"code": "713702000",
+												"code_system": "snomedInternational"
+											}
+										],
+										"data_class": "Allergies and Intolerances",
+										"data_element": "Reaction",
+										"hrsn_domain": "",
+										"valueset_oid": "2.16.840.1.113883.4.642.3.232"
+									}
+								]
+							}
+						},
+						"flags": {
+							"age_indicator": "",
+							"is_icd10cm_refinable": false,
+							"sex_indicator": ""
+						}
+					}
+				}
+			},
+			{
+				"term": "Uncontrolled Type 1 diabetes mellitus with impotence",
+				"normalize_payload": {
+					"code": "1494815897",
+					"title": "Erectile dysfunction due to type 1 diabetes mellitus",
+					"concept_code": "37493336",
+					"concept_title": "erectile dysfunction due to type 1 diabetes mellitus",
+					"lexical_code": "1494815897",
+					"lexical_title": "Erectile dysfunction due to type 1 diabetes mellitus",
+					"default_lexical_code": "1494815897",
+					"default_lexical_title": "Erectile dysfunction due to type 1 diabetes mellitus",
+					"score": 0.947,
 					"certainty": "",
 					"metadata": {
 						"mappings": {
 							"icd10cm": {
 								"codes": [
 									{
-										"code": "E11.69",
+										"code": "E10.69",
 										"code_metadata": {
 											"ccsr": [
 												{
@@ -1239,8 +912,8 @@
 													"ccsr_description": "Diabetes mellitus with complication"
 												},
 												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
+													"ccsr_category": "END004",
+													"ccsr_description": "Diabetes mellitus, Type 1"
 												}
 											],
 											"hcc": [
@@ -1261,54 +934,82 @@
 										},
 										"map_type": "Preferred primary",
 										"relationship_type": "Narrower than",
-										"title": "Type 2 diabetes mellitus with other specified complication"
+										"title": "Type 1 diabetes mellitus with other specified complication"
+									},
+									{
+										"code": "N52.9",
+										"code_metadata": {
+											"ccsr": [
+												{
+													"ccsr_category": "GEN014",
+													"ccsr_description": "Erectile dysfunction"
+												}
+											],
+											"hcc": []
+										},
+										"map_type": "Preferred secondary",
+										"relationship_type": "Narrower than",
+										"title": "Male erectile dysfunction, unspecified"
 									}
 								]
 							},
 							"icd9cm": {
 								"codes": [
 									{
-										"code": "250.80",
+										"code": "250.81",
 										"map_type": "Preferred primary",
-										"title": "Type II or unspecified type diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+										"title": "Type I (juvenile type) diabetes mellitus with other specified manifestations, not stated as uncontrolled"
+									},
+									{
+										"code": "607.84",
+										"map_type": "Preferred secondary",
+										"title": "Impotence of organic origin"
 									}
 								]
 							},
 							"snomedInternational": {
 								"codes": [
 									{
-										"code": "73211009",
+										"code": "691000119103",
 										"map_type": "Preferred primary",
-										"mesh_code": "D003920",
-										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
+										"mesh_code": "",
+										"relationship_type": "Same as",
+										"title": "Erectile dysfunction due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "74627003",
+										"code": "46635009",
 										"map_type": "Non-preferred primary",
-										"mesh_code": "D048909",
+										"mesh_code": "D003922",
 										"relationship_type": "Narrower than",
-										"title": "Complication due to diabetes mellitus"
+										"title": "Type 1 diabetes mellitus"
 									}
 								]
 							},
 							"umls": {
 								"codes": [
 									{
-										"code": "C0342262",
-										"title": "Non-insulin-dependent diabetes mellitus with other specified complications"
+										"code": "C3494566",
+										"title": "Erectile dysfunction due to type 1 diabetes mellitus"
 									},
 									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
+										"code": "C0011854",
+										"title": "Diabetes Mellitus, Insulin-Dependent"
 									},
 									{
-										"code": "C0342257",
-										"title": "Complications of Diabetes Mellitus"
+										"code": "C0156309",
+										"title": "Impotence of organic origin"
 									},
 									{
-										"code": "C0375145",
-										"title": "Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled"
+										"code": "C0375146",
+										"title": "Diabetes with other specified manifestations, type I [juvenile type], not stated as uncontrolled"
+									},
+									{
+										"code": "C0342261",
+										"title": "Insulin-dependent diabetes mellitus with other specified complications"
+									},
+									{
+										"code": "C0242350",
+										"title": "Erectile dysfunction"
 									}
 								]
 							},
@@ -1317,23 +1018,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "E11.69",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "SDOH Problems/Health Concerns",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "73211009",
+												"code": "46635009",
 												"code_system": "snomedInternational"
 											},
 											{
-												"code": "74627003",
+												"code": "691000119103",
 												"code_system": "snomedInternational"
 											}
 										],
@@ -1345,204 +1034,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "E11.69",
-												"code_system": "icd10cm"
-											}
-										],
-										"data_class": "Problems",
-										"data_element": "Problems",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.40.2.48.21"
-									}
-								]
-							}
-						},
-						"flags": {
-							"age_indicator": "",
-							"is_icd10cm_refinable": false,
-							"sex_indicator": ""
-						}
-					}
-				}
-			},
-			{
-				"term": "Improving Diabetes mellitus with fatigued with long-term current use of insulin",
-				"normalize_payload": {
-					"code": "57821885",
-					"title": "Long-term current use of insulin for diabetes mellitus",
-					"concept_code": "1268347903",
-					"concept_title": "long-term current use of insulin for diabetes mellitus",
-					"lexical_code": "57821885",
-					"lexical_title": "Long-term current use of insulin for diabetes mellitus",
-					"default_lexical_code": "57821885",
-					"default_lexical_title": "Long-term current use of insulin for diabetes mellitus",
-					"score": 0.902,
-					"certainty": "",
-					"metadata": {
-						"mappings": {
-							"icd10cm": {
-								"codes": [
-									{
-										"code": "Z79.4",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "FAC025",
-													"ccsr_description": "Other specified status"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred primary",
-										"relationship_type": "Narrower than",
-										"title": "Long term (current) use of insulin"
-									},
-									{
-										"code": "E11.9",
-										"code_metadata": {
-											"ccsr": [
-												{
-													"ccsr_category": "END002",
-													"ccsr_description": "Diabetes mellitus without complication"
-												},
-												{
-													"ccsr_category": "END005",
-													"ccsr_description": "Diabetes mellitus, Type 2"
-												}
-											],
-											"hcc": [
-												{
-													"hcc_factors": {
-														"community_fbdual_aged": "0.1860",
-														"community_fbdual_disabled": "0.2350",
-														"community_nondual_aged": "0.1660",
-														"community_nondual_disabled": "0.1910",
-														"community_pbdual_aged": "0.1660",
-														"community_pbdual_disabled": "0.2100",
-														"institutional": "0.2800"
-													},
-													"hcc_model_category": "38",
-													"hcc_version": "v28"
-												}
-											]
-										},
-										"map_type": "Preferred secondary",
-										"relationship_type": "Narrower than",
-										"title": "Type 2 diabetes mellitus without complications"
-									}
-								]
-							},
-							"icd9cm": {
-								"codes": [
-									{
-										"code": "V58.67",
-										"map_type": "Preferred primary",
-										"title": "Encounter for long-term (current) use of insulin"
-									},
-									{
-										"code": "250.00",
-										"map_type": "Preferred secondary",
-										"title": "Type II or unspecified type diabetes mellitus without mention of complication, not stated as uncontrolled"
-									}
-								]
-							},
-							"snomedInternational": {
-								"codes": [
-									{
-										"code": "710815001",
-										"map_type": "Preferred primary",
-										"mesh_code": "",
-										"relationship_type": "Narrower than",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "309298003",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "",
-										"relationship_type": "Narrower than",
-										"title": "Drug therapy finding"
-									},
-									{
-										"code": "73211009",
-										"map_type": "Non-preferred primary",
-										"mesh_code": "D003920",
-										"relationship_type": "Narrower than",
-										"title": "Diabetes mellitus"
-									}
-								]
-							},
-							"umls": {
-								"codes": [
-									{
-										"code": "C0011849",
-										"title": "Diabetes Mellitus"
-									},
-									{
-										"code": "C0494290",
-										"title": "Non-insulin-dependent diabetes mellitus without complications"
-									},
-									{
-										"code": "C0586814",
-										"title": "Drug therapy finding"
-									},
-									{
-										"code": "C1455979",
-										"title": "Encounter for long-term (current) use of insulin"
-									},
-									{
-										"code": "C4040354",
-										"title": "Long-term current use of insulin"
-									},
-									{
-										"code": "C0375113",
-										"title": "Diabetes mellitus without mention of complication, type II or unspecified type, not stated as uncontrolled"
-									}
-								]
-							},
-							"uscdi": {
-								"profiles": [
-									{
-										"associated_codes": [
-											{
-												"code": "309298003",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "73211009",
-												"code_system": "snomedInternational"
-											}
-										],
-										"data_class": "Allergies and Intolerances",
-										"data_element": "Reaction",
-										"hrsn_domain": "",
-										"valueset_oid": "2.16.840.1.113883.4.642.3.232"
-									},
-									{
-										"associated_codes": [
-											{
-												"code": "710815001",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "E11.9",
+												"code": "E10.69",
 												"code_system": "icd10cm"
 											},
 											{
-												"code": "Z79.4",
+												"code": "N52.9",
 												"code_system": "icd10cm"
 											}
 										],
@@ -1554,15 +1050,11 @@
 									{
 										"associated_codes": [
 											{
-												"code": "710815001",
-												"code_system": "snomedInternational"
-											},
-											{
-												"code": "E11.9",
+												"code": "E10.69",
 												"code_system": "icd10cm"
 											},
 											{
-												"code": "Z79.4",
+												"code": "N52.9",
 												"code_system": "icd10cm"
 											}
 										],
@@ -1577,7 +1069,7 @@
 						"flags": {
 							"age_indicator": "",
 							"is_icd10cm_refinable": false,
-							"sex_indicator": ""
+							"sex_indicator": "M"
 						}
 					}
 				}
@@ -1590,5 +1082,5 @@
 			"output_count": 4
 		}
 	}
-  }
+}
 ]
