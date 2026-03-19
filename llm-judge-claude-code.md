@@ -205,6 +205,7 @@ Evaluates a single clinical note's pipeline output.
     {
       "term": "Improving Unspecified diabetes mellitus",
       "default_lexical_title": "Diabetes mellitus",
+      "default_lexical_code": "29688",
       "icd10_codes": ["E11.9"],
       "snomed_codes": ["73211009"],
       "scores": {
@@ -946,8 +947,10 @@ Flow:
    - `generate_imo_icd_snomed_table()`: Creates comprehensive table with all metrics for all three code systems
    - `generate_detailed_table()`: Creates term-level detailed table showing:
      - Match by lexical code (default_lexical_code)
-     - One row per predicted term
-     - Lexical outcome: TP (match found) or FP (no match)
+     - One row per predicted term (TP or FP)
+     - One row per unmatched gold term (FN)
+     - Lexical outcome: TP (match found), FP (predicted but not in gold), FN (in gold but not predicted)
+     - Suggested corrections column: Shows suggested_term from judge's suggested_corrections (for TP/FP rows only)
      - Per-term ICD-10 and SNOMED code comparison with TP/FP/FN computed for each term individually
 
 **Gold standard JSON structure:**

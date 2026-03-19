@@ -17,6 +17,7 @@ class SuggestedCorrection(BaseModel):
 class TermResult(BaseModel):
     term: str
     default_lexical_title: str
+    default_lexical_code: str
     icd10_codes: List[str]
     snomed_codes: List[str]
     scores: Dict[str, DimensionScore]

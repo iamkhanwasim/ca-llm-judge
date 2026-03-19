@@ -33,6 +33,7 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
         # Get term details from flattened_terms (original pipeline data)
         term_text = ""
         default_lexical_title = ""
+        default_lexical_code = ""
         icd10_codes = []
         snomed_codes = []
 
@@ -40,6 +41,7 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
             flattened = flattened_terms[idx]
             term_text = flattened.get("term", "")  # Raw term from pipeline
             default_lexical_title = flattened.get("default_lexical_title", "")
+            default_lexical_code = flattened.get("default_lexical_code", "")
 
             # Extract just the code values (not full objects)
             icd10_full = flattened.get("icd10", [])
@@ -70,6 +72,7 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
         term_result = {
             "term": term_text,
             "default_lexical_title": default_lexical_title,
+            "default_lexical_code": default_lexical_code,
             "icd10_codes": icd10_codes,
             "snomed_codes": snomed_codes,
             "scores": scores,

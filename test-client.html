@@ -1174,6 +1174,7 @@
             html += '<th>Gold Lexical</th>';
             html += '<th>Pred Lexical</th>';
             html += '<th>Outcome</th>';
+            html += '<th>Suggested</th>';
             html += '<th>Gold ICD-10</th>';
             html += '<th>Pred ICD-10</th>';
             html += '<th>ICD-10 TP</th>';
@@ -1202,6 +1203,7 @@
                 html += `<td>${row.gold_lexical}</td>`;
                 html += `<td>${row.pred_lexical}</td>`;
                 html += `<td ${outcomeClass}>${row.lexical_outcome}</td>`;
+                html += `<td title="${row.suggested}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${row.suggested}</td>`;
                 html += `<td title="${row.gold_icd10cm}">${row.gold_icd10cm}</td>`;
                 html += `<td title="${row.pred_icd10cm}">${row.pred_icd10cm}</td>`;
                 html += `<td>${row.icd10_tp}</td>`;
@@ -1292,7 +1294,7 @@
 
             const headers = [
                 'judges', 'note', 'match_key', 'term', 'default_lexical_title',
-                'gold_lexical', 'pred_lexical', 'lexical_outcome',
+                'gold_lexical', 'pred_lexical', 'lexical_outcome', 'suggested',
                 'gold_icd10cm', 'pred_icd10cm', 'icd10_tp', 'icd10_fp', 'icd10_fn',
                 'gold_snomed', 'pred_snomed', 'snomed_tp', 'snomed_fp', 'snomed_fn'
             ];

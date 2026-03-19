@@ -58,6 +58,7 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
         raise ValueError("No matching note_ids between gold standard and pipeline output")
 
     logger.info(f"Matched {len(matched_note_ids)} notes")
+    logger.info(f"Note IDs to evaluate: {list(matched_note_ids)}")
 
     # Step 4: Evaluate each matched note
     per_note_results = []
@@ -65,6 +66,7 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
     all_predicted_codes = {"imo": [], "icd10": [], "snomed": []}
     all_gold_codes = {"imo": [], "icd10": [], "snomed": []}
 
+    logger.info("Starting note evaluation loop...")
     for note_id in matched_note_ids:
         logger.info(f"Evaluating gold note: {note_id}")
 
@@ -73,11 +75,13 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
 
         # Run LLM judge
         try:
+            logger.info(f"Calling evaluate_note for {note_id} with judges: {judges}")
             judge_result = await evaluate_note(
                 pipeline_output=pipeline_output,
                 judges=judges,
                 prompt_template=prompt_template
             )
+            logger.info(f"evaluate_note completed for {note_id}")
 
             # Extract predicted codes from term_results (now includes ICD10/SNOMED from evaluation)
             predicted_codes = extract_predicted_codes_from_terms(judge_result["term_results"])
@@ -124,9 +128,20 @@ async def evaluate_gold_standard(judges: List[str], prompt_template: str) -> Dic
             }
 
             per_note_results.append(per_note_result)
+            logger.info(f"Successfully added {note_id} to per_note_results. Total results: {len(per_note_results)}")
 
         except Exception as e:
             logger.error(f"Failed to evaluate gold note {note_id}: {e}", exc_info=True)
+            logger.error(f"Error type: {type(e).__name__}")
+            logger.error(f"Error details: {str(e)}")
+            # Continue to next note instead of stopping completely
+            continue
+
+    # Check if any notes were successfully evaluated
+    if not per_note_results:
+        logger.error("No notes were successfully evaluated!")
+        logger.error(f"Matched note IDs: {matched_note_ids}")
+        logger.error("Check error logs above for details on why evaluation failed")
 
     # Step 5: Compute aggregate P/R/F1
     judge_validation_metrics = compute_metrics(all_predicted_codes, all_gold_codes)
@@ -472,8 +487,22 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
                     "snomed_codes": snomed_codes
                 }
 
+        # Build a lookup for term_results by default_lexical_code for matching suggestions
+        term_results_by_code = {}
+        term_results_by_title = {}
+        for term_result in note_result.get("term_results", []):
+            code = term_result.get("default_lexical_code", "")
+            if code:
+                term_results_by_code[code] = term_result
+
+            # Also index by default_lexical_title as fallback
+            title = term_result.get("default_lexical_title", "")
+            if title:
+                term_results_by_title[title] = term_result
+
         # Process each predicted term
         normalized_terms = pipeline_output.get("api_response", {}).get("normalized_terms", [])
+        predicted_lexical_codes = set()  # Track which gold codes were matched
 
         for term_data in normalized_terms:
             normalize_payload = term_data.get("normalize_payload", {})
@@ -482,6 +511,10 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
             term = term_data.get("term", "")
             pred_lexical = normalize_payload.get("code", "")
             default_lexical_title = normalize_payload.get("default_lexical_title", "")
+
+            # Track predicted lexical codes
+            if pred_lexical:
+                predicted_lexical_codes.add(pred_lexical)
 
             # Extract predicted ICD-10 codes
             pred_icd10_codes = []
@@ -497,6 +530,29 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
                 code = code_item.get("code")
                 if code:
                     pred_snomed_codes.append(code)
+
+            # Get suggested_corrections for this term
+            suggested_terms = []
+            # Try matching by code first
+            term_result_match = term_results_by_code.get(pred_lexical)
+
+            # If no match by code, try by title
+            if not term_result_match and default_lexical_title:
+                term_result_match = term_results_by_title.get(default_lexical_title)
+
+            if term_result_match:
+                suggested_corrections_list = term_result_match.get("suggested_corrections", [])
+                logger.info(f"Found {len(suggested_corrections_list)} suggestions for term with code {pred_lexical}")
+                for correction in suggested_corrections_list:
+                    # The field is "suggested" not "suggested_term"
+                    suggested_term = correction.get("suggested", "")
+                    if suggested_term:
+                        suggested_terms.append(suggested_term)
+            else:
+                logger.warning(f"No term_result match found for pred_lexical={pred_lexical}, title={default_lexical_title}")
+
+            # Join multiple suggestions with semicolon
+            suggested = "; ".join(suggested_terms) if suggested_terms else ""
 
             # Check if this predicted term matches a gold term
             gold_match = gold_by_lexical.get(pred_lexical)
@@ -541,6 +597,7 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
                 "gold_lexical": gold_lexical,
                 "pred_lexical": pred_lexical,
                 "lexical_outcome": lexical_outcome,
+                "suggested": suggested,
                 "gold_icd10cm": ", ".join(gold_icd10_codes),
                 "pred_icd10cm": ", ".join(pred_icd10_codes),
                 "icd10_tp": ", ".join(sorted(icd10_tp_set)),
@@ -554,6 +611,38 @@ def generate_detailed_table(per_note_results: List[Dict], judges_str: str, gold_
             }
 
             table_data.append(row)
+
+        # Add FN rows: Gold terms that were NOT predicted
+        for gold_lexical_code, gold_data in gold_by_lexical.items():
+            if gold_lexical_code not in predicted_lexical_codes:
+                # FN: In gold but not in predicted
+                gold_icd10_codes = gold_data["icd10_codes"]
+                gold_snomed_codes = gold_data["snomed_codes"]
+
+                # For FN, there's no predicted data
+                row = {
+                    "judges": judges_str,
+                    "note": note_id,
+                    "match_key": gold_lexical_code,
+                    "term": "",  # No predicted term
+                    "default_lexical_title": "",  # No predicted term
+                    "gold_lexical": gold_lexical_code,
+                    "pred_lexical": "",  # Not predicted
+                    "lexical_outcome": "FN",
+                    "suggested": "",  # No suggestions for FN rows
+                    "gold_icd10cm": ", ".join(gold_icd10_codes),
+                    "pred_icd10cm": "",  # No predicted codes
+                    "icd10_tp": "",
+                    "icd10_fp": "",
+                    "icd10_fn": ", ".join(sorted(gold_icd10_codes)),  # All gold codes are FN
+                    "gold_snomed": ", ".join(gold_snomed_codes),
+                    "pred_snomed": "",  # No predicted codes
+                    "snomed_tp": "",
+                    "snomed_fp": "",
+                    "snomed_fn": ", ".join(sorted(gold_snomed_codes))  # All gold codes are FN
+                }
+
+                table_data.append(row)
 
     logger.info(f"Generated detailed table with {len(table_data)} rows")
     return table_data
