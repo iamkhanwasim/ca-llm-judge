@@ -41,6 +41,7 @@ execution:
 # --- Gold Standard Paths ---
 gold_standard:
   gold_file_path: data/gold_standard/gold_standard.json
+  gold_file_path_new: data/gold_standard/gold_standard_new.json
   pipeline_output_path: data/pipeline_output/pipeline_output.json
 
 # --- Report ---

@@ -1,0 +1,11 @@
+Type 1
+Type 2
+Due to an underlying condition
+Secondary diabetes
+Drug or chemical induced
+Gestational
+Other specified
+Unspecified
+Juvenile
+Insulin-dependent
+Non-insulin dependent

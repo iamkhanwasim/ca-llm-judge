@@ -1,0 +1,73 @@
+Albuminuria
+Amyotrophy
+Arthropathy
+Autonomic (poly) neuropathy
+Autonomic neuropathy
+Bullosis diabeticorum
+Cataract
+Charcot’s
+Chronic kidney disease
+Dermatitis
+Dermopathy
+Diabetic cheiroarthropathy
+Foot ulcer
+Gangrene
+Gastroparalysis
+Gastroparesis
+Glomerulonephrosis
+Glomerulosclerosis
+Hyperglycemia
+Hyperosmolarity
+Hyperosmolarity with coma
+Hyperosmolarity without coma
+Hypoglycemia
+Hypoglycemia with coma
+Hypoglycemia without coma
+Ketoacidosis
+Ketoacidosis with coma
+Ketoacidosis without coma
+Kimmelstiel-Wilson disease
+Loss of protective sensation (LOPS)
+Microalbuminuria
+Mononeuropathy
+Myasthenia
+Necrobiosis lipoidica
+Nephropathy
+Neuralgia
+Neuropathic arthropathy
+Neuropathy
+Osteomyelitis
+Periodontal disease
+Peripheral angiopathy
+Peripheral angiopathy with gangrene
+Peripheral angiopathy without gangrene
+Peripheral artery disease
+Peripheral vascular disease
+Polyneuropathy
+Proteinuria
+Renal dysfunction
+Renal impairment
+Renal insufficiency
+Renal tubular degeneration
+Retinal hemorrhage
+Retinopathy
+Retinopathy mild nonproliferative
+Retinopathy mild nonproliferative with macular edema
+Retinopathy mild nonproliferative without macular edema
+Retinopathy moderate nonproliferative
+Retinopathy moderate nonproliferative with macular edema
+Retinopathy moderate nonproliferative without macular edema
+Retinopathy nonproliferative
+Retinopathy proliferative
+Retinopathy proliferative stable
+Retinopathy proliferative with combined traction retinal detachment and rhegmatogenous retinal detachment
+Retinopathy proliferative with macular edema
+Retinopathy proliferative with traction retinal detachment involving the macula
+Retinopathy proliferative with traction retinal detachment not involving the macula
+Retinopathy severe nonproliferative
+Retinopathy severe nonproliferative with macular edema
+Retinopathy severe nonproliferative without macular edema
+Retinopathy with macular edema
+Retinopathy with macular edema resolved following treatment
+Retinopathy without macular edema
+Skin ulcer

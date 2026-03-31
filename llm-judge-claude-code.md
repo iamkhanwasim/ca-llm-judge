@@ -47,6 +47,7 @@ llm-judge/
 │   │   ├── evaluation.py               # /evaluate (single note)
 │   │   ├── batch_evaluation.py         # /batch_evaluate (multiple notes)
 │   │   ├── gold_evaluation.py          # /gold_evaluate (gold standard P/R/F1)
+│   │   ├── gold_evaluation_new.py      # /gold_evaluate_new (new format)
 │   │   ├── health.py                   # /health
 │   │   └── models.py                   # /models (list available models)
 │   ├── services/
@@ -57,7 +58,8 @@ llm-judge/
 │   │   ├── aggregator.py               # Multi-judge score aggregation
 │   │   ├── threshold_gate.py           # Configurable threshold logic
 │   │   ├── report_generator.py         # Per-note and aggregate reports
-│   │   └── gold_evaluator.py           # Gold standard P/R/F1 computation
+│   │   ├── gold_evaluator.py           # Gold standard P/R/F1 computation (old format)
+│   │   └── gold_evaluator_new.py       # Gold standard P/R/F1 computation (new format)
 │   ├── providers/
 │   │   ├── __init__.py
 │   │   ├── base.py                     # Abstract base provider
@@ -79,7 +81,8 @@ llm-judge/
 │   └── prompt_b_cot.txt                # Prompt B: chain-of-thought
 ├── data/
 │   ├── gold_standard/
-│   │   └── gold_standard.json          # 20 annotated gold notes
+│   │   ├── gold_standard.json          # Old format: 20 annotated gold notes
+│   │   └── gold_standard_new.json      # New format: uses doc_id, concept.code/display
 │   └── pipeline_output/
 │       └── pipeline_output.json        # Pipeline output for gold notes
 ├── tests/
@@ -145,6 +148,7 @@ execution:
 # --- Gold Standard Paths ---
 gold_standard:
   gold_file_path: data/gold_standard/gold_standard.json
+  gold_file_path_new: data/gold_standard/gold_standard_new.json
   pipeline_output_path: data/pipeline_output/pipeline_output.json
 
 # --- Report ---
@@ -356,6 +360,10 @@ Runs LLM judge on the gold standard notes and computes P/R/F1 to validate the ju
 5. Judge produces scores + suggested corrections
 6. Compare pipeline predicted codes against gold standard expected codes
 7. Compute Precision, Recall, F1 per code system
+8. Generate three detailed tables for UI display:
+   - **IMO Table**: Per-note TP/FP/FN for IMO codes
+   - **IMO-ICD-SNOMED Table**: Per-note P/R/F1 for all code systems
+   - **Detailed Term-Level Analysis**: Term matching with suggested corrections
 
 **Request body:**
 ```json
@@ -523,6 +531,37 @@ Runs LLM judge on the gold standard notes and computes P/R/F1 to validate the ju
   - `detailed_table`: Shows term-level matching with lexical codes and ICD-10/SNOMED codes comparison per term
 
 ---
+
+### 4.3.1 `POST /gold_evaluate_new` — Gold Standard Evaluation (New Format)
+
+Evaluates using the new gold standard format with the following differences:
+- Uses `doc_id` field instead of `id` for note identification
+- Gold standard uses `document_annotations` array with `concept.code`, `concept.display`, and `concept.system` fields
+- IMO codes identified by `system="IMO-HEALTH"` (uses `concept.code` as concept_code)
+- ICD-10 codes identified by `system="ICD-10-CM"`
+- **No SNOMED codes** (not part of evaluation)
+- Note IDs are normalized (e.g., `note_01` matches `note_1`)
+
+**Flow:**
+1. Read new gold standard JSON from config path (`gold_standard.gold_file_path_new`)
+2. Read pipeline output JSON from config path (`gold_standard.pipeline_output_path`)
+3. Normalize and match by note_id (handles `note_01` vs `note_1` differences)
+4. For each matched note: run LLM judge on clinical note + pipeline output
+5. Compare predicted codes against gold standard expected codes
+6. Compute Precision, Recall, F1 for IMO and ICD-10 only
+
+**Request body:**
+```json
+{
+  "judges": ["claude-3.7-sonnet"],
+  "prompt_template": "prompt_a"
+}
+```
+
+**Response structure:** Same as `/gold_evaluate` but:
+- Tables use `imo_icd_table` instead of `imo_icd_snomed_table` (no SNOMED columns)
+- Detailed table uses `concept_display`, `concept_outcome`, `gold_concept_code`, `pred_concept_code` fields
+- No SNOMED metrics
 
 ### 4.4 `GET /health` — Health Check
 
@@ -1149,6 +1188,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 # POST http://localhost:8000/evaluate
 # POST http://localhost:8000/batch_evaluate
 # POST http://localhost:8000/gold_evaluate
+# POST http://localhost:8000/gold_evaluate_new
 # GET  http://localhost:8000/health
 # GET  http://localhost:8000/models
 ```
@@ -1182,7 +1222,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 A standalone HTML test client (`test-client.html`) is provided for easy API testing without needing external tools like Postman.
 
 **Features:**
-- Single-page application with tabs for each API endpoint
+- Single-page application with tabs for each API endpoint (Health, Models, Evaluate, Batch Evaluate, Gold Evaluate, Gold Evaluate New)
 - Configurable API base URL (defaults to `http://localhost:8000`)
 - Raw JSON input via textareas
 - **Hierarchical tree display** for readable output (not raw JSON)
@@ -1192,6 +1232,14 @@ A standalone HTML test client (`test-client.html`) is provided for easy API test
   - Failed dimensions
   - Justifications per judge per metric
   - Suggested corrections with judge attribution
+  - `default_lexical_code` field displayed
+- **Three detailed tables for Gold Evaluation**:
+  - IMO Metrics Table: TP/FP/FN per note
+  - IMO-ICD-SNOMED Metrics Table: P/R/F1 for all code systems (or IMO-ICD for new format)
+  - Detailed Term-Level Analysis: Term matching, lexical/concept codes, ICD-10 comparison with suggested corrections
+- **CSV export functionality** for all tables
+- **Search functionality** for detailed term-level analysis table (search by note ID)
+- **Separate tab for new gold standard format** (Gold Evaluate New) with support for concept codes
 - Health status indicators
 - Models table with enabled/disabled status
 - Aggregate statistics for batch and gold evaluations

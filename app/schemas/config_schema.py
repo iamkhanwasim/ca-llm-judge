@@ -22,6 +22,7 @@ class ExecutionConfig(BaseModel):
 
 class GoldStandardConfig(BaseModel):
     gold_file_path: str
+    gold_file_path_new: str
     pipeline_output_path: str
 
 

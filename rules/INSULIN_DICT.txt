@@ -1,0 +1,62 @@
+Humalog
+Lyumjev
+Admelog
+Insulin Lispro
+NovoLog
+Fiasp
+Apidra
+Humulin R
+Novolin R
+ReliOn Novolin R
+Humulin R U-500
+Humulin N
+Novolin N
+ReliOn Novolin N
+Lantus
+Basaglar
+Semglee
+Rezvoglar
+Insulin Glargine
+Toujeo
+Tresiba
+Insulin Degludec
+Levemir
+Premixed insulin
+Humulin 70/30
+Novolin 70/30
+ReliOn Novolin 70/30
+NovoLog Mix 70/30
+Insulin Aspart Protamine / Insulin Aspart
+Humalog Mix 75/25
+Humalog Mix 50/50
+Ryzodeg 70/30
+Afrezza
+NPH insulin
+lispro
+aspart
+glulisine
+humalog
+novolog
+apidra
+fiasp
+lyumjev
+regular insulin
+humulin R
+novolin R
+NPH
+humulin N
+novolin N
+glargine
+detemir
+degludec
+lantus
+levemir
+tresiba
+basaglar
+toujeo
+humulin 70/30
+novolog mix
+humalog mix
+U-500
+humulin U-500
+insulin

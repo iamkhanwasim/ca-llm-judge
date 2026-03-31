@@ -450,6 +450,7 @@
             <button class="tab" onclick="switchTab('evaluate')">Evaluate</button>
             <button class="tab" onclick="switchTab('batch')">Batch Evaluate</button>
             <button class="tab" onclick="switchTab('gold')">Gold Evaluate</button>
+            <button class="tab" onclick="switchTab('gold-new')">Gold Evaluate New</button>
         </div>
 
         <!-- Health Tab -->
@@ -629,6 +630,50 @@
             <div class="section">
                 <div class="section-title">Response</div>
                 <div id="gold-output" class="output empty">Response will appear here</div>
+            </div>
+        </div>
+
+        <!-- Gold Evaluate New Tab -->
+        <div id="gold-new" class="tab-content">
+            <div class="section">
+                <button class="button load-models-btn" onclick="loadModelsForGoldNew()">Load Available Models</button>
+                <div class="loading" id="gold-new-models-loading">Loading models...</div>
+            </div>
+
+            <div class="form-row">
+                <div class="section">
+                    <div class="section-title">Select Judge(s)</div>
+                    <div id="gold-new-judges" class="judge-selection">
+                        <em>Click "Load Available Models" to see judges</em>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Select Prompt Template</div>
+                    <div class="prompt-selection">
+                        <div class="prompt-option">
+                            <input type="radio" id="gold-new-prompt-a" name="gold-new-prompt" value="prompt_a" checked>
+                            <label for="gold-new-prompt-a">Prompt A (Single)</label>
+                        </div>
+                        <div class="prompt-option">
+                            <input type="radio" id="gold-new-prompt-b" name="gold-new-prompt" value="prompt_b">
+                            <label for="gold-new-prompt-b">Prompt B (Chain-of-Thought)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p style="color: #666; font-style: italic; margin-bottom: 15px;">
+                    Note: Gold evaluation NEW format loads data from gold_standard_new.json (uses doc_id, concept.code, concept.display, no SNOMED).
+                </p>
+                <button class="button" onclick="callGoldEvaluateNew()">Run Gold Evaluation (New Format)</button>
+                <div class="loading" id="gold-new-loading">Running gold evaluation...</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Response</div>
+                <div id="gold-new-output" class="output empty">Response will appear here</div>
             </div>
         </div>
     </div>
@@ -1047,15 +1092,24 @@
                     html += '\n';
                 }
 
-                // IMO-ICD-SNOMED Table
+                // IMO-ICD-SNOMED Table (old format) or IMO-ICD Table (new format)
                 if (data.tables.imo_icd_snomed_table && data.tables.imo_icd_snomed_table.length > 0) {
                     html += formatImoIcdSnomedTable(data.tables.imo_icd_snomed_table);
                     html += '\n';
+                } else if (data.tables.imo_icd_table && data.tables.imo_icd_table.length > 0) {
+                    html += formatImoIcdTable(data.tables.imo_icd_table);
+                    html += '\n';
                 }
 
-                // Detailed Table
+                // Detailed Table - check format based on presence of concept_display field
                 if (data.tables.detailed_table && data.tables.detailed_table.length > 0) {
-                    html += formatDetailedTable(data.tables.detailed_table);
+                    const firstRow = data.tables.detailed_table[0];
+                    // Check if using new format (has concept_display) or old format (has default_lexical_title)
+                    if (firstRow.concept_display !== undefined) {
+                        html += formatDetailedTableNew(data.tables.detailed_table);
+                    } else {
+                        html += formatDetailedTable(data.tables.detailed_table);
+                    }
                 }
             } else {
                 console.warn('No tables data found in response');
@@ -1076,11 +1130,14 @@
             html += '</div></div>\n';
             html += '<table class="metrics-table">\n';
             html += '<thead><tr>';
-            html += '<th>Judge(s)</th>';
-            html += '<th>Note</th>';
-            html += '<th>TP</th>';
-            html += '<th>FP</th>';
-            html += '<th>FN</th>';
+            html += '<th rowspan="2">Judge(s)</th>';
+            html += '<th rowspan="2">Note</th>';
+            html += '<th colspan="3">Baseline Evaluation</th>';
+            html += '<th colspan="3">LLM Evaluation</th>';
+            html += '</tr>\n';
+            html += '<tr>';
+            html += '<th>TP</th><th>FP</th><th>FN</th>';
+            html += '<th>TP</th><th>FP</th><th>FN</th>';
             html += '</tr></thead>\n';
             html += '<tbody>\n';
 
@@ -1088,9 +1145,14 @@
                 html += '<tr>';
                 html += `<td>${row.judges}</td>`;
                 html += `<td>${row.note}</td>`;
-                html += `<td>${row.tp}</td>`;
-                html += `<td>${row.fp}</td>`;
-                html += `<td>${row.fn}</td>`;
+                // Baseline metrics
+                html += `<td>${row.baseline_tp !== undefined ? row.baseline_tp : (row.tp || 0)}</td>`;
+                html += `<td>${row.baseline_fp !== undefined ? row.baseline_fp : (row.fp || 0)}</td>`;
+                html += `<td>${row.baseline_fn !== undefined ? row.baseline_fn : (row.fn || 0)}</td>`;
+                // LLM metrics
+                html += `<td>${row.llm_tp !== undefined ? row.llm_tp : (row.tp || 0)}</td>`;
+                html += `<td>${row.llm_fp !== undefined ? row.llm_fp : (row.fp || 0)}</td>`;
+                html += `<td>${row.llm_fn !== undefined ? row.llm_fn : (row.fn || 0)}</td>`;
                 html += '</tr>\n';
             });
 
@@ -1149,6 +1211,89 @@
                 html += `<td>${row.snomed_tp}</td>`;
                 html += `<td>${row.snomed_fp}</td>`;
                 html += `<td>${row.snomed_fn}</td>`;
+                html += '</tr>\n';
+            });
+
+            html += '</tbody>\n</table>\n';
+            return html;
+        }
+
+        // Format IMO-ICD Table (New Format - No SNOMED)
+        function formatImoIcdTable(tableData) {
+            let html = '<div style="margin-top: 20px;">';
+            html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+            html += '<strong>IMO-ICD10 Metrics (Per-Note):</strong>';
+            html += '<button onclick="exportImoIcdTableCSV()" class="export-csv-btn">Export to CSV</button>';
+            html += '</div></div>\n';
+            html += '<table class="metrics-table">\n';
+            html += '<thead><tr>';
+            html += '<th rowspan="3">Judge(s)</th>';
+            html += '<th rowspan="3">Note</th>';
+            html += '<th colspan="12">Baseline Evaluation</th>';
+            html += '<th colspan="12">LLM Evaluation</th>';
+            html += '</tr>\n';
+            html += '<tr>';
+            html += '<th colspan="6">IMO</th>';
+            html += '<th colspan="6">ICD-10</th>';
+            html += '<th colspan="6">IMO</th>';
+            html += '<th colspan="6">ICD-10</th>';
+            html += '</tr>\n';
+            html += '<tr>';
+            // Baseline IMO
+            html += '<th>P</th><th>R</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th>';
+            // Baseline ICD-10
+            html += '<th>P</th><th>R</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th>';
+            // LLM IMO
+            html += '<th>P</th><th>R</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th>';
+            // LLM ICD-10
+            html += '<th>P</th><th>R</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th>';
+            html += '</tr></thead>\n';
+            html += '<tbody>\n';
+
+            tableData.forEach(row => {
+                html += '<tr>';
+                html += `<td>${row.judges}</td>`;
+                html += `<td>${row.note}</td>`;
+
+                // Helper function to safely access and format metrics
+                const getValue = (key, defaultVal = 0) => row[key] !== undefined ? row[key] : defaultVal;
+                const formatNum = (key, defaultVal = 0) => {
+                    const val = getValue(key, defaultVal);
+                    return typeof val === 'number' ? val.toFixed(2) : val;
+                };
+
+                // Baseline IMO metrics
+                html += `<td>${formatNum('baseline_imo_precision')}</td>`;
+                html += `<td>${formatNum('baseline_imo_recall')}</td>`;
+                html += `<td>${formatNum('baseline_imo_f1')}</td>`;
+                html += `<td>${getValue('baseline_imo_tp')}</td>`;
+                html += `<td>${getValue('baseline_imo_fp')}</td>`;
+                html += `<td>${getValue('baseline_imo_fn')}</td>`;
+
+                // Baseline ICD-10 metrics
+                html += `<td>${formatNum('baseline_icd10_precision')}</td>`;
+                html += `<td>${formatNum('baseline_icd10_recall')}</td>`;
+                html += `<td>${formatNum('baseline_icd10_f1')}</td>`;
+                html += `<td>${getValue('baseline_icd10_tp')}</td>`;
+                html += `<td>${getValue('baseline_icd10_fp')}</td>`;
+                html += `<td>${getValue('baseline_icd10_fn')}</td>`;
+
+                // LLM IMO metrics
+                html += `<td>${formatNum('llm_imo_precision', formatNum('imo_precision'))}</td>`;
+                html += `<td>${formatNum('llm_imo_recall', formatNum('imo_recall'))}</td>`;
+                html += `<td>${formatNum('llm_imo_f1', formatNum('imo_f1'))}</td>`;
+                html += `<td>${getValue('llm_imo_tp', getValue('imo_tp'))}</td>`;
+                html += `<td>${getValue('llm_imo_fp', getValue('imo_fp'))}</td>`;
+                html += `<td>${getValue('llm_imo_fn', getValue('imo_fn'))}</td>`;
+
+                // LLM ICD-10 metrics
+                html += `<td>${formatNum('llm_icd10_precision', formatNum('icd10_precision'))}</td>`;
+                html += `<td>${formatNum('llm_icd10_recall', formatNum('icd10_recall'))}</td>`;
+                html += `<td>${formatNum('llm_icd10_f1', formatNum('icd10_f1'))}</td>`;
+                html += `<td>${getValue('llm_icd10_tp', getValue('icd10_tp'))}</td>`;
+                html += `<td>${getValue('llm_icd10_fp', getValue('icd10_fp'))}</td>`;
+                html += `<td>${getValue('llm_icd10_fn', getValue('icd10_fn'))}</td>`;
+
                 html += '</tr>\n';
             });
 
@@ -1227,6 +1372,72 @@
             return html;
         }
 
+        // Format Detailed Table (New Format - uses concept_display, concept_code, no SNOMED)
+        function formatDetailedTableNew(tableData) {
+            let html = '<div style="margin-top: 20px;">';
+            html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+            html += '<strong>Detailed Term-Level Analysis:</strong>';
+            html += '<div>';
+            html += '<input type="text" id="detailedTableSearch" placeholder="Search by note (e.g., note_4)" ';
+            html += 'style="padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px; width: 200px;" ';
+            html += 'onkeyup="filterDetailedTable()" />';
+            html += '<button onclick="exportDetailedTableNewCSV()" class="export-csv-btn">Export to CSV</button>';
+            html += '</div>';
+            html += '</div></div>\n';
+            html += '<div style="overflow-x: auto;">\n';
+            html += '<table id="detailedTableElement" class="metrics-table" style="font-size: 11px;">\n';
+            html += '<thead><tr>';
+            html += '<th>Judge(s)</th>';
+            html += '<th>Note</th>';
+            html += '<th>Match Key</th>';
+            html += '<th>Term</th>';
+            html += '<th>Concept Display</th>';
+            html += '<th>Gold Concept Code</th>';
+            html += '<th>Pred Concept Code</th>';
+            html += '<th>Outcome</th>';
+            html += '<th>Suggested</th>';
+            html += '<th>Gold ICD-10</th>';
+            html += '<th>Pred ICD-10</th>';
+            html += '<th>ICD-10 TP</th>';
+            html += '<th>ICD-10 FP</th>';
+            html += '<th>ICD-10 FN</th>';
+            html += '</tr></thead>\n';
+            html += '<tbody>\n';
+
+            tableData.forEach(row => {
+                // Color code the outcome column
+                const outcomeClass = row.concept_outcome === 'TP' ? 'style="background: #d4edda; font-weight: bold;"' :
+                                    row.concept_outcome === 'FP' ? 'style="background: #f8d7da; font-weight: bold;"' :
+                                    'style="background: #fff3cd; font-weight: bold;"';
+
+                // Safe substring handling
+                const termText = row.term || '';
+                const conceptDisplayText = row.concept_display || '';
+                const suggestedText = row.suggested || '';
+
+                html += '<tr>';
+                html += `<td>${row.judges}</td>`;
+                html += `<td>${row.note}</td>`;
+                html += `<td>${row.match_key}</td>`;
+                html += `<td title="${termText}">${termText ? (termText.substring(0, 30) + (termText.length > 30 ? '...' : '')) : ''}</td>`;
+                html += `<td title="${conceptDisplayText}">${conceptDisplayText ? (conceptDisplayText.substring(0, 30) + (conceptDisplayText.length > 30 ? '...' : '')) : ''}</td>`;
+                html += `<td>${row.gold_concept_code || ''}</td>`;
+                html += `<td>${row.pred_concept_code || ''}</td>`;
+                html += `<td ${outcomeClass}>${row.concept_outcome}</td>`;
+                html += `<td title="${suggestedText}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${suggestedText}</td>`;
+                html += `<td title="${row.gold_icd10cm || ''}">${row.gold_icd10cm || ''}</td>`;
+                html += `<td title="${row.pred_icd10cm || ''}">${row.pred_icd10cm || ''}</td>`;
+                html += `<td>${row.icd10_tp || ''}</td>`;
+                html += `<td>${row.icd10_fp || ''}</td>`;
+                html += `<td>${row.icd10_fn || ''}</td>`;
+                html += '</tr>\n';
+            });
+
+            html += '</tbody>\n</table>\n';
+            html += '</div>\n';
+            return html;
+        }
+
         // CSV Export Functions
         function convertToCSV(headers, rows) {
             const csvRows = [];
@@ -1294,7 +1505,7 @@
                 return;
             }
 
-            const headers = ['judges', 'note', 'tp', 'fp', 'fn'];
+            const headers = ['judges', 'note', 'baseline_tp', 'baseline_fp', 'baseline_fn', 'llm_tp', 'llm_fp', 'llm_fn'];
             const csv = convertToCSV(headers, currentGoldEvalData.tables.imo_table);
             downloadCSV('imo_metrics.csv', csv);
         }
@@ -1315,6 +1526,23 @@
             downloadCSV('imo_icd_snomed_metrics.csv', csv);
         }
 
+        function exportImoIcdTableCSV() {
+            if (!currentGoldEvalData || !currentGoldEvalData.tables || !currentGoldEvalData.tables.imo_icd_table) {
+                alert('No IMO-ICD table data available to export');
+                return;
+            }
+
+            const headers = [
+                'judges', 'note',
+                'baseline_imo_precision', 'baseline_imo_recall', 'baseline_imo_f1', 'baseline_imo_tp', 'baseline_imo_fp', 'baseline_imo_fn',
+                'baseline_icd10_precision', 'baseline_icd10_recall', 'baseline_icd10_f1', 'baseline_icd10_tp', 'baseline_icd10_fp', 'baseline_icd10_fn',
+                'llm_imo_precision', 'llm_imo_recall', 'llm_imo_f1', 'llm_imo_tp', 'llm_imo_fp', 'llm_imo_fn',
+                'llm_icd10_precision', 'llm_icd10_recall', 'llm_icd10_f1', 'llm_icd10_tp', 'llm_icd10_fp', 'llm_icd10_fn'
+            ];
+            const csv = convertToCSV(headers, currentGoldEvalData.tables.imo_icd_table);
+            downloadCSV('imo_icd_metrics.csv', csv);
+        }
+
         function exportDetailedTableCSV() {
             if (!currentGoldEvalData || !currentGoldEvalData.tables || !currentGoldEvalData.tables.detailed_table) {
                 alert('No detailed table data available to export');
@@ -1329,6 +1557,21 @@
             ];
             const csv = convertToCSV(headers, currentGoldEvalData.tables.detailed_table);
             downloadCSV('detailed_term_analysis.csv', csv);
+        }
+
+        function exportDetailedTableNewCSV() {
+            if (!currentGoldEvalData || !currentGoldEvalData.tables || !currentGoldEvalData.tables.detailed_table) {
+                alert('No detailed table data available to export');
+                return;
+            }
+
+            const headers = [
+                'judges', 'note', 'match_key', 'term', 'concept_display',
+                'gold_concept_code', 'pred_concept_code', 'concept_outcome', 'suggested',
+                'gold_icd10cm', 'pred_icd10cm', 'icd10_tp', 'icd10_fp', 'icd10_fn'
+            ];
+            const csv = convertToCSV(headers, currentGoldEvalData.tables.detailed_table);
+            downloadCSV('detailed_term_analysis_new.csv', csv);
         }
 
         // API Calls
@@ -1506,6 +1749,51 @@
                 displayError(outputId, error.message);
             } finally {
                 hideLoading('gold');
+            }
+        }
+
+        function loadModelsForGoldNew() {
+            loadModels('gold-new-judges', 'gold-new-models');
+        }
+
+        async function callGoldEvaluateNew() {
+            const outputId = 'gold-new-output';
+            const judges = getSelectedJudges('gold-new-judges');
+            const promptTemplate = getSelectedPrompt('gold-new-prompt');
+
+            if (judges.length === 0) {
+                displayError(outputId, 'Please select at least one judge');
+                return;
+            }
+
+            showLoading('gold-new');
+
+            try {
+                const requestBody = {
+                    judges: judges,
+                    prompt_template: promptTemplate
+                };
+
+                const response = await fetch(`${getApiUrl()}/gold_evaluate_new`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                const output = document.getElementById(outputId);
+                output.className = 'output';
+                output.innerHTML = formatGoldEvaluationResponse(data);
+            } catch (error) {
+                displayError(outputId, error.message);
+            } finally {
+                hideLoading('gold-new');
             }
         }
     </script>

@@ -10,14 +10,11 @@ For diabetes-related terms, the expected component ordering is:
    provides evidence of control status). Precedes diabetes type.
 2. Diabetes Type — "Type 1" or "Type 2" (only if the note specifies type)
 3. Complications — use natural word order: "diabetes mellitus with
-   retinopathy" NOT "retinopathy with diabetes mellitus". Term can have 
-   only one complications and not many: "diabetes mellitus with
-   retinopathy" and not "diabetes mellitus with retinopathy and neuropathy"
+   retinopathy" NOT "retinopathy with diabetes mellitus"
 4. Insulin Status — "with long-term current use of insulin" (only if the
    note evidences insulin use). Note: this modifier applies exclusively
    to Type 2 diabetes. Type 1 diabetes inherently requires insulin and
    should not include this modifier.
-Optional component (do NOT reduce scores below 0.8 if missing):
 5. Oral Medication — "with oral medication" (only if the note evidences it)
 
 Example: "Uncontrolled Type 2 diabetes mellitus with retinopathy with
@@ -79,7 +76,7 @@ SPECIFICITY: Is this term precise enough? Not too broad, not hallucinated?
 COMPONENT_COVERAGE: Does this term capture all relevant clinical modifiers
 evidenced in the note? For diabetes terms, are components in correct order?
 - 1.0 = all evidenced modifiers present, correct order
-- 0.8 = all modifiers present, minor ordering issue, optional modifier missing
+- 0.8 = all modifiers present, minor ordering issue
 - 0.6 = one evidenced modifier missing, order correct
 - 0.4 = one modifier missing + ordering issue
 - 0.2 = multiple modifiers missing

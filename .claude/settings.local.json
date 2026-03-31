@@ -4,7 +4,12 @@
       "Bash(mkdir:*)",
       "Bash(python -m app.main:*)",
       "Bash(cat:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(taskkill:*)",
+      "Bash(nul)",
+      "Bash(find:*)",
+      "Bash(del test_baseline_metrics.py)"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,92 @@
+Metformin
+Glucophage
+Glucophage XR
+Fortamet
+Glumetza
+Riomet
+Riomet ER
+Glipizide
+Glucotrol
+Glucotrol XL
+Glyburide
+Micronase
+Glynase PresTab
+Glimepiride
+Amaryl
+Repaglinide
+Prandin
+Nateglinide
+Starlix
+Pioglitazone
+Actos
+Rosiglitazone
+Avandia
+Sitagliptin
+Januvia
+Saxagliptin
+Onglyza
+Linagliptin
+Tradjenta
+Alogliptin
+Nesina
+Canagliflozin
+Invokana
+Dapagliflozin
+Farxiga
+Empagliflozin
+Jardiance
+Ertugliflozin
+Steglatro
+Acarbose
+Precose
+Miglitol
+Glyset
+Colesevelam
+Welchol
+Bromocriptine
+Cycloset
+Semaglutide
+Rybelsus
+Sitagliptin/Metformin
+Janumet
+Janumet XR  
+Saxagliptin/Metformin
+Kombiglyze XR
+Linagliptin/Metformin
+Jentadueto
+Jentadueto XR
+Alogliptin/Metformin
+Kazano
+Canagliflozin/Metformin
+Invokamet
+Invokamet XR
+Dapagliflozin/Metformin
+Xigduo XR
+Empagliflozin/Metformin
+Synjardy
+Synjardy XR
+Ertugliflozin/Metformin
+Segluromet
+Empagliflozin/Linagliptin
+Glyxambi
+Dapagliflozin/Saxagliptin
+Qtern
+Ertugliflozin/Sitagliptin
+Steglujan
+Dapagliflozin/Saxagliptin/Metformin
+Qternmet XR
+Empagliflozin/Linagliptin/Metformin
+Trijardy XR  
+Pioglitazone/Metformin
+Actoplus Met
+Actoplus Met XR
+Rosiglitazone/Metformin
+Avandamet
+Pioglitazone/Alogliptin
+Oseni  
+Pioglitazone/Glimepiride
+Duetact
+Metformin/Glyburide
+Glucovance  
+Metformin/Glipizide
+Metaglip

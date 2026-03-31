@@ -15,10 +15,16 @@ For diabetes-related terms, the expected component ordering is:
    note evidences insulin use). Note: this modifier applies exclusively
    to Type 2 diabetes. Type 1 diabetes inherently requires insulin and
    should not include this modifier.
+
+Optional components (do NOT penalize if missing, even when evidenced):
 5. Oral Medication — "with oral medication" (only if the note evidences it)
 
 Example: "Uncontrolled Type 2 diabetes mellitus with retinopathy with
 long-term current use of insulin"
+
+SCORING GUIDANCE: Missing a required component when evidence exists
+should reduce scores. Missing an optional component should NOT reduce
+scores.
 
 Do NOT penalize missing components if the clinical note lacks evidence
 for them. Only penalize if the note has evidence and the term omits it,
@@ -38,7 +44,7 @@ and SNOMED descriptions clinically supported by the note?
 COMPLETENESS: Does this term fully capture the clinical finding it
 represents? Are relevant aspects of that finding included?
 - 1.0 = finding fully represented
-- 0.8 = core finding + most aspects captured, one minor aspect missing
+- 0.8 = core finding + most aspects captured, one minor aspect missing or an optional modifier missing
 - 0.6 = core finding captured, one significant aspect missing
 - 0.4 = core finding captured, multiple aspects missing
 - 0.2 = only the broadest element captured
@@ -56,7 +62,7 @@ COMPONENT_COVERAGE: Does this term capture all relevant clinical modifiers
 and qualifiers evidenced in the note? For diabetes terms, are the
 components present in the correct order per the construction rules above?
 - 1.0 = all evidenced modifiers present, correct order
-- 0.8 = all modifiers present, minor ordering issue
+- 0.8 = all modifiers present, minor ordering issue or optional modifier missing
 - 0.6 = one evidenced modifier missing, order correct
 - 0.4 = one modifier missing + ordering issue
 - 0.2 = multiple modifiers missing

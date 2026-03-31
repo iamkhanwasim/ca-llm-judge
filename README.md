@@ -156,7 +156,29 @@ Evaluate multiple notes at once.
 POST /gold_evaluate
 ```
 
-Run judge on gold standard notes and compute P/R/F1 metrics.
+Run judge on gold standard notes and compute P/R/F1 metrics. Returns evaluation results with three detailed tables:
+- **IMO Metrics Table**: Per-note TP/FP/FN for IMO codes
+- **IMO-ICD-SNOMED Metrics Table**: Per-note Precision/Recall/F1 for all code systems
+- **Detailed Term-Level Analysis**: Term matching, lexical codes, ICD-10/SNOMED comparison with suggested corrections
+
+All tables include CSV export functionality.
+
+### Gold Standard Evaluation (New Format)
+
+```bash
+POST /gold_evaluate_new
+```
+
+Evaluates using the new gold standard format (`gold_standard_new.json`):
+- Uses `doc_id` field for note identification
+- Uses `concept.code` and `concept.display` from `document_annotations`
+- Separates IMO codes (`system="IMO-HEALTH"`) from ICD-10 codes (`system="ICD-10-CM"`)
+- **No SNOMED codes** (not part of evaluation)
+
+Returns the same structure as `/gold_evaluate` but with:
+- **IMO Metrics Table**: Per-note TP/FP/FN
+- **IMO-ICD Metrics Table**: Per-note Precision/Recall/F1 (no SNOMED)
+- **Detailed Term-Level Analysis**: Uses concept codes instead of lexical codes
 
 ## Test Client (HTML UI)
 
@@ -178,9 +200,17 @@ open test-client.html
   - Failed dimensions highlighted
   - Justifications per judge per metric
   - Suggested corrections with judge attribution
+  - `default_lexical_code` field included in responses
 - 🔧 **Configurable API URL** (defaults to localhost:8000)
 - 📈 **Aggregate statistics** for batch evaluations
 - 🎓 **P/R/F1 metrics** for gold standard validation
+- 📋 **Three detailed tables** for gold evaluation:
+  - IMO Metrics Table (TP/FP/FN per note)
+  - IMO-ICD-SNOMED Metrics Table (P/R/F1 per code system)
+  - Detailed Term-Level Analysis (term matching with search)
+- 💾 **CSV export** for all tables
+- 🔍 **Search functionality** for detailed tables
+- 📊 **Separate tab for new gold standard format** (Gold Evaluate New)
 
 **Example Output:**
 ```
@@ -218,6 +248,9 @@ Edit `config/config.yaml` to configure:
 - **Azure OpenAI**: Endpoint and credentials
 - **Metrics**: Evaluation dimensions
 - **Gold standard paths**: Location of gold files
+  - `gold_file_path`: Old format gold standard
+  - `gold_file_path_new`: New format gold standard
+  - `pipeline_output_path`: Pipeline output file
 
 ## Scoring Dimensions
 
@@ -260,13 +293,23 @@ Key log points:
 ## Testing
 
 Place your test data in:
-- `data/gold_standard/gold_standard.json`
-- `data/pipeline_output/pipeline_output.json`
+- `data/gold_standard/gold_standard.json` - Old format gold standard
+- `data/gold_standard/gold_standard_new.json` - New format gold standard
+- `data/pipeline_output/pipeline_output.json` - Pipeline output
 
 Run gold evaluation to validate judge performance:
 
 ```bash
+# Old format
 curl -X POST "http://localhost:8000/gold_evaluate" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "judges": ["claude-3.7-sonnet"],
+    "prompt_template": "prompt_a"
+  }'
+
+# New format
+curl -X POST "http://localhost:8000/gold_evaluate_new" \
   -H "Content-Type: application/json" \
   -d '{
     "judges": ["claude-3.7-sonnet"],
