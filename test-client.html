@@ -451,6 +451,7 @@
             <button class="tab" onclick="switchTab('batch')">Batch Evaluate</button>
             <button class="tab" onclick="switchTab('gold')">Gold Evaluate</button>
             <button class="tab" onclick="switchTab('gold-new')">Gold Evaluate New</button>
+            <button class="tab" onclick="switchTab('judge-validation')">Judge Validation</button>
         </div>
 
         <!-- Health Tab -->
@@ -674,6 +675,55 @@
             <div class="section">
                 <div class="section-title">Response</div>
                 <div id="gold-new-output" class="output empty">Response will appear here</div>
+            </div>
+        </div>
+
+        <!-- Judge Validation Tab -->
+        <div id="judge-validation" class="tab-content">
+            <div class="section">
+                <button class="button load-models-btn" onclick="loadModelsForJudgeValidation()">Load Available Models</button>
+                <div class="loading" id="judge-validation-models-loading">Loading models...</div>
+            </div>
+
+            <div class="form-row">
+                <div class="section">
+                    <div class="section-title">Select Judge(s)</div>
+                    <div id="judge-validation-judges" class="judge-selection">
+                        <em>Click "Load Available Models" to see judges</em>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Select Prompt Template</div>
+                    <div class="prompt-selection">
+                        <div class="prompt-option">
+                            <input type="radio" id="judge-validation-prompt-a" name="judge-validation-prompt" value="prompt_a" checked>
+                            <label for="judge-validation-prompt-a">Prompt A (Single)</label>
+                        </div>
+                        <div class="prompt-option">
+                            <input type="radio" id="judge-validation-prompt-b" name="judge-validation-prompt" value="prompt_b">
+                            <label for="judge-validation-prompt-b">Prompt B (Chain-of-Thought)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <p style="color: #666; font-style: italic; margin-bottom: 15px;">
+                    Validates LLM judge by comparing Pipeline vs Gold (baseline) against Pipeline vs Judge. Uses IMO code matching only.
+                </p>
+                <button class="button" onclick="callJudgeValidate()">Run Judge Validation</button>
+                <div class="loading" id="judge-validation-loading">Running judge validation...</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Validation Results Table</div>
+                <div id="judge-validation-table-container"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Raw Response</div>
+                <div id="judge-validation-output" class="output empty">Response will appear here</div>
             </div>
         </div>
     </div>
@@ -1795,6 +1845,139 @@
             } finally {
                 hideLoading('gold-new');
             }
+        }
+
+        // Judge Validation Functions
+        function loadModelsForJudgeValidation() {
+            loadModels('judge-validation-judges', 'judge-validation-models');
+        }
+
+        async function callJudgeValidate() {
+            const outputId = 'judge-validation-output';
+            const judges = getSelectedJudges('judge-validation-judges');
+            const promptTemplate = getSelectedPrompt('judge-validation-prompt');
+
+            if (judges.length === 0) {
+                displayError(outputId, 'Please select at least one judge');
+                return;
+            }
+
+            showLoading('judge-validation');
+
+            try {
+                const requestBody = {
+                    judges: judges,
+                    prompt_template: promptTemplate
+                };
+
+                const response = await fetch(`${getApiUrl()}/judge_validate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Display table
+                const tableContainer = document.getElementById('judge-validation-table-container');
+                tableContainer.innerHTML = formatJudgeValidationTable(data);
+
+                // Display raw response
+                const output = document.getElementById(outputId);
+                output.className = 'output';
+                output.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                displayError(outputId, error.message);
+                document.getElementById('judge-validation-table-container').innerHTML = '';
+            } finally {
+                hideLoading('judge-validation');
+            }
+        }
+
+        function formatJudgeValidationTable(data) {
+            if (!data.results || data.results.length === 0) {
+                return '<p style="color: #999; font-style: italic;">No results to display</p>';
+            }
+
+            let html = '<div style="margin-bottom: 15px;">';
+            html += `<p><strong>Total Notes:</strong> ${data.total_notes}</p>`;
+            html += `<p><strong>Judges:</strong> ${data.judge_names}</p>`;
+            html += `<p><strong>Prompt Template:</strong> ${data.prompt_template}</p>`;
+            html += '</div>';
+
+            html += '<button class="button" style="margin-bottom: 15px;" onclick="exportJudgeValidationCSV()">Export as CSV</button>';
+
+            html += '<table class="metrics-table" id="judge-validation-results-table">';
+            html += '<thead><tr>';
+            html += '<th>Judge</th>';
+            html += '<th>Note ID</th>';
+            html += '<th colspan="3" style="background: #2c5282;">Baseline (Pipeline vs Gold)</th>';
+            html += '<th colspan="3" style="background: #2c5282;">Judge (Pipeline vs LLM)</th>';
+            html += '</tr><tr>';
+            html += '<th></th><th></th>';
+            html += '<th style="background: #2c5282;">TP</th>';
+            html += '<th style="background: #2c5282;">FP</th>';
+            html += '<th style="background: #2c5282;">FN</th>';
+            html += '<th style="background: #2c5282;">TP</th>';
+            html += '<th style="background: #2c5282;">FP</th>';
+            html += '<th style="background: #2c5282;">FN</th>';
+            html += '</tr></thead>';
+            html += '<tbody>';
+
+            for (const result of data.results) {
+                // Check if there's a disagreement between baseline and judge
+                const hasDisagreement =
+                    result.baseline_tp !== result.judge_tp ||
+                    result.baseline_fp !== result.judge_fp;
+
+                const rowStyle = hasDisagreement ? 'background: #fff3cd;' : '';
+
+                html += `<tr style="${rowStyle}">`;
+                html += `<td>${result.judge}</td>`;
+                html += `<td>${result.note_id}</td>`;
+                html += `<td style="text-align: center;">${result.baseline_tp}</td>`;
+                html += `<td style="text-align: center;">${result.baseline_fp}</td>`;
+                html += `<td style="text-align: center;">${result.baseline_fn}</td>`;
+                html += `<td style="text-align: center;">${result.judge_tp}</td>`;
+                html += `<td style="text-align: center;">${result.judge_fp}</td>`;
+                html += `<td style="text-align: center;">${result.judge_fn}</td>`;
+                html += '</tr>';
+            }
+
+            html += '</tbody></table>';
+
+            return html;
+        }
+
+        function exportJudgeValidationCSV() {
+            const table = document.getElementById('judge-validation-results-table');
+            if (!table) {
+                alert('No table to export');
+                return;
+            }
+
+            let csv = 'judge,note,baseline_tp,baseline_fp,baseline_fn,judge_tp,judge_fp,judge_fn\n';
+
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = Array.from(cells).map(cell => cell.textContent.trim());
+                csv += rowData.join(',') + '\n';
+            });
+
+            // Create download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'judge_validation_results.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
     </script>
 </body>

@@ -36,6 +36,10 @@ def flatten_pipeline_output(pipeline_output: dict) -> Tuple[str, List[Dict], str
         default_lexical_title = normalize_payload.get("default_lexical_title", "")
         default_lexical_code = normalize_payload.get("default_lexical_code", "")
 
+        # Extract concept code and title (for judge validation)
+        concept_code = normalize_payload.get("concept_code", "")
+        concept_title = normalize_payload.get("title", "")
+
         # Extract IMO code
         imo_code = normalize_payload.get("code", "")
 
@@ -60,6 +64,8 @@ def flatten_pipeline_output(pipeline_output: dict) -> Tuple[str, List[Dict], str
 
         flattened_term = {
             "term": term_text,
+            "concept_code": concept_code,
+            "concept_title": concept_title,
             "default_lexical_title": default_lexical_title,
             "default_lexical_code": default_lexical_code,
             "imo_code": imo_code,

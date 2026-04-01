@@ -16,6 +16,8 @@ class SuggestedCorrection(BaseModel):
 
 class TermResult(BaseModel):
     term: str
+    concept_code: str = ""
+    concept_title: str = ""
     default_lexical_title: str
     default_lexical_code: str
     icd10_codes: List[str]
@@ -104,3 +106,31 @@ class ModelInfo(BaseModel):
 
 class ModelsResponse(BaseModel):
     models: List[ModelInfo]
+
+
+class TermValidationDetail(BaseModel):
+    concept_code: str
+    concept_title: str
+    verdict: Literal["PASS", "FAIL"]
+    in_gold: bool
+    baseline_outcome: Literal["TP", "FP"]
+    judge_outcome: Literal["TP", "FP"]
+
+
+class NoteValidationResult(BaseModel):
+    judge: str
+    note_id: str
+    baseline_tp: int
+    baseline_fp: int
+    baseline_fn: int
+    judge_tp: int
+    judge_fp: int
+    judge_fn: int
+    term_details: List[TermValidationDetail]
+
+
+class JudgeValidateResponse(BaseModel):
+    total_notes: int
+    judge_names: str
+    prompt_template: str
+    results: List[NoteValidationResult]

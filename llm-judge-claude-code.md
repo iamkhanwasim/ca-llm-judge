@@ -48,6 +48,7 @@ llm-judge/
 │   │   ├── batch_evaluation.py         # /batch_evaluate (multiple notes)
 │   │   ├── gold_evaluation.py          # /gold_evaluate (gold standard P/R/F1)
 │   │   ├── gold_evaluation_new.py      # /gold_evaluate_new (new format)
+│   │   ├── judge_validation.py         # /judge_validate (judge validation)
 │   │   ├── health.py                   # /health
 │   │   └── models.py                   # /models (list available models)
 │   ├── services/
@@ -59,7 +60,8 @@ llm-judge/
 │   │   ├── threshold_gate.py           # Configurable threshold logic
 │   │   ├── report_generator.py         # Per-note and aggregate reports
 │   │   ├── gold_evaluator.py           # Gold standard P/R/F1 computation (old format)
-│   │   └── gold_evaluator_new.py       # Gold standard P/R/F1 computation (new format)
+│   │   ├── gold_evaluator_new.py       # Gold standard P/R/F1 computation (new format)
+│   │   └── judge_validator.py          # Judge validation logic (standalone)
 │   ├── providers/
 │   │   ├── __init__.py
 │   │   ├── base.py                     # Abstract base provider
@@ -593,6 +595,98 @@ Evaluates using the new gold standard format with the following differences:
 
 ---
 
+### 4.6 `POST /judge_validate` — Judge Validation
+
+Compares Pipeline vs Gold (deterministic baseline) against Pipeline vs LLM Judge (reference-free) to validate how well the judge aligns with gold standard. Standalone service — does not depend on `gold_evaluator.py` or `gold_evaluator_new.py`.
+
+**Flow:**
+1. Read new gold standard JSON from config path (`gold_standard.gold_file_path_new`)
+2. Read pipeline output JSON from config path (`gold_standard.pipeline_output_path`)
+3. Match by note_id (`note_id` = `doc_id`, normalize `note_01` vs `note_1`)
+4. For each matched note:
+   a. **Baseline (Pipeline vs Gold):**
+      - Extract `concept_code` from each pipeline `normalized_term` (`api_response.normalized_terms[].normalize_payload.concept_code`)
+      - Extract gold IMO codes from `document_annotations` where `system="IMO-HEALTH"` (`concept.code`)
+      - TP = concept_code in both pipeline and gold
+      - FP = concept_code in pipeline but not in gold
+      - FN = concept_code in gold but not in pipeline
+   b. **Judge (Pipeline vs LLM):**
+      - Run LLM judge on clinical note + pipeline output (same as `/evaluate`)
+      - TP = term with verdict PASS
+      - FP = term with verdict FAIL
+      - FN = same as Baseline FN (gold codes not in pipeline — judge never saw these)
+5. Return per-note table with both Baseline and Judge TP/FP/FN
+
+**IMO code matching only.** No ICD-10 or SNOMED matching.
+
+**Request body:**
+```json
+{
+  "judges": ["nova-premier"],
+  "prompt_template": "prompt_a"
+}
+```
+
+**Response:**
+```json
+{
+  "total_notes": 3,
+  "judge_names": "nova-premier",
+  "prompt_template": "prompt_a",
+  "results": [
+    {
+      "judge": "nova-premier",
+      "note_id": "note_01",
+      "baseline_tp": 2,
+      "baseline_fp": 1,
+      "baseline_fn": 1,
+      "judge_tp": 1,
+      "judge_fp": 2,
+      "judge_fn": 1,
+      "term_details": [
+        {
+          "concept_code": "389773404",
+          "concept_title": "poorly controlled type 1 diabetes mellitus with neuropathy",
+          "verdict": "PASS",
+          "in_gold": true,
+          "baseline_outcome": "TP",
+          "judge_outcome": "TP"
+        },
+        {
+          "concept_code": "1613809867",
+          "concept_title": "uncontrolled type 1 diabetes with diabetic neuropathy",
+          "verdict": "FAIL",
+          "in_gold": false,
+          "baseline_outcome": "FP",
+          "judge_outcome": "FP"
+        }
+      ]
+    },
+    {
+      "judge": "nova-premier",
+      "note_id": "note_02",
+      "baseline_tp": 1,
+      "baseline_fp": 2,
+      "baseline_fn": 0,
+      "judge_tp": 2,
+      "judge_fp": 1,
+      "judge_fn": 0,
+      "term_details": []
+    }
+  ]
+}
+```
+
+**CSV export format (per run):**
+```
+judge,note,baseline_tp,baseline_fp,baseline_fn,judge_tp,judge_fp,judge_fn
+nova-premier,note_01,2,1,1,1,2,1
+nova-premier,note_02,1,2,0,2,1,0
+nova-premier,note_03,3,0,1,2,1,1
+```
+
+---
+
 ## 5. Prompt Template Files
 
 ### 5.1 `prompts/prompt_a_single.txt` — Single Prompt
@@ -1055,6 +1149,10 @@ class BatchEvaluateRequest(BaseModel):
 class GoldEvaluateRequest(BaseModel):
     judges: List[str] = Field(..., min_length=1)
     prompt_template: Literal["prompt_a", "prompt_b"]
+
+class JudgeValidateRequest(BaseModel):
+    judges: List[str] = Field(..., min_length=1)
+    prompt_template: Literal["prompt_a", "prompt_b"]
 ```
 
 ### 7.2 Response Schemas (`schemas/responses.py`)
@@ -1075,7 +1173,10 @@ class SuggestedCorrection(BaseModel):
 
 class TermResult(BaseModel):
     term: str
+    concept_code: str
+    concept_title: str
     default_lexical_title: str
+    default_lexical_code: str
     icd10_codes: List[str]
     snomed_codes: List[str]
     scores: Dict[str, DimensionScore]
@@ -1137,6 +1238,31 @@ class GoldEvaluateResponse(BaseModel):
     per_note_results: List[GoldNoteResult]
     judge_validation_metrics: Dict[str, CodeSystemMetrics]
     aggregate: AggregateStats
+
+class TermValidationDetail(BaseModel):
+    concept_code: str
+    concept_title: str
+    verdict: Literal["PASS", "FAIL"]
+    in_gold: bool
+    baseline_outcome: Literal["TP", "FP"]
+    judge_outcome: Literal["TP", "FP"]
+
+class NoteValidationResult(BaseModel):
+    judge: str
+    note_id: str
+    baseline_tp: int
+    baseline_fp: int
+    baseline_fn: int
+    judge_tp: int
+    judge_fp: int
+    judge_fn: int
+    term_details: List[TermValidationDetail]
+
+class JudgeValidateResponse(BaseModel):
+    total_notes: int
+    judge_names: str
+    prompt_template: str
+    results: List[NoteValidationResult]
 ```
 
 ---
@@ -1189,6 +1315,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 # POST http://localhost:8000/batch_evaluate
 # POST http://localhost:8000/gold_evaluate
 # POST http://localhost:8000/gold_evaluate_new
+# POST http://localhost:8000/judge_validate
 # GET  http://localhost:8000/health
 # GET  http://localhost:8000/models
 ```
@@ -1222,7 +1349,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 A standalone HTML test client (`test-client.html`) is provided for easy API testing without needing external tools like Postman.
 
 **Features:**
-- Single-page application with tabs for each API endpoint (Health, Models, Evaluate, Batch Evaluate, Gold Evaluate, Gold Evaluate New)
+- Single-page application with tabs for each API endpoint (Health, Models, Evaluate, Batch Evaluate, Gold Evaluate, Gold Evaluate New, Judge Validation)
 - Configurable API base URL (defaults to `http://localhost:8000`)
 - Raw JSON input via textareas
 - **Hierarchical tree display** for readable output (not raw JSON)
@@ -1297,6 +1424,8 @@ xdg-open test-client.html
 3. **Evaluate** - Single note evaluation with full term details
 4. **Batch Evaluate** - Multiple notes with aggregate statistics
 5. **Gold Evaluate** - Gold standard validation with P/R/F1 metrics
+6. **Gold Evaluate New** - New format gold standard validation
+7. **Judge Validation** - Compare judge verdicts against gold standard baseline with Baseline vs Judge TP/FP/FN table, CSV export, and color-coded rows highlighting disagreements
 
 The test client makes it easy to:
 - Quickly verify API is running

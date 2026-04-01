@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import evaluation, batch_evaluation, gold_evaluation, gold_evaluation_new, health, models
+from app.routers import evaluation, batch_evaluation, gold_evaluation, gold_evaluation_new, judge_validation, health, models
 from app.config import load_config
 import logging
 import sys
@@ -61,6 +61,7 @@ app.include_router(evaluation.router, tags=["Evaluation"])
 app.include_router(batch_evaluation.router, tags=["Batch Evaluation"])
 app.include_router(gold_evaluation.router, tags=["Gold Evaluation"])
 app.include_router(gold_evaluation_new.router, tags=["Gold Evaluation New"])
+app.include_router(judge_validation.router, tags=["Judge Validation"])
 
 
 @app.get("/")
@@ -75,7 +76,8 @@ async def root():
             "/evaluate",
             "/batch_evaluate",
             "/gold_evaluate",
-            "/gold_evaluate_new"
+            "/gold_evaluate_new",
+            "/judge_validate"
         ]
     }
 

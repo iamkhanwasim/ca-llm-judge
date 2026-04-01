@@ -32,6 +32,8 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
 
         # Get term details from flattened_terms (original pipeline data)
         term_text = ""
+        concept_code = ""
+        concept_title = ""
         default_lexical_title = ""
         default_lexical_code = ""
         icd10_codes = []
@@ -40,6 +42,8 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
         if idx < len(flattened_terms):
             flattened = flattened_terms[idx]
             term_text = flattened.get("term", "")  # Raw term from pipeline
+            concept_code = flattened.get("concept_code", "")
+            concept_title = flattened.get("concept_title", "")
             default_lexical_title = flattened.get("default_lexical_title", "")
             default_lexical_code = flattened.get("default_lexical_code", "")
 
@@ -71,6 +75,8 @@ def apply_thresholds(aggregated_terms: List[Dict], flattened_terms: List[Dict]) 
 
         term_result = {
             "term": term_text,
+            "concept_code": concept_code,
+            "concept_title": concept_title,
             "default_lexical_title": default_lexical_title,
             "default_lexical_code": default_lexical_code,
             "icd10_codes": icd10_codes,

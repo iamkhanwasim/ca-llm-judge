@@ -17,3 +17,8 @@ class BatchEvaluateRequest(BaseModel):
 class GoldEvaluateRequest(BaseModel):
     judges: List[str] = Field(..., min_length=1)
     prompt_template: Literal["prompt_a", "prompt_b"]
+
+
+class JudgeValidateRequest(BaseModel):
+    judges: List[str] = Field(..., min_length=1)
+    prompt_template: Literal["prompt_a", "prompt_b"]

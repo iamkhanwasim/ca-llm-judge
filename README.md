@@ -180,6 +180,34 @@ Returns the same structure as `/gold_evaluate` but with:
 - **IMO-ICD Metrics Table**: Per-note Precision/Recall/F1 (no SNOMED)
 - **Detailed Term-Level Analysis**: Uses concept codes instead of lexical codes
 
+### Judge Validation
+
+```bash
+POST /judge_validate
+```
+
+Validates LLM judge reliability by comparing judge verdicts against gold standard baseline. For each note, computes TP/FP/FN for both Pipeline vs Gold (Baseline) and Pipeline vs LLM Judge (Judge). Uses IMO code matching only (`concept_code` from pipeline vs `concept.code` from gold where `system="IMO-HEALTH"`).
+
+- **Baseline (Pipeline vs Gold):** Deterministic code matching — TP/FP/FN based on whether pipeline concept_codes exist in gold
+- **Judge (Pipeline vs LLM):** TP = term verdict PASS, FP = term verdict FAIL, FN = gold codes not in pipeline
+- **Standalone service** — does not depend on gold_evaluator or gold_evaluator_new
+- Results exportable as CSV for manual aggregation of micro P/R/F1 across runs
+
+Request body:
+```json
+{
+  "judges": ["nova-premier"],
+  "prompt_template": "prompt_a"
+}
+```
+
+Output table format:
+```
+judge,note,baseline_tp,baseline_fp,baseline_fn,judge_tp,judge_fp,judge_fn
+nova-premier,note_01,2,1,1,1,2,1
+nova-premier,note_02,1,2,0,2,1,0
+```
+
 ## Test Client (HTML UI)
 
 A standalone HTML test client is provided for easy API testing without external tools:
@@ -211,6 +239,7 @@ open test-client.html
 - 💾 **CSV export** for all tables
 - 🔍 **Search functionality** for detailed tables
 - 📊 **Separate tab for new gold standard format** (Gold Evaluate New)
+- ✅ **Judge Validation tab**: Compare judge verdicts against gold standard baseline with Baseline vs Judge TP/FP/FN table, CSV export, and color-coded disagreement rows
 
 **Example Output:**
 ```
